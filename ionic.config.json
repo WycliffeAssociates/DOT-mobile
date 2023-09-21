@@ -1,0 +1,7 @@
+{
+  "name": "DotMobile",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}

@@ -41,10 +41,6 @@ type IDownloadButtonsParams = {
 export function DownloadButtons(props: IDownloadButtonsParams) {
   const {t} = useTranslation();
 
-  // useEffect(() => {
-  // setInitialPlayerSpeed();
-  // }, []);
-
   async function saveBooks(scope: IVidWithCustom[]) {
     for await (const vidChapter of scope) {
       if (!vidChapter.savedSources?.poster || !vidChapter.savedSources.video) {
@@ -61,11 +57,16 @@ export function DownloadButtons(props: IDownloadButtonsParams) {
           props.playlistSlug
         );
         await props.saveVidOffline(vidChapter, currentPlaylistData);
-
         await updateStateFromFs({
           playlistSlug: props.playlistSlug,
           vid: vidChapter,
           setCurrentBook: props.setCurrentBook,
+          setCurrentVid:
+            scope.length === 1
+              ? props.setCurrentVid
+              : vidChapter.id === props.currentVid.id
+              ? props.setCurrentVid
+              : undefined,
         });
       }
     }
@@ -162,6 +163,7 @@ export function DownloadButtons(props: IDownloadButtonsParams) {
           `${getDownloadSize({
             playlistSlug: props.playlistSlug,
             scope: props.currentBook,
+            maxSigDigits: 3,
           })}`}
       </IonButton>
     </div>

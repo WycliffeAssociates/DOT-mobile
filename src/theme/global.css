@@ -89,9 +89,9 @@
   background-image: linear-gradient(
     0deg,
     hsl(20, 100%, 56%) 0%,
-    hsla(20, 100%, 56%, 0) 55%,
-    hsla(20, 100%, 56%, 0) 75%,
-    hsla(20, 100%, 56%, 1) 100%
+    hsla(20, 100%, 56%, 0) 15%,
+    hsla(20, 100%, 56%, 0) 85%,
+    hsla(20, 100%, 56%, 0.6) 100%
   );
 }
 
@@ -207,7 +207,7 @@ ion-modal {
 .customProgressBar[value] {
   -webkit-appearance: none;
 
-  accent-color: var(--ion-color-success-tint)
+  accent-color: var(--ion-color-success-tint);
   /* Get rid of the default appearance */
   border-radius: 20px;
   background: red;
@@ -218,6 +218,6 @@ ion-modal {
   /* accent-color: var(--ion-color-success-tint) */
 }
 
-ion-checkbox::part(container)  {
-  margin-right: -.5rem;
+ion-checkbox::part(container) {
+  margin-right: -0.5rem;
 }

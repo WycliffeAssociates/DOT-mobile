@@ -35,14 +35,14 @@ export function PlaylistBookPicker({
             pointerEvents: "none",
             height: "100%",
           }}
-          className="y-scroll-gradient sm:(hidden)"
+          className="y-scroll-gradient md:(hidden)"
         />
-        <ul className="max-h-375px overflow-y-auto scrollbar-hide pt-8 pb-36 sm:(max-h-[50vh]) list-none">
+        <ul className="max-h-375px overflow-y-scroll scrollbar-hide pt-8 pb-36 sm:(max-h-[50vh]) list-none">
           {Object.entries(vids).map(([key, book], idx) => {
             return (
               <li
                 key={key}
-                className="text-neutral-100 dark:text-neutral-200 py-1 w-full border-y border-base md:text-lg md:py-2"
+                className="text-neutral-100 dark:text-neutral-200 py-1 w-full border-y border-base md:text-lg md:py-2 text-lg"
               >
                 <button
                   onClick={async () => {

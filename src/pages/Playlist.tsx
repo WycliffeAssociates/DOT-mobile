@@ -86,17 +86,18 @@ function Playlist() {
       type: "video/mp4",
     };
     const savedPoster = vid.savedSources?.poster;
+
     savedSrc ? plyr?.src(savedSrc) : plyr?.src(httpsOnly);
     savedPoster
       ? plyr?.poster(savedPoster)
       : vid.poster
       ? plyr?.poster(vid.poster)
       : null;
-    plyr?.load();
+    // plyr?.load();
     plyr?.one("loadedmetadata", () => {
       handleChapters(vid, plyr);
     });
-    plyr?.play();
+    // plyr?.play();
   }
 
   function changeVid({chapNum, bookToUse}: changeVidParams) {

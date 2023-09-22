@@ -1,17 +1,13 @@
 import {
   IVidWithCustom,
   changePlayerSrcParams,
-  changeVidParams,
   chapterMarkers,
 } from "../customTypes/types";
-import {Dispatch, SetStateAction, useCallback, useEffect, useRef} from "react";
+import {Dispatch, SetStateAction, useEffect, useRef} from "react";
 import {getSavedAppPreferences} from "../lib/storage";
-import {
-  handleVideoJsTaps,
-  playerCustomHotKeys,
-  trackAdjacentChap,
-} from "../lib/Ui";
+import {handleVideoJsTaps, playerCustomHotKeys} from "../lib/Ui";
 import {VideoJsPlayer} from "video.js";
+import {Capacitor} from "@capacitor/core";
 type Iplayer = {
   setPlayer: Dispatch<SetStateAction<VideoJsPlayer | undefined>>;
   playlistData: Record<string, IVidWithCustom[]>;
@@ -62,6 +58,7 @@ export function VidJsPlayer({
 
       // instantiate player
       // window.bc is from /bc/willPlayer.  This is a brightcove player that has been manually downloaded and included to avoid the network request for a 200kb + video js player.  This allows us to bundle it for offline usage in mobile app more easily too.  We could just use video js, but the bundled / minified player includes brightcoves built in analytics. If we are offline, they won't send, but that's a noop at that point. The priority is availability.
+      // SEe https://videojs.com/guides/options/ for options
       const player = window.bc(vidPlayerRef.current, {
         responsive: true,
         fluid: true,
@@ -69,12 +66,13 @@ export function VidJsPlayer({
         controls: true,
         playbackRates: [0.5, 1, 1.5, 2, 2.5],
         preload: "auto",
-        autoplay: true,
+        autoplay: false,
         fullscreen: {
           navigationUI: "show",
         },
         sources: firstVidSrces,
         poster: firstPoster,
+        nativeControlsForTouch: true,
       });
       player.playbackRate(preferredSpeed);
       player.language(navigator.languages[0]);
@@ -137,7 +135,25 @@ export function VidJsPlayer({
         })
       );
 
-      // player.on("ended", () => autoPlayToNextBook(player));
+      player.on("fullscreenchange", (e) => {
+        const isFullScreen = player.isFullscreen();
+        if (Capacitor.getPlatform() === "ios") {
+          // noop IOS handles it
+        } else if (Capacitor.getPlatform() === "android") {
+          if (isFullScreen) {
+            // document.body.style.transform = "rotate(90deg)";
+          } else {
+            // document.body.style.transform = "rotate(0deg)";
+          }
+        } else {
+          console.log("web");
+          if (isFullScreen) {
+            // document.body.style.transform = "rotate(90deg)";
+          } else {
+            // document.body.style.transform = "rotate(0deg)";
+          }
+        }
+      });
 
       // Finally set state
       setPlayer(player);

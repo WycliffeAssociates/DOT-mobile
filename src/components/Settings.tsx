@@ -151,7 +151,7 @@ export function Settings(props: ISettings) {
     props.setShapedPlaylist(playlistClone);
     await vidSaver.updateCachedPlaylist(playlistClone);
     setDownloadProgress({
-      amount: 100,
+      amount: 1,
       started: true,
       vidName,
     });

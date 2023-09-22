@@ -511,7 +511,9 @@ export async function updateStateFromFs({
       setCurrentVid(curVid);
     }
     if (curBook && setCurrentBook) {
-      setCurrentBook(curBook);
+      const newRefBook = structuredClone(curBook);
+      // new reference for state updates
+      setCurrentBook(newRefBook);
     }
   }
 }

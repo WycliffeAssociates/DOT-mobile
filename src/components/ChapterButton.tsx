@@ -12,7 +12,7 @@ export function ChapterButton(props: IChapterButton) {
         props.onClick(props.vid);
         // updateHistory(props.vid, "PUSH");
       }}
-      className={`rounded-full h-8 w-8 inline-grid place-content-center text-center flex-shrink-0 bg-neutral-400 dark:bg-neutral-600 text-white sm:(w-12 h-12) hover:(bg-primary/70 transition scale-110) active:(scale-95) ${
+      className={`rounded-full h-12 w-12 inline-grid place-content-center text-center flex-shrink-0 bg-neutral-400 dark:bg-neutral-600 text-white sm:(w-12 h-12) hover:(bg-primary/70 transition scale-110) active:(scale-95) ${
         props.vid.chapter === props.currentVid.chapter
           ? "bg-neutral-800 dark:bg-neutral-900 transform scale-120  transition-colors duration-200"
           : ""

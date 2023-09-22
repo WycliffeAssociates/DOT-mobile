@@ -118,3 +118,14 @@ export type IdeviceInfo = {
   realDiskFree: string | null;
   realDiskTotal: string | null;
 };
+
+export type IadjacentChap =
+  | {
+      chapterStart: number;
+      chapterEnd: number;
+      label: string;
+      xPos: string;
+      startVerse: string | null;
+      endVerse: string | null;
+    }
+  | undefined;

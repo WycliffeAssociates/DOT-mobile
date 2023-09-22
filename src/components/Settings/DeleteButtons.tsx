@@ -88,7 +88,7 @@ export function DeleteButtons(props: IDeleteButtonParams) {
                     <IonButton
                       size="small"
                       fill="outline"
-                      className="p-0 m-0"
+                      className="p-0 m-0 whitespace-normal"
                       onClick={(e) => deleteBooks(props.currentBook)}
                       disabled={props.downloadProgress?.started}
                     >

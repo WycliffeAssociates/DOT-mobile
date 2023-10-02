@@ -12,6 +12,7 @@ const config: CapacitorConfig = {
       keystorePath:
         "/Users/willkelly/Documents/Work/Code_support_files/DotMobile/DotMobileKs",
       keystoreAlias: "key0",
+      signingType: "apksigner",
     },
   },
 };

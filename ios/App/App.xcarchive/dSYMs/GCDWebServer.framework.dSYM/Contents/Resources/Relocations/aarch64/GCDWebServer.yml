@@ -1,0 +1,417 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/willkelly/Library/Developer/Xcode/DerivedData/App-aykcmlxtaaiohscdmmrqbpegamdn/Build/Intermediates.noindex/ArchiveIntermediates/App/IntermediateBuildFilesPath/UninstalledProducts/iphoneos/GCDWebServer.framework/GCDWebServer'
+relocations:
+  - { offsetInCU: 0x34, offset: 0x546B4, size: 0x8, addend: 0x0, symName: _GCDWebServerVersionString, symObjAddr: 0x0, symBinAddr: 0x15800, symSize: 0x0 }
+  - { offsetInCU: 0x69, offset: 0x546E9, size: 0x8, addend: 0x0, symName: _GCDWebServerVersionNumber, symObjAddr: 0x30, symBinAddr: 0x15830, symSize: 0x0 }
+  - { offsetInCU: 0x27, offset: 0x54726, size: 0x8, addend: 0x0, symName: _GCDWebServerLogMessage, symObjAddr: 0x0, symBinAddr: 0x4000, symSize: 0xF4 }
+  - { offsetInCU: 0x41, offset: 0x54740, size: 0x8, addend: 0x0, symName: _GCDWebServerOption_Port, symObjAddr: 0x5680, symBinAddr: 0x1C0D0, symSize: 0x0 }
+  - { offsetInCU: 0x8F, offset: 0x5478E, size: 0x8, addend: 0x0, symName: _GCDWebServerOption_BonjourName, symObjAddr: 0x5688, symBinAddr: 0x1C0D8, symSize: 0x0 }
+  - { offsetInCU: 0xA5, offset: 0x547A4, size: 0x8, addend: 0x0, symName: _GCDWebServerOption_BonjourType, symObjAddr: 0x5690, symBinAddr: 0x1C0E0, symSize: 0x0 }
+  - { offsetInCU: 0xBB, offset: 0x547BA, size: 0x8, addend: 0x0, symName: _GCDWebServerOption_RequestNATPortMapping, symObjAddr: 0x5698, symBinAddr: 0x1C0E8, symSize: 0x0 }
+  - { offsetInCU: 0xD1, offset: 0x547D0, size: 0x8, addend: 0x0, symName: _GCDWebServerOption_BindToLocalhost, symObjAddr: 0x56A0, symBinAddr: 0x1C0F0, symSize: 0x0 }
+  - { offsetInCU: 0xE7, offset: 0x547E6, size: 0x8, addend: 0x0, symName: _GCDWebServerOption_MaxPendingConnections, symObjAddr: 0x56A8, symBinAddr: 0x1C0F8, symSize: 0x0 }
+  - { offsetInCU: 0xFD, offset: 0x547FC, size: 0x8, addend: 0x0, symName: _GCDWebServerOption_ServerName, symObjAddr: 0x56B0, symBinAddr: 0x1C100, symSize: 0x0 }
+  - { offsetInCU: 0x113, offset: 0x54812, size: 0x8, addend: 0x0, symName: _GCDWebServerOption_AuthenticationMethod, symObjAddr: 0x56B8, symBinAddr: 0x1C108, symSize: 0x0 }
+  - { offsetInCU: 0x129, offset: 0x54828, size: 0x8, addend: 0x0, symName: _GCDWebServerOption_AuthenticationRealm, symObjAddr: 0x56C0, symBinAddr: 0x1C110, symSize: 0x0 }
+  - { offsetInCU: 0x13F, offset: 0x5483E, size: 0x8, addend: 0x0, symName: _GCDWebServerOption_AuthenticationAccounts, symObjAddr: 0x56C8, symBinAddr: 0x1C118, symSize: 0x0 }
+  - { offsetInCU: 0x155, offset: 0x54854, size: 0x8, addend: 0x0, symName: _GCDWebServerOption_ConnectionClass, symObjAddr: 0x56D0, symBinAddr: 0x1C120, symSize: 0x0 }
+  - { offsetInCU: 0x16B, offset: 0x5486A, size: 0x8, addend: 0x0, symName: _GCDWebServerOption_AutomaticallyMapHEADToGET, symObjAddr: 0x56D8, symBinAddr: 0x1C128, symSize: 0x0 }
+  - { offsetInCU: 0x181, offset: 0x54880, size: 0x8, addend: 0x0, symName: _GCDWebServerOption_ConnectedStateCoalescingInterval, symObjAddr: 0x56E0, symBinAddr: 0x1C130, symSize: 0x0 }
+  - { offsetInCU: 0x197, offset: 0x54896, size: 0x8, addend: 0x0, symName: _GCDWebServerOption_DispatchQueuePriority, symObjAddr: 0x56E8, symBinAddr: 0x1C138, symSize: 0x0 }
+  - { offsetInCU: 0x1AD, offset: 0x548AC, size: 0x8, addend: 0x0, symName: _GCDWebServerOption_AutomaticallySuspendInBackground, symObjAddr: 0x56F0, symBinAddr: 0x1C140, symSize: 0x0 }
+  - { offsetInCU: 0x1C3, offset: 0x548C2, size: 0x8, addend: 0x0, symName: _GCDWebServerAuthenticationMethod_Basic, symObjAddr: 0x56F8, symBinAddr: 0x1C148, symSize: 0x0 }
+  - { offsetInCU: 0x1D9, offset: 0x548D8, size: 0x8, addend: 0x0, symName: _GCDWebServerAuthenticationMethod_DigestAccess, symObjAddr: 0x5700, symBinAddr: 0x1C150, symSize: 0x0 }
+  - { offsetInCU: 0x1EF, offset: 0x548EE, size: 0x8, addend: 0x0, symName: _GCDWebServerLogLevel, symObjAddr: 0x5940, symBinAddr: 0x25740, symSize: 0x0 }
+  - { offsetInCU: 0x244, offset: 0x54943, size: 0x8, addend: 0x0, symName: _GCDWebServerLogMessage, symObjAddr: 0x0, symBinAddr: 0x4000, symSize: 0xF4 }
+  - { offsetInCU: 0x266, offset: 0x54965, size: 0x8, addend: 0x0, symName: _GCDWebServerLogMessage.levelNames, symObjAddr: 0x5708, symBinAddr: 0x1C158, symSize: 0x0 }
+  - { offsetInCU: 0x27C, offset: 0x5497B, size: 0x8, addend: 0x0, symName: _GCDWebServerLogMessage.enableLogging, symObjAddr: 0x5944, symBinAddr: 0x25744, symSize: 0x0 }
+  - { offsetInCU: 0x335, offset: 0x54A34, size: 0x8, addend: 0x0, symName: __builtInLoggerBlock, symObjAddr: 0x1B720, symBinAddr: 0x25868, symSize: 0x0 }
+  - { offsetInCU: 0xA7F, offset: 0x5517E, size: 0x8, addend: 0x0, symName: '-[GCDWebServerHandler initWithMatchBlock:asyncProcessBlock:]', symObjAddr: 0xF4, symBinAddr: 0x40F4, symSize: 0xB0 }
+  - { offsetInCU: 0xAD6, offset: 0x551D5, size: 0x8, addend: 0x0, symName: '-[GCDWebServerHandler matchBlock]', symObjAddr: 0x1A4, symBinAddr: 0x41A4, symSize: 0x8 }
+  - { offsetInCU: 0xB0D, offset: 0x5520C, size: 0x8, addend: 0x0, symName: '-[GCDWebServerHandler asyncProcessBlock]', symObjAddr: 0x1AC, symBinAddr: 0x41AC, symSize: 0x8 }
+  - { offsetInCU: 0xB44, offset: 0x55243, size: 0x8, addend: 0x0, symName: '-[GCDWebServerHandler .cxx_destruct]', symObjAddr: 0x1B4, symBinAddr: 0x41B4, symSize: 0x30 }
+  - { offsetInCU: 0xB77, offset: 0x55276, size: 0x8, addend: 0x0, symName: '+[GCDWebServer initialize]', symObjAddr: 0x1E4, symBinAddr: 0x41E4, symSize: 0x4 }
+  - { offsetInCU: 0xBA9, offset: 0x552A8, size: 0x8, addend: 0x0, symName: '+[GCDWebServer initialize]', symObjAddr: 0x1E4, symBinAddr: 0x41E4, symSize: 0x4 }
+  - { offsetInCU: 0xBBC, offset: 0x552BB, size: 0x8, addend: 0x0, symName: '-[GCDWebServer init]', symObjAddr: 0x1E8, symBinAddr: 0x41E8, symSize: 0xC8 }
+  - { offsetInCU: 0xC5B, offset: 0x5535A, size: 0x8, addend: 0x0, symName: '-[GCDWebServer dealloc]', symObjAddr: 0x2B0, symBinAddr: 0x42B0, symSize: 0x34 }
+  - { offsetInCU: 0xC8E, offset: 0x5538D, size: 0x8, addend: 0x0, symName: '-[GCDWebServer _startBackgroundTask]', symObjAddr: 0x2E4, symBinAddr: 0x42E4, symSize: 0x98 }
+  - { offsetInCU: 0xCC1, offset: 0x553C0, size: 0x8, addend: 0x0, symName: '___36-[GCDWebServer _startBackgroundTask]_block_invoke', symObjAddr: 0x37C, symBinAddr: 0x437C, symSize: 0x54 }
+  - { offsetInCU: 0xD15, offset: 0x55414, size: 0x8, addend: 0x0, symName: ___copy_helper_block_e8_32s, symObjAddr: 0x3D0, symBinAddr: 0x43D0, symSize: 0x8 }
+  - { offsetInCU: 0xD3C, offset: 0x5543B, size: 0x8, addend: 0x0, symName: ___destroy_helper_block_e8_32s, symObjAddr: 0x3D8, symBinAddr: 0x43D8, symSize: 0x8 }
+  - { offsetInCU: 0xD5B, offset: 0x5545A, size: 0x8, addend: 0x0, symName: '-[GCDWebServer _didConnect]', symObjAddr: 0x3E0, symBinAddr: 0x43E0, symSize: 0xB8 }
+  - { offsetInCU: 0xD8E, offset: 0x5548D, size: 0x8, addend: 0x0, symName: '-[GCDWebServer willStartConnection:]', symObjAddr: 0x498, symBinAddr: 0x4498, symSize: 0x58 }
+  - { offsetInCU: 0xDFD, offset: 0x554FC, size: 0x8, addend: 0x0, symName: '___36-[GCDWebServer willStartConnection:]_block_invoke', symObjAddr: 0x4F0, symBinAddr: 0x44F0, symSize: 0x84 }
+  - { offsetInCU: 0xE66, offset: 0x55565, size: 0x8, addend: 0x0, symName: '___36-[GCDWebServer willStartConnection:]_block_invoke_2', symObjAddr: 0x574, symBinAddr: 0x4574, symSize: 0x5C }
+  - { offsetInCU: 0xEE5, offset: 0x555E4, size: 0x8, addend: 0x0, symName: '-[GCDWebServer _endBackgroundTask]', symObjAddr: 0x5D0, symBinAddr: 0x45D0, symSize: 0xBC }
+  - { offsetInCU: 0xF19, offset: 0x55618, size: 0x8, addend: 0x0, symName: '-[GCDWebServer _didDisconnect]', symObjAddr: 0x68C, symBinAddr: 0x468C, symSize: 0x80 }
+  - { offsetInCU: 0xF4D, offset: 0x5564C, size: 0x8, addend: 0x0, symName: '-[GCDWebServer didEndConnection:]', symObjAddr: 0x70C, symBinAddr: 0x470C, symSize: 0x58 }
+  - { offsetInCU: 0xFA4, offset: 0x556A3, size: 0x8, addend: 0x0, symName: '___33-[GCDWebServer didEndConnection:]_block_invoke', symObjAddr: 0x764, symBinAddr: 0x4764, symSize: 0x78 }
+  - { offsetInCU: 0xFFC, offset: 0x556FB, size: 0x8, addend: 0x0, symName: '___33-[GCDWebServer didEndConnection:]_block_invoke_2', symObjAddr: 0x7DC, symBinAddr: 0x47DC, symSize: 0xEC }
+  - { offsetInCU: 0x116F, offset: 0x5586E, size: 0x8, addend: 0x0, symName: '___33-[GCDWebServer didEndConnection:]_block_invoke_3', symObjAddr: 0x8C8, symBinAddr: 0x48C8, symSize: 0x38 }
+  - { offsetInCU: 0x11CC, offset: 0x558CB, size: 0x8, addend: 0x0, symName: '-[GCDWebServer bonjourName]', symObjAddr: 0x900, symBinAddr: 0x4900, symSize: 0x48 }
+  - { offsetInCU: 0x1285, offset: 0x55984, size: 0x8, addend: 0x0, symName: '-[GCDWebServer bonjourType]', symObjAddr: 0x948, symBinAddr: 0x4948, symSize: 0x48 }
+  - { offsetInCU: 0x1313, offset: 0x55A12, size: 0x8, addend: 0x0, symName: '-[GCDWebServer addHandlerWithMatchBlock:processBlock:]', symObjAddr: 0x990, symBinAddr: 0x4990, symSize: 0x90 }
+  - { offsetInCU: 0x1369, offset: 0x55A68, size: 0x8, addend: 0x0, symName: '___54-[GCDWebServer addHandlerWithMatchBlock:processBlock:]_block_invoke', symObjAddr: 0xA20, symBinAddr: 0x4A20, symSize: 0x78 }
+  - { offsetInCU: 0x13FF, offset: 0x55AFE, size: 0x8, addend: 0x0, symName: ___copy_helper_block_e8_32b, symObjAddr: 0xA98, symBinAddr: 0x4A98, symSize: 0x10 }
+  - { offsetInCU: 0x1428, offset: 0x55B27, size: 0x8, addend: 0x0, symName: '-[GCDWebServer addHandlerWithMatchBlock:asyncProcessBlock:]', symObjAddr: 0xAA8, symBinAddr: 0x4AA8, symSize: 0x84 }
+  - { offsetInCU: 0x148F, offset: 0x55B8E, size: 0x8, addend: 0x0, symName: '-[GCDWebServer removeAllHandlers]', symObjAddr: 0xB2C, symBinAddr: 0x4B2C, symSize: 0x8 }
+  - { offsetInCU: 0x14E2, offset: 0x55BE1, size: 0x8, addend: 0x0, symName: '-[GCDWebServer _createListeningSocket:localAddress:length:maxPendingConnections:error:]', symObjAddr: 0xB34, symBinAddr: 0x4B34, symSize: 0x3F8 }
+  - { offsetInCU: 0x175D, offset: 0x55E5C, size: 0x8, addend: 0x0, symName: '-[GCDWebServer _createDispatchSourceWithListeningSocket:isIPv6:]', symObjAddr: 0xF2C, symBinAddr: 0x4F2C, symSize: 0x100 }
+  - { offsetInCU: 0x18B9, offset: 0x55FB8, size: 0x8, addend: 0x0, symName: '___64-[GCDWebServer _createDispatchSourceWithListeningSocket:isIPv6:]_block_invoke', symObjAddr: 0x102C, symBinAddr: 0x502C, symSize: 0xAC }
+  - { offsetInCU: 0x197D, offset: 0x5607C, size: 0x8, addend: 0x0, symName: '___64-[GCDWebServer _createDispatchSourceWithListeningSocket:isIPv6:]_block_invoke.77', symObjAddr: 0x10D8, symBinAddr: 0x50D8, symSize: 0x1C0 }
+  - { offsetInCU: 0x1BB0, offset: 0x562AF, size: 0x8, addend: 0x0, symName: '-[GCDWebServer _start:]', symObjAddr: 0x1298, symBinAddr: 0x5298, symSize: 0xBF0 }
+  - { offsetInCU: 0x2524, offset: 0x56C23, size: 0x8, addend: 0x0, symName: '___23-[GCDWebServer _start:]_block_invoke', symObjAddr: 0x1E88, symBinAddr: 0x5E88, symSize: 0xF0 }
+  - { offsetInCU: 0x25BE, offset: 0x56CBD, size: 0x8, addend: 0x0, symName: '___23-[GCDWebServer _start:]_block_invoke.88', symObjAddr: 0x1F78, symBinAddr: 0x5F78, symSize: 0x80 }
+  - { offsetInCU: 0x2650, offset: 0x56D4F, size: 0x8, addend: 0x0, symName: __NetServiceRegisterCallBack, symObjAddr: 0x1FF8, symBinAddr: 0x5FF8, symSize: 0xE0 }
+  - { offsetInCU: 0x2724, offset: 0x56E23, size: 0x8, addend: 0x0, symName: __NetServiceResolveCallBack, symObjAddr: 0x20D8, symBinAddr: 0x60D8, symSize: 0x144 }
+  - { offsetInCU: 0x27B1, offset: 0x56EB0, size: 0x8, addend: 0x0, symName: __DNSServiceCallBack, symObjAddr: 0x221C, symBinAddr: 0x621C, symSize: 0x1B8 }
+  - { offsetInCU: 0x28F7, offset: 0x56FF6, size: 0x8, addend: 0x0, symName: __SocketCallBack, symObjAddr: 0x23D4, symBinAddr: 0x63D4, symSize: 0x60 }
+  - { offsetInCU: 0x29BB, offset: 0x570BA, size: 0x8, addend: 0x0, symName: '___23-[GCDWebServer _start:]_block_invoke_2', symObjAddr: 0x2434, symBinAddr: 0x6434, symSize: 0x38 }
+  - { offsetInCU: 0x29FD, offset: 0x570FC, size: 0x8, addend: 0x0, symName: '-[GCDWebServer _stop]', symObjAddr: 0x246C, symBinAddr: 0x646C, symSize: 0x258 }
+  - { offsetInCU: 0x2C11, offset: 0x57310, size: 0x8, addend: 0x0, symName: '___21-[GCDWebServer _stop]_block_invoke', symObjAddr: 0x26C4, symBinAddr: 0x66C4, symSize: 0x50 }
+  - { offsetInCU: 0x2C6F, offset: 0x5736E, size: 0x8, addend: 0x0, symName: '___21-[GCDWebServer _stop]_block_invoke_2', symObjAddr: 0x2714, symBinAddr: 0x6714, symSize: 0x38 }
+  - { offsetInCU: 0x2CB1, offset: 0x573B0, size: 0x8, addend: 0x0, symName: '-[GCDWebServer _didEnterBackground:]', symObjAddr: 0x274C, symBinAddr: 0x674C, symSize: 0x54 }
+  - { offsetInCU: 0x2CF6, offset: 0x573F5, size: 0x8, addend: 0x0, symName: '-[GCDWebServer _willEnterForeground:]', symObjAddr: 0x27A0, symBinAddr: 0x67A0, symSize: 0x14 }
+  - { offsetInCU: 0x2D35, offset: 0x57434, size: 0x8, addend: 0x0, symName: '-[GCDWebServer startWithOptions:error:]', symObjAddr: 0x27B4, symBinAddr: 0x67B4, symSize: 0x200 }
+  - { offsetInCU: 0x2DCC, offset: 0x574CB, size: 0x8, addend: 0x0, symName: '-[GCDWebServer isRunning]', symObjAddr: 0x29B4, symBinAddr: 0x69B4, symSize: 0x10 }
+  - { offsetInCU: 0x2E04, offset: 0x57503, size: 0x8, addend: 0x0, symName: '-[GCDWebServer stop]', symObjAddr: 0x29C4, symBinAddr: 0x69C4, symSize: 0xC8 }
+  - { offsetInCU: 0x2E38, offset: 0x57537, size: 0x8, addend: 0x0, symName: '-[GCDWebServer delegate]', symObjAddr: 0x2A8C, symBinAddr: 0x6A8C, symSize: 0x18 }
+  - { offsetInCU: 0x2E70, offset: 0x5756F, size: 0x8, addend: 0x0, symName: '-[GCDWebServer setDelegate:]', symObjAddr: 0x2AA4, symBinAddr: 0x6AA4, symSize: 0xC }
+  - { offsetInCU: 0x2EB2, offset: 0x575B1, size: 0x8, addend: 0x0, symName: '-[GCDWebServer port]', symObjAddr: 0x2AB0, symBinAddr: 0x6AB0, symSize: 0x8 }
+  - { offsetInCU: 0x2EEA, offset: 0x575E9, size: 0x8, addend: 0x0, symName: '-[GCDWebServer handlers]', symObjAddr: 0x2AB8, symBinAddr: 0x6AB8, symSize: 0x8 }
+  - { offsetInCU: 0x2F21, offset: 0x57620, size: 0x8, addend: 0x0, symName: '-[GCDWebServer serverName]', symObjAddr: 0x2AC0, symBinAddr: 0x6AC0, symSize: 0x8 }
+  - { offsetInCU: 0x2F58, offset: 0x57657, size: 0x8, addend: 0x0, symName: '-[GCDWebServer authenticationRealm]', symObjAddr: 0x2AC8, symBinAddr: 0x6AC8, symSize: 0x8 }
+  - { offsetInCU: 0x2F8F, offset: 0x5768E, size: 0x8, addend: 0x0, symName: '-[GCDWebServer authenticationBasicAccounts]', symObjAddr: 0x2AD0, symBinAddr: 0x6AD0, symSize: 0x8 }
+  - { offsetInCU: 0x2FC6, offset: 0x576C5, size: 0x8, addend: 0x0, symName: '-[GCDWebServer authenticationDigestAccounts]', symObjAddr: 0x2AD8, symBinAddr: 0x6AD8, symSize: 0x8 }
+  - { offsetInCU: 0x2FFD, offset: 0x576FC, size: 0x8, addend: 0x0, symName: '-[GCDWebServer shouldAutomaticallyMapHEADToGET]', symObjAddr: 0x2AE0, symBinAddr: 0x6AE0, symSize: 0x8 }
+  - { offsetInCU: 0x3034, offset: 0x57733, size: 0x8, addend: 0x0, symName: '-[GCDWebServer dispatchQueuePriority]', symObjAddr: 0x2AE8, symBinAddr: 0x6AE8, symSize: 0x8 }
+  - { offsetInCU: 0x306B, offset: 0x5776A, size: 0x8, addend: 0x0, symName: '-[GCDWebServer .cxx_destruct]', symObjAddr: 0x2AF0, symBinAddr: 0x6AF0, symSize: 0xA4 }
+  - { offsetInCU: 0x309E, offset: 0x5779D, size: 0x8, addend: 0x0, symName: '-[GCDWebServer(Extensions) serverURL]', symObjAddr: 0x2B94, symBinAddr: 0x6B94, symSize: 0xDC }
+  - { offsetInCU: 0x3119, offset: 0x57818, size: 0x8, addend: 0x0, symName: '-[GCDWebServer(Extensions) bonjourServerURL]', symObjAddr: 0x2C70, symBinAddr: 0x6C70, symSize: 0x104 }
+  - { offsetInCU: 0x3192, offset: 0x57891, size: 0x8, addend: 0x0, symName: '-[GCDWebServer(Extensions) publicServerURL]', symObjAddr: 0x2D74, symBinAddr: 0x6D74, symSize: 0xC0 }
+  - { offsetInCU: 0x31CA, offset: 0x578C9, size: 0x8, addend: 0x0, symName: '-[GCDWebServer(Extensions) start]', symObjAddr: 0x2E34, symBinAddr: 0x6E34, symSize: 0x10 }
+  - { offsetInCU: 0x3200, offset: 0x578FF, size: 0x8, addend: 0x0, symName: '-[GCDWebServer(Extensions) startWithPort:bonjourName:]', symObjAddr: 0x2E44, symBinAddr: 0x6E44, symSize: 0xC4 }
+  - { offsetInCU: 0x326B, offset: 0x5796A, size: 0x8, addend: 0x0, symName: '-[GCDWebServer(Handlers) addDefaultHandlerForMethod:requestClass:processBlock:]', symObjAddr: 0x2F08, symBinAddr: 0x6F08, symSize: 0x98 }
+  - { offsetInCU: 0x32D2, offset: 0x579D1, size: 0x8, addend: 0x0, symName: '___79-[GCDWebServer(Handlers) addDefaultHandlerForMethod:requestClass:processBlock:]_block_invoke', symObjAddr: 0x2FA0, symBinAddr: 0x6FA0, symSize: 0x78 }
+  - { offsetInCU: 0x3368, offset: 0x57A67, size: 0x8, addend: 0x0, symName: '-[GCDWebServer(Handlers) addDefaultHandlerForMethod:requestClass:asyncProcessBlock:]', symObjAddr: 0x3018, symBinAddr: 0x7018, symSize: 0x94 }
+  - { offsetInCU: 0x33CF, offset: 0x57ACE, size: 0x8, addend: 0x0, symName: '___84-[GCDWebServer(Handlers) addDefaultHandlerForMethod:requestClass:asyncProcessBlock:]_block_invoke', symObjAddr: 0x30AC, symBinAddr: 0x70AC, symSize: 0xE0 }
+  - { offsetInCU: 0x3477, offset: 0x57B76, size: 0x8, addend: 0x0, symName: '-[GCDWebServer(Handlers) addHandlerForMethod:path:requestClass:processBlock:]', symObjAddr: 0x318C, symBinAddr: 0x718C, symSize: 0xA8 }
+  - { offsetInCU: 0x34EF, offset: 0x57BEE, size: 0x8, addend: 0x0, symName: '___77-[GCDWebServer(Handlers) addHandlerForMethod:path:requestClass:processBlock:]_block_invoke', symObjAddr: 0x3234, symBinAddr: 0x7234, symSize: 0x78 }
+  - { offsetInCU: 0x3585, offset: 0x57C84, size: 0x8, addend: 0x0, symName: '-[GCDWebServer(Handlers) addHandlerForMethod:path:requestClass:asyncProcessBlock:]', symObjAddr: 0x32AC, symBinAddr: 0x72AC, symSize: 0x110 }
+  - { offsetInCU: 0x35FD, offset: 0x57CFC, size: 0x8, addend: 0x0, symName: '___82-[GCDWebServer(Handlers) addHandlerForMethod:path:requestClass:asyncProcessBlock:]_block_invoke', symObjAddr: 0x33BC, symBinAddr: 0x73BC, symSize: 0xF0 }
+  - { offsetInCU: 0x36B6, offset: 0x57DB5, size: 0x8, addend: 0x0, symName: ___copy_helper_block_e8_32s40s, symObjAddr: 0x34AC, symBinAddr: 0x74AC, symSize: 0x28 }
+  - { offsetInCU: 0x36DF, offset: 0x57DDE, size: 0x8, addend: 0x0, symName: ___destroy_helper_block_e8_32s40s, symObjAddr: 0x34D4, symBinAddr: 0x74D4, symSize: 0x28 }
+  - { offsetInCU: 0x36FE, offset: 0x57DFD, size: 0x8, addend: 0x0, symName: '-[GCDWebServer(Handlers) addHandlerForMethod:pathRegex:requestClass:processBlock:]', symObjAddr: 0x34FC, symBinAddr: 0x74FC, symSize: 0xA8 }
+  - { offsetInCU: 0x3776, offset: 0x57E75, size: 0x8, addend: 0x0, symName: '___82-[GCDWebServer(Handlers) addHandlerForMethod:pathRegex:requestClass:processBlock:]_block_invoke', symObjAddr: 0x35A4, symBinAddr: 0x75A4, symSize: 0x78 }
+  - { offsetInCU: 0x380C, offset: 0x57F0B, size: 0x8, addend: 0x0, symName: '-[GCDWebServer(Handlers) addHandlerForMethod:pathRegex:requestClass:asyncProcessBlock:]', symObjAddr: 0x361C, symBinAddr: 0x761C, symSize: 0x118 }
+  - { offsetInCU: 0x3895, offset: 0x57F94, size: 0x8, addend: 0x0, symName: '___87-[GCDWebServer(Handlers) addHandlerForMethod:pathRegex:requestClass:asyncProcessBlock:]_block_invoke', symObjAddr: 0x3734, symBinAddr: 0x7734, symSize: 0x2BC }
+  - { offsetInCU: 0x39F0, offset: 0x580EF, size: 0x8, addend: 0x0, symName: '-[GCDWebServer(GETHandlers) addGETHandlerForPath:staticData:contentType:cacheAge:]', symObjAddr: 0x39F0, symBinAddr: 0x79F0, symSize: 0x108 }
+  - { offsetInCU: 0x3A68, offset: 0x58167, size: 0x8, addend: 0x0, symName: '___82-[GCDWebServer(GETHandlers) addGETHandlerForPath:staticData:contentType:cacheAge:]_block_invoke', symObjAddr: 0x3AF8, symBinAddr: 0x7AF8, symSize: 0x44 }
+  - { offsetInCU: 0x3AF9, offset: 0x581F8, size: 0x8, addend: 0x0, symName: '-[GCDWebServer(GETHandlers) addGETHandlerForPath:filePath:isAttachment:cacheAge:allowRangeRequests:]', symObjAddr: 0x3B3C, symBinAddr: 0x7B3C, symSize: 0xF0 }
+  - { offsetInCU: 0x3B7A, offset: 0x58279, size: 0x8, addend: 0x0, symName: '___100-[GCDWebServer(GETHandlers) addGETHandlerForPath:filePath:isAttachment:cacheAge:allowRangeRequests:]_block_invoke', symObjAddr: 0x3C2C, symBinAddr: 0x7C2C, symSize: 0xA8 }
+  - { offsetInCU: 0x3C20, offset: 0x5831F, size: 0x8, addend: 0x0, symName: '-[GCDWebServer(GETHandlers) _responseWithContentsOfDirectory:]', symObjAddr: 0x3CD4, symBinAddr: 0x7CD4, symSize: 0x338 }
+  - { offsetInCU: 0x3CD8, offset: 0x583D7, size: 0x8, addend: 0x0, symName: '-[GCDWebServer(GETHandlers) addGETHandlerForBasePath:directoryPath:indexFilename:cacheAge:allowRangeRequests:]', symObjAddr: 0x400C, symBinAddr: 0x800C, symSize: 0x16C }
+  - { offsetInCU: 0x3D7B, offset: 0x5847A, size: 0x8, addend: 0x0, symName: '___110-[GCDWebServer(GETHandlers) addGETHandlerForBasePath:directoryPath:indexFilename:cacheAge:allowRangeRequests:]_block_invoke', symObjAddr: 0x4178, symBinAddr: 0x8178, symSize: 0xF8 }
+  - { offsetInCU: 0x3E12, offset: 0x58511, size: 0x8, addend: 0x0, symName: '___110-[GCDWebServer(GETHandlers) addGETHandlerForBasePath:directoryPath:indexFilename:cacheAge:allowRangeRequests:]_block_invoke.296', symObjAddr: 0x4270, symBinAddr: 0x8270, symSize: 0x2C4 }
+  - { offsetInCU: 0x3F4D, offset: 0x5864C, size: 0x8, addend: 0x0, symName: ___copy_helper_block_e8_32s40s48s, symObjAddr: 0x4534, symBinAddr: 0x8534, symSize: 0x30 }
+  - { offsetInCU: 0x3F76, offset: 0x58675, size: 0x8, addend: 0x0, symName: ___destroy_helper_block_e8_32s40s48s, symObjAddr: 0x4564, symBinAddr: 0x8564, symSize: 0x30 }
+  - { offsetInCU: 0x3F95, offset: 0x58694, size: 0x8, addend: 0x0, symName: '+[GCDWebServer(Logging) setLogLevel:]', symObjAddr: 0x4594, symBinAddr: 0x8594, symSize: 0xC }
+  - { offsetInCU: 0x3FD4, offset: 0x586D3, size: 0x8, addend: 0x0, symName: '+[GCDWebServer(Logging) setBuiltInLogger:]', symObjAddr: 0x45A0, symBinAddr: 0x85A0, symSize: 0x28 }
+  - { offsetInCU: 0x4015, offset: 0x58714, size: 0x8, addend: 0x0, symName: '-[GCDWebServer(Logging) logVerbose:]', symObjAddr: 0x45C8, symBinAddr: 0x85C8, symSize: 0x88 }
+  - { offsetInCU: 0x407D, offset: 0x5877C, size: 0x8, addend: 0x0, symName: '-[GCDWebServer(Logging) logInfo:]', symObjAddr: 0x4650, symBinAddr: 0x8650, symSize: 0x88 }
+  - { offsetInCU: 0x40E5, offset: 0x587E4, size: 0x8, addend: 0x0, symName: '-[GCDWebServer(Logging) logWarning:]', symObjAddr: 0x46D8, symBinAddr: 0x86D8, symSize: 0x88 }
+  - { offsetInCU: 0x414D, offset: 0x5884C, size: 0x8, addend: 0x0, symName: '-[GCDWebServer(Logging) logError:]', symObjAddr: 0x4760, symBinAddr: 0x8760, symSize: 0x88 }
+  - { offsetInCU: 0x27, offset: 0x59539, size: 0x8, addend: 0x0, symName: '+[GCDWebServerConnection initialize]', symObjAddr: 0x0, symBinAddr: 0x87E8, symSize: 0x19C }
+  - { offsetInCU: 0x41, offset: 0x59553, size: 0x8, addend: 0x0, symName: __CRLFData, symObjAddr: 0x13B10, symBinAddr: 0x25870, symSize: 0x0 }
+  - { offsetInCU: 0x8A, offset: 0x5959C, size: 0x8, addend: 0x0, symName: __CRLFCRLFData, symObjAddr: 0x13B18, symBinAddr: 0x25878, symSize: 0x0 }
+  - { offsetInCU: 0xA0, offset: 0x595B2, size: 0x8, addend: 0x0, symName: __continueData, symObjAddr: 0x13B20, symBinAddr: 0x25880, symSize: 0x0 }
+  - { offsetInCU: 0xB6, offset: 0x595C8, size: 0x8, addend: 0x0, symName: __lastChunkData, symObjAddr: 0x13B28, symBinAddr: 0x25888, symSize: 0x0 }
+  - { offsetInCU: 0xCC, offset: 0x595DE, size: 0x8, addend: 0x0, symName: __digestAuthenticationNonce, symObjAddr: 0x13B30, symBinAddr: 0x25890, symSize: 0x0 }
+  - { offsetInCU: 0x6EC, offset: 0x59BFE, size: 0x8, addend: 0x0, symName: '+[GCDWebServerConnection initialize]', symObjAddr: 0x0, symBinAddr: 0x87E8, symSize: 0x19C }
+  - { offsetInCU: 0x875, offset: 0x59D87, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection isUsingIPv6]', symObjAddr: 0x19C, symBinAddr: 0x8984, symSize: 0x24 }
+  - { offsetInCU: 0x8BC, offset: 0x59DCE, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection _initializeResponseHeadersWithStatusCode:]', symObjAddr: 0x1C0, symBinAddr: 0x89A8, symSize: 0xD0 }
+  - { offsetInCU: 0x996, offset: 0x59EA8, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection _startProcessingRequest]', symObjAddr: 0x290, symBinAddr: 0x8A78, symSize: 0x94 }
+  - { offsetInCU: 0x9D9, offset: 0x59EEB, size: 0x8, addend: 0x0, symName: '___49-[GCDWebServerConnection _startProcessingRequest]_block_invoke', symObjAddr: 0x324, symBinAddr: 0x8B0C, symSize: 0xC }
+  - { offsetInCU: 0xA28, offset: 0x59F3A, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection _finishProcessingRequest:]', symObjAddr: 0x340, symBinAddr: 0x8B18, symSize: 0x3A4 }
+  - { offsetInCU: 0xB77, offset: 0x5A089, size: 0x8, addend: 0x0, symName: '___51-[GCDWebServerConnection _finishProcessingRequest:]_block_invoke', symObjAddr: 0x6E4, symBinAddr: 0x8EBC, symSize: 0xC }
+  - { offsetInCU: 0xBFD, offset: 0x5A10F, size: 0x8, addend: 0x0, symName: '___51-[GCDWebServerConnection _finishProcessingRequest:]_block_invoke.38', symObjAddr: 0x6F0, symBinAddr: 0x8EC8, symSize: 0x7C }
+  - { offsetInCU: 0xC5C, offset: 0x5A16E, size: 0x8, addend: 0x0, symName: '___51-[GCDWebServerConnection _finishProcessingRequest:]_block_invoke_2', symObjAddr: 0x76C, symBinAddr: 0x8F44, symSize: 0xC }
+  - { offsetInCU: 0xCA7, offset: 0x5A1B9, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection _readBodyWithLength:initialData:]', symObjAddr: 0x778, symBinAddr: 0x8F50, symSize: 0x224 }
+  - { offsetInCU: 0xD34, offset: 0x5A246, size: 0x8, addend: 0x0, symName: '___58-[GCDWebServerConnection _readBodyWithLength:initialData:]_block_invoke', symObjAddr: 0x99C, symBinAddr: 0x9174, symSize: 0xA8 }
+  - { offsetInCU: 0xDC3, offset: 0x5A2D5, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection _readChunkedBodyWithInitialData:]', symObjAddr: 0xA94, symBinAddr: 0x921C, symSize: 0x120 }
+  - { offsetInCU: 0xE3D, offset: 0x5A34F, size: 0x8, addend: 0x0, symName: '___58-[GCDWebServerConnection _readChunkedBodyWithInitialData:]_block_invoke', symObjAddr: 0xBB4, symBinAddr: 0x933C, symSize: 0xA8 }
+  - { offsetInCU: 0xED2, offset: 0x5A3E4, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection _readRequestHeaders]', symObjAddr: 0xC5C, symBinAddr: 0x93E4, symSize: 0x9C }
+  - { offsetInCU: 0xF4B, offset: 0x5A45D, size: 0x8, addend: 0x0, symName: '___45-[GCDWebServerConnection _readRequestHeaders]_block_invoke', symObjAddr: 0xCF8, symBinAddr: 0x9480, symSize: 0x5F4 }
+  - { offsetInCU: 0x119B, offset: 0x5A6AD, size: 0x8, addend: 0x0, symName: '___45-[GCDWebServerConnection _readRequestHeaders]_block_invoke_2', symObjAddr: 0x12EC, symBinAddr: 0x9A74, symSize: 0x68 }
+  - { offsetInCU: 0x11FF, offset: 0x5A711, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection initWithServer:localAddress:remoteAddress:socket:]', symObjAddr: 0x1354, symBinAddr: 0x9ADC, symSize: 0x124 }
+  - { offsetInCU: 0x12A0, offset: 0x5A7B2, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection localAddressString]', symObjAddr: 0x1478, symBinAddr: 0x9C00, symSize: 0x1C }
+  - { offsetInCU: 0x130E, offset: 0x5A820, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection remoteAddressString]', symObjAddr: 0x1494, symBinAddr: 0x9C1C, symSize: 0x1C }
+  - { offsetInCU: 0x135B, offset: 0x5A86D, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection dealloc]', symObjAddr: 0x14B0, symBinAddr: 0x9C38, symSize: 0xD0 }
+  - { offsetInCU: 0x13DF, offset: 0x5A8F1, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection server]', symObjAddr: 0x1580, symBinAddr: 0x9D08, symSize: 0x8 }
+  - { offsetInCU: 0x1416, offset: 0x5A928, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection localAddressData]', symObjAddr: 0x1588, symBinAddr: 0x9D10, symSize: 0x8 }
+  - { offsetInCU: 0x144D, offset: 0x5A95F, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection remoteAddressData]', symObjAddr: 0x1590, symBinAddr: 0x9D18, symSize: 0x8 }
+  - { offsetInCU: 0x1484, offset: 0x5A996, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection totalBytesRead]', symObjAddr: 0x1598, symBinAddr: 0x9D20, symSize: 0x8 }
+  - { offsetInCU: 0x14BB, offset: 0x5A9CD, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection totalBytesWritten]', symObjAddr: 0x15A0, symBinAddr: 0x9D28, symSize: 0x8 }
+  - { offsetInCU: 0x14F2, offset: 0x5AA04, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection .cxx_destruct]', symObjAddr: 0x15A8, symBinAddr: 0x9D30, symSize: 0x60 }
+  - { offsetInCU: 0x1525, offset: 0x5AA37, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection(Read) readData:withLength:completionBlock:]', symObjAddr: 0x1608, symBinAddr: 0x9D90, symSize: 0xFC }
+  - { offsetInCU: 0x166D, offset: 0x5AB7F, size: 0x8, addend: 0x0, symName: '___68-[GCDWebServerConnection(Read) readData:withLength:completionBlock:]_block_invoke', symObjAddr: 0x1704, symBinAddr: 0x9E8C, symSize: 0x19C }
+  - { offsetInCU: 0x17DB, offset: 0x5ACED, size: 0x8, addend: 0x0, symName: '___68-[GCDWebServerConnection(Read) readData:withLength:completionBlock:]_block_invoke_2', symObjAddr: 0x18A0, symBinAddr: 0xA028, symSize: 0x24 }
+  - { offsetInCU: 0x1859, offset: 0x5AD6B, size: 0x8, addend: 0x0, symName: ___copy_helper_block_e8_32s40s48b, symObjAddr: 0x18C4, symBinAddr: 0xA04C, symSize: 0x3C }
+  - { offsetInCU: 0x1882, offset: 0x5AD94, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection(Read) readHeaders:withCompletionBlock:]', symObjAddr: 0x1930, symBinAddr: 0xA088, symSize: 0xC0 }
+  - { offsetInCU: 0x18D8, offset: 0x5ADEA, size: 0x8, addend: 0x0, symName: '___64-[GCDWebServerConnection(Read) readHeaders:withCompletionBlock:]_block_invoke', symObjAddr: 0x19F0, symBinAddr: 0xA148, symSize: 0x178 }
+  - { offsetInCU: 0x1A35, offset: 0x5AF47, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection(Read) readBodyWithRemainingLength:completionBlock:]', symObjAddr: 0x1B68, symBinAddr: 0xA2C0, symSize: 0xD4 }
+  - { offsetInCU: 0x1A9C, offset: 0x5AFAE, size: 0x8, addend: 0x0, symName: '___76-[GCDWebServerConnection(Read) readBodyWithRemainingLength:completionBlock:]_block_invoke', symObjAddr: 0x1C3C, symBinAddr: 0xA394, symSize: 0x140 }
+  - { offsetInCU: 0x1B9C, offset: 0x5B0AE, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection(Read) readNextBodyChunk:completionBlock:]', symObjAddr: 0x1D7C, symBinAddr: 0xA4D4, symSize: 0x3B0 }
+  - { offsetInCU: 0x1CD2, offset: 0x5B1E4, size: 0x8, addend: 0x0, symName: __ScanHexNumber, symObjAddr: 0x212C, symBinAddr: 0xA884, symSize: 0xBC }
+  - { offsetInCU: 0x1D59, offset: 0x5B26B, size: 0x8, addend: 0x0, symName: '___66-[GCDWebServerConnection(Read) readNextBodyChunk:completionBlock:]_block_invoke', symObjAddr: 0x21E8, symBinAddr: 0xA940, symSize: 0x20 }
+  - { offsetInCU: 0x1DDD, offset: 0x5B2EF, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection(Write) writeData:withCompletionBlock:]', symObjAddr: 0x2208, symBinAddr: 0xA960, symSize: 0x1A0 }
+  - { offsetInCU: 0x1F08, offset: 0x5B41A, size: 0x8, addend: 0x0, symName: '___63-[GCDWebServerConnection(Write) writeData:withCompletionBlock:]_block_invoke', symObjAddr: 0x23A8, symBinAddr: 0xAB00, symSize: 0x20 }
+  - { offsetInCU: 0x1F46, offset: 0x5B458, size: 0x8, addend: 0x0, symName: '___63-[GCDWebServerConnection(Write) writeData:withCompletionBlock:]_block_invoke.158', symObjAddr: 0x23C8, symBinAddr: 0xAB20, symSize: 0xE0 }
+  - { offsetInCU: 0x1FED, offset: 0x5B4FF, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection(Write) writeHeadersWithCompletionBlock:]', symObjAddr: 0x24A8, symBinAddr: 0xAC00, symSize: 0x5C }
+  - { offsetInCU: 0x206F, offset: 0x5B581, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection(Write) writeBodyWithCompletionBlock:]', symObjAddr: 0x2504, symBinAddr: 0xAC5C, symSize: 0x84 }
+  - { offsetInCU: 0x20B4, offset: 0x5B5C6, size: 0x8, addend: 0x0, symName: '___62-[GCDWebServerConnection(Write) writeBodyWithCompletionBlock:]_block_invoke', symObjAddr: 0x2588, symBinAddr: 0xACE0, symSize: 0x2BC }
+  - { offsetInCU: 0x21BD, offset: 0x5B6CF, size: 0x8, addend: 0x0, symName: '___62-[GCDWebServerConnection(Write) writeBodyWithCompletionBlock:]_block_invoke_2', symObjAddr: 0x2844, symBinAddr: 0xAF9C, symSize: 0x1C }
+  - { offsetInCU: 0x2230, offset: 0x5B742, size: 0x8, addend: 0x0, symName: ___copy_helper_block_e8_32s40b, symObjAddr: 0x2860, symBinAddr: 0xAFB8, symSize: 0x34 }
+  - { offsetInCU: 0x2259, offset: 0x5B76B, size: 0x8, addend: 0x0, symName: '___62-[GCDWebServerConnection(Write) writeBodyWithCompletionBlock:]_block_invoke.165', symObjAddr: 0x2894, symBinAddr: 0xAFEC, symSize: 0xC }
+  - { offsetInCU: 0x22C0, offset: 0x5B7D2, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection(Subclassing) open]', symObjAddr: 0x28B0, symBinAddr: 0xAFF8, symSize: 0x8 }
+  - { offsetInCU: 0x22F4, offset: 0x5B806, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection(Subclassing) didReadBytes:length:]', symObjAddr: 0x28B8, symBinAddr: 0xB000, symSize: 0x10 }
+  - { offsetInCU: 0x2342, offset: 0x5B854, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection(Subclassing) didWriteBytes:length:]', symObjAddr: 0x28C8, symBinAddr: 0xB010, symSize: 0x10 }
+  - { offsetInCU: 0x2390, offset: 0x5B8A2, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection(Subclassing) rewriteRequestURL:withMethod:headers:]', symObjAddr: 0x28D8, symBinAddr: 0xB020, symSize: 0x18 }
+  - { offsetInCU: 0x23EF, offset: 0x5B901, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection(Subclassing) preflightRequest:]', symObjAddr: 0x28F0, symBinAddr: 0xB038, symSize: 0x530 }
+  - { offsetInCU: 0x2617, offset: 0x5BB29, size: 0x8, addend: 0x0, symName: '___56-[GCDWebServerConnection(Subclassing) preflightRequest:]_block_invoke', symObjAddr: 0x2E20, symBinAddr: 0xB568, symSize: 0x40 }
+  - { offsetInCU: 0x2695, offset: 0x5BBA7, size: 0x8, addend: 0x0, symName: ___copy_helper_block_e8_32s40r, symObjAddr: 0x2E60, symBinAddr: 0xB5A8, symSize: 0x34 }
+  - { offsetInCU: 0x26BE, offset: 0x5BBD0, size: 0x8, addend: 0x0, symName: ___destroy_helper_block_e8_32s40r, symObjAddr: 0x2E94, symBinAddr: 0xB5DC, symSize: 0x2C }
+  - { offsetInCU: 0x26DD, offset: 0x5BBEF, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection(Subclassing) processRequest:completion:]', symObjAddr: 0x2EC0, symBinAddr: 0xB608, symSize: 0x90 }
+  - { offsetInCU: 0x2798, offset: 0x5BCAA, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection(Subclassing) overrideResponse:forRequest:]', symObjAddr: 0x2F50, symBinAddr: 0xB698, symSize: 0x2BC }
+  - { offsetInCU: 0x2825, offset: 0x5BD37, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection(Subclassing) abortRequest:withStatusCode:]', symObjAddr: 0x320C, symBinAddr: 0xB954, symSize: 0x30 }
+  - { offsetInCU: 0x2877, offset: 0x5BD89, size: 0x8, addend: 0x0, symName: '___67-[GCDWebServerConnection(Subclassing) abortRequest:withStatusCode:]_block_invoke', symObjAddr: 0x323C, symBinAddr: 0xB984, symSize: 0x4 }
+  - { offsetInCU: 0x28AD, offset: 0x5BDBF, size: 0x8, addend: 0x0, symName: '-[GCDWebServerConnection(Subclassing) close]', symObjAddr: 0x3240, symBinAddr: 0xB988, symSize: 0x174 }
+  - { offsetInCU: 0x27, offset: 0x5C93F, size: 0x8, addend: 0x0, symName: '-[GCDWebServerDataRequest open:]', symObjAddr: 0x0, symBinAddr: 0xBAFC, symSize: 0x138 }
+  - { offsetInCU: 0x262, offset: 0x5CB7A, size: 0x8, addend: 0x0, symName: '-[GCDWebServerDataRequest open:]', symObjAddr: 0x0, symBinAddr: 0xBAFC, symSize: 0x138 }
+  - { offsetInCU: 0x2A9, offset: 0x5CBC1, size: 0x8, addend: 0x0, symName: '-[GCDWebServerDataRequest writeData:error:]', symObjAddr: 0x138, symBinAddr: 0xBC34, symSize: 0x24 }
+  - { offsetInCU: 0x2FC, offset: 0x5CC14, size: 0x8, addend: 0x0, symName: '-[GCDWebServerDataRequest close:]', symObjAddr: 0x15C, symBinAddr: 0xBC58, symSize: 0x8 }
+  - { offsetInCU: 0x33B, offset: 0x5CC53, size: 0x8, addend: 0x0, symName: '-[GCDWebServerDataRequest description]', symObjAddr: 0x164, symBinAddr: 0xBC60, symSize: 0xEC }
+  - { offsetInCU: 0x3B6, offset: 0x5CCCE, size: 0x8, addend: 0x0, symName: '-[GCDWebServerDataRequest data]', symObjAddr: 0x250, symBinAddr: 0xBD4C, symSize: 0x10 }
+  - { offsetInCU: 0x3ED, offset: 0x5CD05, size: 0x8, addend: 0x0, symName: '-[GCDWebServerDataRequest setData:]', symObjAddr: 0x260, symBinAddr: 0xBD5C, symSize: 0x14 }
+  - { offsetInCU: 0x42E, offset: 0x5CD46, size: 0x8, addend: 0x0, symName: '-[GCDWebServerDataRequest .cxx_destruct]', symObjAddr: 0x274, symBinAddr: 0xBD70, symSize: 0x54 }
+  - { offsetInCU: 0x461, offset: 0x5CD79, size: 0x8, addend: 0x0, symName: '-[GCDWebServerDataRequest(Extensions) text]', symObjAddr: 0x2C8, symBinAddr: 0xBDC4, symSize: 0x100 }
+  - { offsetInCU: 0x504, offset: 0x5CE1C, size: 0x8, addend: 0x0, symName: '-[GCDWebServerDataRequest(Extensions) jsonObject]', symObjAddr: 0x3C8, symBinAddr: 0xBEC4, symSize: 0xE0 }
+  - { offsetInCU: 0x27, offset: 0x5CEE5, size: 0x8, addend: 0x0, symName: '+[GCDWebServerDataResponse responseWithData:contentType:]', symObjAddr: 0x0, symBinAddr: 0xBFA4, symSize: 0x70 }
+  - { offsetInCU: 0x1AC, offset: 0x5D06A, size: 0x8, addend: 0x0, symName: '+[GCDWebServerDataResponse responseWithData:contentType:]', symObjAddr: 0x0, symBinAddr: 0xBFA4, symSize: 0x70 }
+  - { offsetInCU: 0x203, offset: 0x5D0C1, size: 0x8, addend: 0x0, symName: '-[GCDWebServerDataResponse initWithData:contentType:]', symObjAddr: 0x70, symBinAddr: 0xC014, symSize: 0xB8 }
+  - { offsetInCU: 0x25A, offset: 0x5D118, size: 0x8, addend: 0x0, symName: '-[GCDWebServerDataResponse readData:]', symObjAddr: 0x128, symBinAddr: 0xC0CC, symSize: 0x5C }
+  - { offsetInCU: 0x2AD, offset: 0x5D16B, size: 0x8, addend: 0x0, symName: '-[GCDWebServerDataResponse description]', symObjAddr: 0x184, symBinAddr: 0xC128, symSize: 0xE4 }
+  - { offsetInCU: 0x328, offset: 0x5D1E6, size: 0x8, addend: 0x0, symName: '-[GCDWebServerDataResponse .cxx_destruct]', symObjAddr: 0x268, symBinAddr: 0xC20C, symSize: 0x14 }
+  - { offsetInCU: 0x35B, offset: 0x5D219, size: 0x8, addend: 0x0, symName: '+[GCDWebServerDataResponse(Extensions) responseWithText:]', symObjAddr: 0x27C, symBinAddr: 0xC220, symSize: 0x48 }
+  - { offsetInCU: 0x3A2, offset: 0x5D260, size: 0x8, addend: 0x0, symName: '+[GCDWebServerDataResponse(Extensions) responseWithHTML:]', symObjAddr: 0x2C4, symBinAddr: 0xC268, symSize: 0x48 }
+  - { offsetInCU: 0x3E9, offset: 0x5D2A7, size: 0x8, addend: 0x0, symName: '+[GCDWebServerDataResponse(Extensions) responseWithHTMLTemplate:variables:]', symObjAddr: 0x30C, symBinAddr: 0xC2B0, symSize: 0x6C }
+  - { offsetInCU: 0x440, offset: 0x5D2FE, size: 0x8, addend: 0x0, symName: '+[GCDWebServerDataResponse(Extensions) responseWithJSONObject:]', symObjAddr: 0x378, symBinAddr: 0xC31C, symSize: 0x48 }
+  - { offsetInCU: 0x487, offset: 0x5D345, size: 0x8, addend: 0x0, symName: '+[GCDWebServerDataResponse(Extensions) responseWithJSONObject:contentType:]', symObjAddr: 0x3C0, symBinAddr: 0xC364, symSize: 0x6C }
+  - { offsetInCU: 0x4DE, offset: 0x5D39C, size: 0x8, addend: 0x0, symName: '-[GCDWebServerDataResponse(Extensions) initWithText:]', symObjAddr: 0x42C, symBinAddr: 0xC3D0, symSize: 0x7C }
+  - { offsetInCU: 0x535, offset: 0x5D3F3, size: 0x8, addend: 0x0, symName: '-[GCDWebServerDataResponse(Extensions) initWithHTML:]', symObjAddr: 0x4A8, symBinAddr: 0xC44C, symSize: 0x7C }
+  - { offsetInCU: 0x58C, offset: 0x5D44A, size: 0x8, addend: 0x0, symName: '-[GCDWebServerDataResponse(Extensions) initWithHTMLTemplate:variables:]', symObjAddr: 0x524, symBinAddr: 0xC4C8, symSize: 0xE8 }
+  - { offsetInCU: 0x5F3, offset: 0x5D4B1, size: 0x8, addend: 0x0, symName: '___71-[GCDWebServerDataResponse(Extensions) initWithHTMLTemplate:variables:]_block_invoke', symObjAddr: 0x60C, symBinAddr: 0xC5B0, symSize: 0xA0 }
+  - { offsetInCU: 0x65A, offset: 0x5D518, size: 0x8, addend: 0x0, symName: '-[GCDWebServerDataResponse(Extensions) initWithJSONObject:]', symObjAddr: 0x6BC, symBinAddr: 0xC650, symSize: 0xC }
+  - { offsetInCU: 0x69F, offset: 0x5D55D, size: 0x8, addend: 0x0, symName: '-[GCDWebServerDataResponse(Extensions) initWithJSONObject:contentType:]', symObjAddr: 0x6C8, symBinAddr: 0xC65C, symSize: 0x9C }
+  - { offsetInCU: 0x27, offset: 0x5D716, size: 0x8, addend: 0x0, symName: '+[GCDWebServerErrorResponse responseWithClientError:message:]', symObjAddr: 0x0, symBinAddr: 0xC6F8, symSize: 0x70 }
+  - { offsetInCU: 0x2B2, offset: 0x5D9A1, size: 0x8, addend: 0x0, symName: '+[GCDWebServerErrorResponse responseWithClientError:message:]', symObjAddr: 0x0, symBinAddr: 0xC6F8, symSize: 0x70 }
+  - { offsetInCU: 0x32A, offset: 0x5DA19, size: 0x8, addend: 0x0, symName: '+[GCDWebServerErrorResponse responseWithServerError:message:]', symObjAddr: 0x70, symBinAddr: 0xC768, symSize: 0x70 }
+  - { offsetInCU: 0x3A2, offset: 0x5DA91, size: 0x8, addend: 0x0, symName: '+[GCDWebServerErrorResponse responseWithClientError:underlyingError:message:]', symObjAddr: 0xE0, symBinAddr: 0xC7D8, symSize: 0x88 }
+  - { offsetInCU: 0x42A, offset: 0x5DB19, size: 0x8, addend: 0x0, symName: '+[GCDWebServerErrorResponse responseWithServerError:underlyingError:message:]', symObjAddr: 0x168, symBinAddr: 0xC860, symSize: 0x88 }
+  - { offsetInCU: 0x4CC, offset: 0x5DBBB, size: 0x8, addend: 0x0, symName: '-[GCDWebServerErrorResponse initWithStatusCode:underlyingError:messageFormat:arguments:]', symObjAddr: 0x1F0, symBinAddr: 0xC8E8, symSize: 0x1F0 }
+  - { offsetInCU: 0x5BF, offset: 0x5DCAE, size: 0x8, addend: 0x0, symName: '-[GCDWebServerErrorResponse initWithClientError:message:]', symObjAddr: 0x3E0, symBinAddr: 0xCAD8, symSize: 0x30 }
+  - { offsetInCU: 0x627, offset: 0x5DD16, size: 0x8, addend: 0x0, symName: '-[GCDWebServerErrorResponse initWithServerError:message:]', symObjAddr: 0x410, symBinAddr: 0xCB08, symSize: 0x30 }
+  - { offsetInCU: 0x68F, offset: 0x5DD7E, size: 0x8, addend: 0x0, symName: '-[GCDWebServerErrorResponse initWithClientError:underlyingError:message:]', symObjAddr: 0x440, symBinAddr: 0xCB38, symSize: 0x28 }
+  - { offsetInCU: 0x707, offset: 0x5DDF6, size: 0x8, addend: 0x0, symName: '-[GCDWebServerErrorResponse initWithServerError:underlyingError:message:]', symObjAddr: 0x468, symBinAddr: 0xCB60, symSize: 0x28 }
+  - { offsetInCU: 0x27, offset: 0x5DF0F, size: 0x8, addend: 0x0, symName: '-[GCDWebServerFileRequest initWithMethod:url:headers:path:query:]', symObjAddr: 0x0, symBinAddr: 0xCB88, symSize: 0xCC }
+  - { offsetInCU: 0x209, offset: 0x5E0F1, size: 0x8, addend: 0x0, symName: '-[GCDWebServerFileRequest initWithMethod:url:headers:path:query:]', symObjAddr: 0x0, symBinAddr: 0xCB88, symSize: 0xCC }
+  - { offsetInCU: 0x2AA, offset: 0x5E192, size: 0x8, addend: 0x0, symName: '-[GCDWebServerFileRequest dealloc]', symObjAddr: 0xCC, symBinAddr: 0xCC54, symSize: 0x54 }
+  - { offsetInCU: 0x32E, offset: 0x5E216, size: 0x8, addend: 0x0, symName: '-[GCDWebServerFileRequest open:]', symObjAddr: 0x120, symBinAddr: 0xCCA8, symSize: 0x168 }
+  - { offsetInCU: 0x3C9, offset: 0x5E2B1, size: 0x8, addend: 0x0, symName: '-[GCDWebServerFileRequest writeData:error:]', symObjAddr: 0x288, symBinAddr: 0xCE10, symSize: 0x18C }
+  - { offsetInCU: 0x484, offset: 0x5E36C, size: 0x8, addend: 0x0, symName: '-[GCDWebServerFileRequest close:]', symObjAddr: 0x414, symBinAddr: 0xCF9C, symSize: 0x144 }
+  - { offsetInCU: 0x510, offset: 0x5E3F8, size: 0x8, addend: 0x0, symName: '-[GCDWebServerFileRequest description]', symObjAddr: 0x558, symBinAddr: 0xD0E0, symSize: 0xA0 }
+  - { offsetInCU: 0x557, offset: 0x5E43F, size: 0x8, addend: 0x0, symName: '-[GCDWebServerFileRequest temporaryPath]', symObjAddr: 0x5F8, symBinAddr: 0xD180, symSize: 0x10 }
+  - { offsetInCU: 0x58E, offset: 0x5E476, size: 0x8, addend: 0x0, symName: '-[GCDWebServerFileRequest .cxx_destruct]', symObjAddr: 0x608, symBinAddr: 0xD190, symSize: 0x14 }
+  - { offsetInCU: 0x27, offset: 0x5E529, size: 0x8, addend: 0x0, symName: '+[GCDWebServerFileResponse responseWithFile:]', symObjAddr: 0x0, symBinAddr: 0xD1A4, symSize: 0x4C }
+  - { offsetInCU: 0x1F7, offset: 0x5E6F9, size: 0x8, addend: 0x0, symName: '+[GCDWebServerFileResponse responseWithFile:]', symObjAddr: 0x0, symBinAddr: 0xD1A4, symSize: 0x4C }
+  - { offsetInCU: 0x23E, offset: 0x5E740, size: 0x8, addend: 0x0, symName: '+[GCDWebServerFileResponse responseWithFile:isAttachment:]', symObjAddr: 0x4C, symBinAddr: 0xD1F0, symSize: 0x5C }
+  - { offsetInCU: 0x295, offset: 0x5E797, size: 0x8, addend: 0x0, symName: '+[GCDWebServerFileResponse responseWithFile:byteRange:]', symObjAddr: 0xA8, symBinAddr: 0xD24C, symSize: 0x64 }
+  - { offsetInCU: 0x2E8, offset: 0x5E7EA, size: 0x8, addend: 0x0, symName: '+[GCDWebServerFileResponse responseWithFile:byteRange:isAttachment:]', symObjAddr: 0x10C, symBinAddr: 0xD2B0, symSize: 0x78 }
+  - { offsetInCU: 0x34B, offset: 0x5E84D, size: 0x8, addend: 0x0, symName: '-[GCDWebServerFileResponse initWithFile:]', symObjAddr: 0x184, symBinAddr: 0xD328, symSize: 0x14 }
+  - { offsetInCU: 0x38E, offset: 0x5E890, size: 0x8, addend: 0x0, symName: '-[GCDWebServerFileResponse initWithFile:isAttachment:]', symObjAddr: 0x198, symBinAddr: 0xD33C, symSize: 0x14 }
+  - { offsetInCU: 0x3E3, offset: 0x5E8E5, size: 0x8, addend: 0x0, symName: '-[GCDWebServerFileResponse initWithFile:byteRange:]', symObjAddr: 0x1AC, symBinAddr: 0xD350, symSize: 0xC }
+  - { offsetInCU: 0x470, offset: 0x5E972, size: 0x8, addend: 0x0, symName: '-[GCDWebServerFileResponse initWithFile:byteRange:isAttachment:mimeTypeOverrides:]', symObjAddr: 0x1B8, symBinAddr: 0xD35C, symSize: 0x3AC }
+  - { offsetInCU: 0x6E8, offset: 0x5EBEA, size: 0x8, addend: 0x0, symName: '-[GCDWebServerFileResponse open:]', symObjAddr: 0x564, symBinAddr: 0xD708, symSize: 0x250 }
+  - { offsetInCU: 0x7FA, offset: 0x5ECFC, size: 0x8, addend: 0x0, symName: '-[GCDWebServerFileResponse readData:]', symObjAddr: 0x7B4, symBinAddr: 0xD958, symSize: 0x1C8 }
+  - { offsetInCU: 0x8FE, offset: 0x5EE00, size: 0x8, addend: 0x0, symName: '-[GCDWebServerFileResponse close]', symObjAddr: 0x97C, symBinAddr: 0xDB20, symSize: 0x10 }
+  - { offsetInCU: 0x93F, offset: 0x5EE41, size: 0x8, addend: 0x0, symName: '-[GCDWebServerFileResponse description]', symObjAddr: 0x98C, symBinAddr: 0xDB30, symSize: 0xA0 }
+  - { offsetInCU: 0x986, offset: 0x5EE88, size: 0x8, addend: 0x0, symName: '-[GCDWebServerFileResponse .cxx_destruct]', symObjAddr: 0xA2C, symBinAddr: 0xDBD0, symSize: 0x14 }
+  - { offsetInCU: 0x27, offset: 0x5EF53, size: 0x8, addend: 0x0, symName: _GCDWebServerInitializeFunctions, symObjAddr: 0x0, symBinAddr: 0xDBE4, symSize: 0x180 }
+  - { offsetInCU: 0x41, offset: 0x5EF6D, size: 0x8, addend: 0x0, symName: __dateFormatterRFC822, symObjAddr: 0x7588, symBinAddr: 0x25898, symSize: 0x0 }
+  - { offsetInCU: 0x8A, offset: 0x5EFB6, size: 0x8, addend: 0x0, symName: __dateFormatterISO8601, symObjAddr: 0x7590, symBinAddr: 0x258A0, symSize: 0x0 }
+  - { offsetInCU: 0xA0, offset: 0x5EFCC, size: 0x8, addend: 0x0, symName: __dateFormatterQueue, symObjAddr: 0x7598, symBinAddr: 0x258A8, symSize: 0x0 }
+  - { offsetInCU: 0x19D, offset: 0x5F0C9, size: 0x8, addend: 0x0, symName: _GCDWebServerInitializeFunctions, symObjAddr: 0x0, symBinAddr: 0xDBE4, symSize: 0x180 }
+  - { offsetInCU: 0x1F1, offset: 0x5F11D, size: 0x8, addend: 0x0, symName: _GCDWebServerNormalizeHeaderValue, symObjAddr: 0x180, symBinAddr: 0xDD64, symSize: 0xF0 }
+  - { offsetInCU: 0x23B, offset: 0x5F167, size: 0x8, addend: 0x0, symName: _GCDWebServerTruncateHeaderValue, symObjAddr: 0x270, symBinAddr: 0xDE54, symSize: 0x70 }
+  - { offsetInCU: 0x27D, offset: 0x5F1A9, size: 0x8, addend: 0x0, symName: _GCDWebServerExtractHeaderValueParameter, symObjAddr: 0x2E0, symBinAddr: 0xDEC4, symSize: 0x168 }
+  - { offsetInCU: 0x2F7, offset: 0x5F223, size: 0x8, addend: 0x0, symName: _GCDWebServerStringEncodingFromCharset, symObjAddr: 0x448, symBinAddr: 0xE02C, symSize: 0x50 }
+  - { offsetInCU: 0x37C, offset: 0x5F2A8, size: 0x8, addend: 0x0, symName: _GCDWebServerFormatRFC822, symObjAddr: 0x498, symBinAddr: 0xE07C, symSize: 0xD4 }
+  - { offsetInCU: 0x3F2, offset: 0x5F31E, size: 0x8, addend: 0x0, symName: ___Block_byref_object_copy_, symObjAddr: 0x56C, symBinAddr: 0xE150, symSize: 0x10 }
+  - { offsetInCU: 0x417, offset: 0x5F343, size: 0x8, addend: 0x0, symName: ___Block_byref_object_dispose_, symObjAddr: 0x57C, symBinAddr: 0xE160, symSize: 0x8 }
+  - { offsetInCU: 0x436, offset: 0x5F362, size: 0x8, addend: 0x0, symName: ___GCDWebServerFormatRFC822_block_invoke, symObjAddr: 0x584, symBinAddr: 0xE168, symSize: 0x48 }
+  - { offsetInCU: 0x481, offset: 0x5F3AD, size: 0x8, addend: 0x0, symName: _GCDWebServerParseRFC822, symObjAddr: 0x62C, symBinAddr: 0xE1B0, symSize: 0xD4 }
+  - { offsetInCU: 0x4DD, offset: 0x5F409, size: 0x8, addend: 0x0, symName: ___GCDWebServerParseRFC822_block_invoke, symObjAddr: 0x700, symBinAddr: 0xE284, symSize: 0x48 }
+  - { offsetInCU: 0x528, offset: 0x5F454, size: 0x8, addend: 0x0, symName: _GCDWebServerFormatISO8601, symObjAddr: 0x748, symBinAddr: 0xE2CC, symSize: 0xD4 }
+  - { offsetInCU: 0x584, offset: 0x5F4B0, size: 0x8, addend: 0x0, symName: ___GCDWebServerFormatISO8601_block_invoke, symObjAddr: 0x81C, symBinAddr: 0xE3A0, symSize: 0x48 }
+  - { offsetInCU: 0x5CF, offset: 0x5F4FB, size: 0x8, addend: 0x0, symName: _GCDWebServerParseISO8601, symObjAddr: 0x864, symBinAddr: 0xE3E8, symSize: 0xD4 }
+  - { offsetInCU: 0x62B, offset: 0x5F557, size: 0x8, addend: 0x0, symName: ___GCDWebServerParseISO8601_block_invoke, symObjAddr: 0x938, symBinAddr: 0xE4BC, symSize: 0x48 }
+  - { offsetInCU: 0x676, offset: 0x5F5A2, size: 0x8, addend: 0x0, symName: _GCDWebServerIsTextContentType, symObjAddr: 0x980, symBinAddr: 0xE504, symSize: 0x6C }
+  - { offsetInCU: 0x6A1, offset: 0x5F5CD, size: 0x8, addend: 0x0, symName: _GCDWebServerDescribeData, symObjAddr: 0x9EC, symBinAddr: 0xE570, symSize: 0xE4 }
+  - { offsetInCU: 0x73D, offset: 0x5F669, size: 0x8, addend: 0x0, symName: _GCDWebServerGetMimeTypeForExtension, symObjAddr: 0xAD0, symBinAddr: 0xE654, symSize: 0x194 }
+  - { offsetInCU: 0x841, offset: 0x5F76D, size: 0x8, addend: 0x0, symName: _GCDWebServerEscapeURLString, symObjAddr: 0xC64, symBinAddr: 0xE7E8, symSize: 0x38 }
+  - { offsetInCU: 0x8B0, offset: 0x5F7DC, size: 0x8, addend: 0x0, symName: _GCDWebServerUnescapeURLString, symObjAddr: 0xC9C, symBinAddr: 0xE820, symSize: 0x34 }
+  - { offsetInCU: 0x914, offset: 0x5F840, size: 0x8, addend: 0x0, symName: _GCDWebServerParseURLEncodedForm, symObjAddr: 0xCD0, symBinAddr: 0xE854, symSize: 0x288 }
+  - { offsetInCU: 0xA06, offset: 0x5F932, size: 0x8, addend: 0x0, symName: _GCDWebServerStringFromSockAddr, symObjAddr: 0xF58, symBinAddr: 0xEADC, symSize: 0xBC }
+  - { offsetInCU: 0xAE5, offset: 0x5FA11, size: 0x8, addend: 0x0, symName: _GCDWebServerGetPrimaryIPAddress, symObjAddr: 0x1014, symBinAddr: 0xEB98, symSize: 0xC0 }
+  - { offsetInCU: 0xBC1, offset: 0x5FAED, size: 0x8, addend: 0x0, symName: _GCDWebServerComputeMD5Digest, symObjAddr: 0x10D4, symBinAddr: 0xEC58, symSize: 0x124 }
+  - { offsetInCU: 0xCC9, offset: 0x5FBF5, size: 0x8, addend: 0x0, symName: _GCDWebServerNormalizePath, symObjAddr: 0x11F8, symBinAddr: 0xED7C, symSize: 0x208 }
+  - { offsetInCU: 0x27, offset: 0x5FF4E, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPart initWithControlName:contentType:]', symObjAddr: 0x0, symBinAddr: 0xEF84, symSize: 0xD0 }
+  - { offsetInCU: 0x41, offset: 0x5FF68, size: 0x8, addend: 0x0, symName: __newlineData, symObjAddr: 0x9FC8, symBinAddr: 0x258B0, symSize: 0x0 }
+  - { offsetInCU: 0x8A, offset: 0x5FFB1, size: 0x8, addend: 0x0, symName: __newlinesData, symObjAddr: 0x9FD0, symBinAddr: 0x258B8, symSize: 0x0 }
+  - { offsetInCU: 0xA0, offset: 0x5FFC7, size: 0x8, addend: 0x0, symName: __dashNewlineData, symObjAddr: 0x9FD8, symBinAddr: 0x258C0, symSize: 0x0 }
+  - { offsetInCU: 0x4BB, offset: 0x603E2, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPart initWithControlName:contentType:]', symObjAddr: 0x0, symBinAddr: 0xEF84, symSize: 0xD0 }
+  - { offsetInCU: 0x532, offset: 0x60459, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPart controlName]', symObjAddr: 0xD0, symBinAddr: 0xF054, symSize: 0x8 }
+  - { offsetInCU: 0x569, offset: 0x60490, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPart contentType]', symObjAddr: 0xD8, symBinAddr: 0xF05C, symSize: 0x8 }
+  - { offsetInCU: 0x5A0, offset: 0x604C7, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPart mimeType]', symObjAddr: 0xE0, symBinAddr: 0xF064, symSize: 0x8 }
+  - { offsetInCU: 0x5D7, offset: 0x604FE, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPart .cxx_destruct]', symObjAddr: 0xE8, symBinAddr: 0xF06C, symSize: 0x3C }
+  - { offsetInCU: 0x60A, offset: 0x60531, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartArgument initWithControlName:contentType:data:]', symObjAddr: 0x124, symBinAddr: 0xF0A8, symSize: 0x14C }
+  - { offsetInCU: 0x6DD, offset: 0x60604, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartArgument description]', symObjAddr: 0x270, symBinAddr: 0xF1F4, symSize: 0x90 }
+  - { offsetInCU: 0x714, offset: 0x6063B, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartArgument data]', symObjAddr: 0x300, symBinAddr: 0xF284, symSize: 0x10 }
+  - { offsetInCU: 0x74B, offset: 0x60672, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartArgument string]', symObjAddr: 0x310, symBinAddr: 0xF294, symSize: 0x10 }
+  - { offsetInCU: 0x782, offset: 0x606A9, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartArgument .cxx_destruct]', symObjAddr: 0x320, symBinAddr: 0xF2A4, symSize: 0x40 }
+  - { offsetInCU: 0x7B5, offset: 0x606DC, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartFile initWithControlName:contentType:fileName:temporaryPath:]', symObjAddr: 0x360, symBinAddr: 0xF2E4, symSize: 0xD8 }
+  - { offsetInCU: 0x82C, offset: 0x60753, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartFile dealloc]', symObjAddr: 0x438, symBinAddr: 0xF3BC, symSize: 0x54 }
+  - { offsetInCU: 0x88A, offset: 0x607B1, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartFile description]', symObjAddr: 0x48C, symBinAddr: 0xF410, symSize: 0x8C }
+  - { offsetInCU: 0x8C1, offset: 0x607E8, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartFile fileName]', symObjAddr: 0x518, symBinAddr: 0xF49C, symSize: 0x10 }
+  - { offsetInCU: 0x8F8, offset: 0x6081F, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartFile temporaryPath]', symObjAddr: 0x528, symBinAddr: 0xF4AC, symSize: 0x10 }
+  - { offsetInCU: 0x92F, offset: 0x60856, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartFile .cxx_destruct]', symObjAddr: 0x538, symBinAddr: 0xF4BC, symSize: 0x40 }
+  - { offsetInCU: 0x962, offset: 0x60889, size: 0x8, addend: 0x0, symName: '+[GCDWebServerMIMEStreamParser initialize]', symObjAddr: 0x578, symBinAddr: 0xF4FC, symSize: 0xC8 }
+  - { offsetInCU: 0x991, offset: 0x608B8, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMIMEStreamParser initWithBoundary:defaultControlName:arguments:files:]', symObjAddr: 0x640, symBinAddr: 0xF5C4, symSize: 0x19C }
+  - { offsetInCU: 0xA18, offset: 0x6093F, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMIMEStreamParser dealloc]', symObjAddr: 0x7DC, symBinAddr: 0xF760, symSize: 0x5C }
+  - { offsetInCU: 0xA7E, offset: 0x609A5, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMIMEStreamParser _parseData]', symObjAddr: 0x838, symBinAddr: 0xF7BC, symSize: 0x85C }
+  - { offsetInCU: 0xE70, offset: 0x60D97, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMIMEStreamParser appendBytes:length:]', symObjAddr: 0x1094, symBinAddr: 0x10018, symSize: 0x28 }
+  - { offsetInCU: 0xECA, offset: 0x60DF1, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMIMEStreamParser isAtEnd]', symObjAddr: 0x10BC, symBinAddr: 0x10040, symSize: 0x10 }
+  - { offsetInCU: 0xF02, offset: 0x60E29, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMIMEStreamParser .cxx_destruct]', symObjAddr: 0x10CC, symBinAddr: 0x10050, symSize: 0x90 }
+  - { offsetInCU: 0xF35, offset: 0x60E5C, size: 0x8, addend: 0x0, symName: '+[GCDWebServerMultiPartFormRequest mimeType]', symObjAddr: 0x115C, symBinAddr: 0x100E0, symSize: 0xC }
+  - { offsetInCU: 0xF69, offset: 0x60E90, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartFormRequest initWithMethod:url:headers:path:query:]', symObjAddr: 0x1168, symBinAddr: 0x100EC, symSize: 0x8C }
+  - { offsetInCU: 0xFF6, offset: 0x60F1D, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartFormRequest open:]', symObjAddr: 0x11F4, symBinAddr: 0x10178, symSize: 0x170 }
+  - { offsetInCU: 0x105E, offset: 0x60F85, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartFormRequest writeData:error:]', symObjAddr: 0x1364, symBinAddr: 0x102E8, symSize: 0x130 }
+  - { offsetInCU: 0x10B8, offset: 0x60FDF, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartFormRequest close:]', symObjAddr: 0x1494, symBinAddr: 0x10418, symSize: 0xFC }
+  - { offsetInCU: 0x110E, offset: 0x61035, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartFormRequest firstArgumentForControlName:]', symObjAddr: 0x1590, symBinAddr: 0x10514, symSize: 0x158 }
+  - { offsetInCU: 0x116F, offset: 0x61096, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartFormRequest firstFileForControlName:]', symObjAddr: 0x16E8, symBinAddr: 0x1066C, symSize: 0x158 }
+  - { offsetInCU: 0x11D0, offset: 0x610F7, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartFormRequest description]', symObjAddr: 0x1840, symBinAddr: 0x107C4, symSize: 0x364 }
+  - { offsetInCU: 0x128D, offset: 0x611B4, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartFormRequest arguments]', symObjAddr: 0x1BA4, symBinAddr: 0x10B28, symSize: 0x10 }
+  - { offsetInCU: 0x12C4, offset: 0x611EB, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartFormRequest setArguments:]', symObjAddr: 0x1BB4, symBinAddr: 0x10B38, symSize: 0x14 }
+  - { offsetInCU: 0x1306, offset: 0x6122D, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartFormRequest files]', symObjAddr: 0x1BC8, symBinAddr: 0x10B4C, symSize: 0x10 }
+  - { offsetInCU: 0x133D, offset: 0x61264, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartFormRequest setFiles:]', symObjAddr: 0x1BD8, symBinAddr: 0x10B5C, symSize: 0x14 }
+  - { offsetInCU: 0x137F, offset: 0x612A6, size: 0x8, addend: 0x0, symName: '-[GCDWebServerMultiPartFormRequest .cxx_destruct]', symObjAddr: 0x1BEC, symBinAddr: 0x10B70, symSize: 0x54 }
+  - { offsetInCU: 0x27, offset: 0x6139A, size: 0x8, addend: 0x0, symName: '-[GCDWebServerBodyDecoder initWithRequest:writer:]', symObjAddr: 0x0, symBinAddr: 0x10BC4, symSize: 0x4C }
+  - { offsetInCU: 0x41, offset: 0x613B4, size: 0x8, addend: 0x0, symName: _GCDWebServerRequestAttribute_RegexCaptures, symObjAddr: 0x1360, symBinAddr: 0x1C6A0, symSize: 0x0 }
+  - { offsetInCU: 0x3D7, offset: 0x6174A, size: 0x8, addend: 0x0, symName: '-[GCDWebServerBodyDecoder initWithRequest:writer:]', symObjAddr: 0x0, symBinAddr: 0x10BC4, symSize: 0x4C }
+  - { offsetInCU: 0x42E, offset: 0x617A1, size: 0x8, addend: 0x0, symName: '-[GCDWebServerBodyDecoder open:]', symObjAddr: 0x4C, symBinAddr: 0x10C10, symSize: 0x8 }
+  - { offsetInCU: 0x473, offset: 0x617E6, size: 0x8, addend: 0x0, symName: '-[GCDWebServerBodyDecoder writeData:error:]', symObjAddr: 0x54, symBinAddr: 0x10C18, symSize: 0x8 }
+  - { offsetInCU: 0x4C6, offset: 0x61839, size: 0x8, addend: 0x0, symName: '-[GCDWebServerBodyDecoder close:]', symObjAddr: 0x5C, symBinAddr: 0x10C20, symSize: 0x8 }
+  - { offsetInCU: 0x50B, offset: 0x6187E, size: 0x8, addend: 0x0, symName: '-[GCDWebServerGZipDecoder open:]', symObjAddr: 0x64, symBinAddr: 0x10C28, symSize: 0xD0 }
+  - { offsetInCU: 0x5DA, offset: 0x6194D, size: 0x8, addend: 0x0, symName: '-[GCDWebServerGZipDecoder writeData:error:]', symObjAddr: 0x134, symBinAddr: 0x10CF8, symSize: 0x1E0 }
+  - { offsetInCU: 0x6D4, offset: 0x61A47, size: 0x8, addend: 0x0, symName: '-[GCDWebServerGZipDecoder close:]', symObjAddr: 0x314, symBinAddr: 0x10ED8, symSize: 0x58 }
+  - { offsetInCU: 0x729, offset: 0x61A9C, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest initWithMethod:url:headers:path:query:]', symObjAddr: 0x36C, symBinAddr: 0x10F30, symSize: 0x5F8 }
+  - { offsetInCU: 0x92E, offset: 0x61CA1, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest hasBody]', symObjAddr: 0x964, symBinAddr: 0x11528, symSize: 0x10 }
+  - { offsetInCU: 0x97F, offset: 0x61CF2, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest hasByteRange]', symObjAddr: 0x974, symBinAddr: 0x11538, symSize: 0x14 }
+  - { offsetInCU: 0x9D6, offset: 0x61D49, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest attributeForKey:]', symObjAddr: 0x988, symBinAddr: 0x1154C, symSize: 0x8 }
+  - { offsetInCU: 0xA1B, offset: 0x61D8E, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest open:]', symObjAddr: 0x990, symBinAddr: 0x11554, symSize: 0x8 }
+  - { offsetInCU: 0xA5A, offset: 0x61DCD, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest writeData:error:]', symObjAddr: 0x998, symBinAddr: 0x1155C, symSize: 0x8 }
+  - { offsetInCU: 0xAA5, offset: 0x61E18, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest close:]', symObjAddr: 0x9A0, symBinAddr: 0x11564, symSize: 0x8 }
+  - { offsetInCU: 0xAE4, offset: 0x61E57, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest prepareForWriting]', symObjAddr: 0x9A8, symBinAddr: 0x1156C, symSize: 0xD8 }
+  - { offsetInCU: 0xB44, offset: 0x61EB7, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest performOpen:]', symObjAddr: 0xA80, symBinAddr: 0x11644, symSize: 0x20 }
+  - { offsetInCU: 0xB8B, offset: 0x61EFE, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest performWriteData:error:]', symObjAddr: 0xAA0, symBinAddr: 0x11664, symSize: 0x8 }
+  - { offsetInCU: 0xBE1, offset: 0x61F54, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest performClose:]', symObjAddr: 0xAA8, symBinAddr: 0x1166C, symSize: 0x8 }
+  - { offsetInCU: 0xC28, offset: 0x61F9B, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest setAttribute:forKey:]', symObjAddr: 0xAB0, symBinAddr: 0x11674, symSize: 0x8 }
+  - { offsetInCU: 0xC7A, offset: 0x61FED, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest localAddressString]', symObjAddr: 0xAB8, symBinAddr: 0x1167C, symSize: 0x1C }
+  - { offsetInCU: 0xCE8, offset: 0x6205B, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest remoteAddressString]', symObjAddr: 0xAD4, symBinAddr: 0x11698, symSize: 0x1C }
+  - { offsetInCU: 0xD35, offset: 0x620A8, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest description]', symObjAddr: 0xAF0, symBinAddr: 0x116B4, symSize: 0x290 }
+  - { offsetInCU: 0xDAE, offset: 0x62121, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest method]', symObjAddr: 0xD80, symBinAddr: 0x11944, symSize: 0x8 }
+  - { offsetInCU: 0xDE5, offset: 0x62158, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest URL]', symObjAddr: 0xD88, symBinAddr: 0x1194C, symSize: 0x8 }
+  - { offsetInCU: 0xE1C, offset: 0x6218F, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest headers]', symObjAddr: 0xD90, symBinAddr: 0x11954, symSize: 0x8 }
+  - { offsetInCU: 0xE53, offset: 0x621C6, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest path]', symObjAddr: 0xD98, symBinAddr: 0x1195C, symSize: 0x8 }
+  - { offsetInCU: 0xE8A, offset: 0x621FD, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest query]', symObjAddr: 0xDA0, symBinAddr: 0x11964, symSize: 0x8 }
+  - { offsetInCU: 0xEC1, offset: 0x62234, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest contentType]', symObjAddr: 0xDA8, symBinAddr: 0x1196C, symSize: 0x8 }
+  - { offsetInCU: 0xEF8, offset: 0x6226B, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest contentLength]', symObjAddr: 0xDB0, symBinAddr: 0x11974, symSize: 0x8 }
+  - { offsetInCU: 0xF2F, offset: 0x622A2, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest ifModifiedSince]', symObjAddr: 0xDB8, symBinAddr: 0x1197C, symSize: 0x8 }
+  - { offsetInCU: 0xF66, offset: 0x622D9, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest ifNoneMatch]', symObjAddr: 0xDC0, symBinAddr: 0x11984, symSize: 0x8 }
+  - { offsetInCU: 0xF9D, offset: 0x62310, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest byteRange]', symObjAddr: 0xDC8, symBinAddr: 0x1198C, symSize: 0xC }
+  - { offsetInCU: 0xFD4, offset: 0x62347, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest acceptsGzipContentEncoding]', symObjAddr: 0xDD4, symBinAddr: 0x11998, symSize: 0x8 }
+  - { offsetInCU: 0x100B, offset: 0x6237E, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest localAddressData]', symObjAddr: 0xDDC, symBinAddr: 0x119A0, symSize: 0x8 }
+  - { offsetInCU: 0x1042, offset: 0x623B5, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest setLocalAddressData:]', symObjAddr: 0xDE4, symBinAddr: 0x119A8, symSize: 0xC }
+  - { offsetInCU: 0x1083, offset: 0x623F6, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest remoteAddressData]', symObjAddr: 0xDF0, symBinAddr: 0x119B4, symSize: 0x8 }
+  - { offsetInCU: 0x10BA, offset: 0x6242D, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest setRemoteAddressData:]', symObjAddr: 0xDF8, symBinAddr: 0x119BC, symSize: 0xC }
+  - { offsetInCU: 0x10FB, offset: 0x6246E, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest usesChunkedTransferEncoding]', symObjAddr: 0xE04, symBinAddr: 0x119C8, symSize: 0x8 }
+  - { offsetInCU: 0x1132, offset: 0x624A5, size: 0x8, addend: 0x0, symName: '-[GCDWebServerRequest .cxx_destruct]', symObjAddr: 0xE0C, symBinAddr: 0x119D0, symSize: 0xA8 }
+  - { offsetInCU: 0x27, offset: 0x6254D, size: 0x8, addend: 0x0, symName: '-[GCDWebServerBodyEncoder initWithResponse:reader:]', symObjAddr: 0x0, symBinAddr: 0x11A78, symSize: 0x4C }
+  - { offsetInCU: 0x2A2, offset: 0x627C8, size: 0x8, addend: 0x0, symName: '-[GCDWebServerBodyEncoder initWithResponse:reader:]', symObjAddr: 0x0, symBinAddr: 0x11A78, symSize: 0x4C }
+  - { offsetInCU: 0x2F9, offset: 0x6281F, size: 0x8, addend: 0x0, symName: '-[GCDWebServerBodyEncoder open:]', symObjAddr: 0x4C, symBinAddr: 0x11AC4, symSize: 0x8 }
+  - { offsetInCU: 0x33E, offset: 0x62864, size: 0x8, addend: 0x0, symName: '-[GCDWebServerBodyEncoder readData:]', symObjAddr: 0x54, symBinAddr: 0x11ACC, symSize: 0x8 }
+  - { offsetInCU: 0x383, offset: 0x628A9, size: 0x8, addend: 0x0, symName: '-[GCDWebServerBodyEncoder close]', symObjAddr: 0x5C, symBinAddr: 0x11AD4, symSize: 0x8 }
+  - { offsetInCU: 0x3B6, offset: 0x628DC, size: 0x8, addend: 0x0, symName: '-[GCDWebServerGZipEncoder initWithResponse:reader:]', symObjAddr: 0x64, symBinAddr: 0x11ADC, symSize: 0x98 }
+  - { offsetInCU: 0x40D, offset: 0x62933, size: 0x8, addend: 0x0, symName: '-[GCDWebServerGZipEncoder open:]', symObjAddr: 0xFC, symBinAddr: 0x11B74, symSize: 0xE0 }
+  - { offsetInCU: 0x502, offset: 0x62A28, size: 0x8, addend: 0x0, symName: '-[GCDWebServerGZipEncoder readData:]', symObjAddr: 0x1DC, symBinAddr: 0x11C54, symSize: 0x1DC }
+  - { offsetInCU: 0x5E4, offset: 0x62B0A, size: 0x8, addend: 0x0, symName: '-[GCDWebServerGZipEncoder close]', symObjAddr: 0x3B8, symBinAddr: 0x11E30, symSize: 0x50 }
+  - { offsetInCU: 0x625, offset: 0x62B4B, size: 0x8, addend: 0x0, symName: '+[GCDWebServerResponse response]', symObjAddr: 0x408, symBinAddr: 0x11E80, symSize: 0x18 }
+  - { offsetInCU: 0x65C, offset: 0x62B82, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse init]', symObjAddr: 0x420, symBinAddr: 0x11E98, symSize: 0x9C }
+  - { offsetInCU: 0x693, offset: 0x62BB9, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse setValue:forAdditionalHeader:]', symObjAddr: 0x4BC, symBinAddr: 0x11F34, symSize: 0x8 }
+  - { offsetInCU: 0x6E2, offset: 0x62C08, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse hasBody]', symObjAddr: 0x4C4, symBinAddr: 0x11F3C, symSize: 0x10 }
+  - { offsetInCU: 0x719, offset: 0x62C3F, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse usesChunkedTransferEncoding]', symObjAddr: 0x4D4, symBinAddr: 0x11F4C, symSize: 0x20 }
+  - { offsetInCU: 0x750, offset: 0x62C76, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse open:]', symObjAddr: 0x4F4, symBinAddr: 0x11F6C, symSize: 0x8 }
+  - { offsetInCU: 0x78F, offset: 0x62CB5, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse readData:]', symObjAddr: 0x4FC, symBinAddr: 0x11F74, symSize: 0xC }
+  - { offsetInCU: 0x7CE, offset: 0x62CF4, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse close]', symObjAddr: 0x508, symBinAddr: 0x11F80, symSize: 0x4 }
+  - { offsetInCU: 0x7FD, offset: 0x62D23, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse prepareForReading]', symObjAddr: 0x50C, symBinAddr: 0x11F84, symSize: 0x64 }
+  - { offsetInCU: 0x84F, offset: 0x62D75, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse performOpen:]', symObjAddr: 0x570, symBinAddr: 0x11FE8, symSize: 0x20 }
+  - { offsetInCU: 0x894, offset: 0x62DBA, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse performReadDataWithCompletion:]', symObjAddr: 0x590, symBinAddr: 0x12008, symSize: 0xC0 }
+  - { offsetInCU: 0x928, offset: 0x62E4E, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse performClose]', symObjAddr: 0x650, symBinAddr: 0x120C8, symSize: 0x8 }
+  - { offsetInCU: 0x95B, offset: 0x62E81, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse description]', symObjAddr: 0x658, symBinAddr: 0x120D0, symSize: 0x234 }
+  - { offsetInCU: 0x9B9, offset: 0x62EDF, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse contentType]', symObjAddr: 0x88C, symBinAddr: 0x12304, symSize: 0x8 }
+  - { offsetInCU: 0x9F0, offset: 0x62F16, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse setContentType:]', symObjAddr: 0x894, symBinAddr: 0x1230C, symSize: 0x8 }
+  - { offsetInCU: 0xA2F, offset: 0x62F55, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse contentLength]', symObjAddr: 0x89C, symBinAddr: 0x12314, symSize: 0x8 }
+  - { offsetInCU: 0xA66, offset: 0x62F8C, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse setContentLength:]', symObjAddr: 0x8A4, symBinAddr: 0x1231C, symSize: 0x8 }
+  - { offsetInCU: 0xAA3, offset: 0x62FC9, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse statusCode]', symObjAddr: 0x8AC, symBinAddr: 0x12324, symSize: 0x8 }
+  - { offsetInCU: 0xADA, offset: 0x63000, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse setStatusCode:]', symObjAddr: 0x8B4, symBinAddr: 0x1232C, symSize: 0x8 }
+  - { offsetInCU: 0xB17, offset: 0x6303D, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse cacheControlMaxAge]', symObjAddr: 0x8BC, symBinAddr: 0x12334, symSize: 0x8 }
+  - { offsetInCU: 0xB4E, offset: 0x63074, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse setCacheControlMaxAge:]', symObjAddr: 0x8C4, symBinAddr: 0x1233C, symSize: 0x8 }
+  - { offsetInCU: 0xB8B, offset: 0x630B1, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse lastModifiedDate]', symObjAddr: 0x8CC, symBinAddr: 0x12344, symSize: 0x8 }
+  - { offsetInCU: 0xBC2, offset: 0x630E8, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse setLastModifiedDate:]', symObjAddr: 0x8D4, symBinAddr: 0x1234C, symSize: 0xC }
+  - { offsetInCU: 0xC03, offset: 0x63129, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse eTag]', symObjAddr: 0x8E0, symBinAddr: 0x12358, symSize: 0x8 }
+  - { offsetInCU: 0xC3A, offset: 0x63160, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse setETag:]', symObjAddr: 0x8E8, symBinAddr: 0x12360, symSize: 0x8 }
+  - { offsetInCU: 0xC79, offset: 0x6319F, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse isGZipContentEncodingEnabled]', symObjAddr: 0x8F0, symBinAddr: 0x12368, symSize: 0x8 }
+  - { offsetInCU: 0xCB0, offset: 0x631D6, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse setGzipContentEncodingEnabled:]', symObjAddr: 0x8F8, symBinAddr: 0x12370, symSize: 0x8 }
+  - { offsetInCU: 0xCEB, offset: 0x63211, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse additionalHeaders]', symObjAddr: 0x900, symBinAddr: 0x12378, symSize: 0x8 }
+  - { offsetInCU: 0xD22, offset: 0x63248, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse .cxx_destruct]', symObjAddr: 0x908, symBinAddr: 0x12380, symSize: 0x54 }
+  - { offsetInCU: 0xD55, offset: 0x6327B, size: 0x8, addend: 0x0, symName: '+[GCDWebServerResponse(Extensions) responseWithStatusCode:]', symObjAddr: 0x95C, symBinAddr: 0x123D4, symSize: 0x28 }
+  - { offsetInCU: 0xD9E, offset: 0x632C4, size: 0x8, addend: 0x0, symName: '+[GCDWebServerResponse(Extensions) responseWithRedirect:permanent:]', symObjAddr: 0x984, symBinAddr: 0x123FC, symSize: 0x58 }
+  - { offsetInCU: 0xDF8, offset: 0x6331E, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse(Extensions) initWithStatusCode:]', symObjAddr: 0x9DC, symBinAddr: 0x12454, symSize: 0x38 }
+  - { offsetInCU: 0xE41, offset: 0x63367, size: 0x8, addend: 0x0, symName: '-[GCDWebServerResponse(Extensions) initWithRedirect:permanent:]', symObjAddr: 0xA14, symBinAddr: 0x1248C, symSize: 0x98 }
+  - { offsetInCU: 0x27, offset: 0x634C5, size: 0x8, addend: 0x0, symName: '+[GCDWebServerStreamedResponse responseWithContentType:streamBlock:]', symObjAddr: 0x0, symBinAddr: 0x12524, symSize: 0x70 }
+  - { offsetInCU: 0x273, offset: 0x63711, size: 0x8, addend: 0x0, symName: '+[GCDWebServerStreamedResponse responseWithContentType:streamBlock:]', symObjAddr: 0x0, symBinAddr: 0x12524, symSize: 0x70 }
+  - { offsetInCU: 0x2CA, offset: 0x63768, size: 0x8, addend: 0x0, symName: '+[GCDWebServerStreamedResponse responseWithContentType:asyncStreamBlock:]', symObjAddr: 0x70, symBinAddr: 0x12594, symSize: 0x70 }
+  - { offsetInCU: 0x321, offset: 0x637BF, size: 0x8, addend: 0x0, symName: '-[GCDWebServerStreamedResponse initWithContentType:streamBlock:]', symObjAddr: 0xE0, symBinAddr: 0x12604, symSize: 0x98 }
+  - { offsetInCU: 0x378, offset: 0x63816, size: 0x8, addend: 0x0, symName: '___64-[GCDWebServerStreamedResponse initWithContentType:streamBlock:]_block_invoke', symObjAddr: 0x178, symBinAddr: 0x1269C, symSize: 0x90 }
+  - { offsetInCU: 0x42F, offset: 0x638CD, size: 0x8, addend: 0x0, symName: '-[GCDWebServerStreamedResponse initWithContentType:asyncStreamBlock:]', symObjAddr: 0x220, symBinAddr: 0x1272C, symSize: 0xAC }
+  - { offsetInCU: 0x486, offset: 0x63924, size: 0x8, addend: 0x0, symName: '-[GCDWebServerStreamedResponse asyncReadDataWithCompletion:]', symObjAddr: 0x2CC, symBinAddr: 0x127D8, symSize: 0x18 }
+  - { offsetInCU: 0x4DE, offset: 0x6397C, size: 0x8, addend: 0x0, symName: '-[GCDWebServerStreamedResponse description]', symObjAddr: 0x2E4, symBinAddr: 0x127F0, symSize: 0x84 }
+  - { offsetInCU: 0x525, offset: 0x639C3, size: 0x8, addend: 0x0, symName: '-[GCDWebServerStreamedResponse .cxx_destruct]', symObjAddr: 0x368, symBinAddr: 0x12874, symSize: 0x14 }
+  - { offsetInCU: 0x27, offset: 0x63B77, size: 0x8, addend: 0x0, symName: '+[GCDWebServerURLEncodedFormRequest mimeType]', symObjAddr: 0x0, symBinAddr: 0x12888, symSize: 0xC }
+  - { offsetInCU: 0x20C, offset: 0x63D5C, size: 0x8, addend: 0x0, symName: '+[GCDWebServerURLEncodedFormRequest mimeType]', symObjAddr: 0x0, symBinAddr: 0x12888, symSize: 0xC }
+  - { offsetInCU: 0x23F, offset: 0x63D8F, size: 0x8, addend: 0x0, symName: '-[GCDWebServerURLEncodedFormRequest close:]', symObjAddr: 0xC, symBinAddr: 0x12894, symSize: 0x110 }
+  - { offsetInCU: 0x31B, offset: 0x63E6B, size: 0x8, addend: 0x0, symName: '-[GCDWebServerURLEncodedFormRequest description]', symObjAddr: 0x11C, symBinAddr: 0x129A4, symSize: 0x1CC }
+  - { offsetInCU: 0x379, offset: 0x63EC9, size: 0x8, addend: 0x0, symName: '-[GCDWebServerURLEncodedFormRequest arguments]', symObjAddr: 0x2E8, symBinAddr: 0x12B70, symSize: 0x10 }
+  - { offsetInCU: 0x3B0, offset: 0x63F00, size: 0x8, addend: 0x0, symName: '-[GCDWebServerURLEncodedFormRequest .cxx_destruct]', symObjAddr: 0x2F8, symBinAddr: 0x12B80, symSize: 0x14 }
+...

@@ -165,17 +165,10 @@ export function VidJsPlayer({
   }, [playlistData]);
   useEffect(() => {}, [currentBook, currentVid]);
   return (
-    <>
-      <div className="aspect-video  mx-auto">
-        {playlistData && (
-          <video
-            ref={vidPlayerRef}
-            className="video-js"
-            controls
-            src=""
-          ></video>
-        )}
-      </div>
-    </>
+    <div className="aspect-video  mx-auto">
+      {playlistData && (
+        <video ref={vidPlayerRef} className="video-js" controls src=""></video>
+      )}
+    </div>
   );
 }

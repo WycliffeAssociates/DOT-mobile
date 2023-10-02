@@ -1,0 +1,9 @@
+{
+	"appId": "com.slbible",
+	"appName": "DotMobile",
+	"webDir": "dist",
+	"server": {
+		"androidScheme": "https"
+	},
+	"android": {}
+}

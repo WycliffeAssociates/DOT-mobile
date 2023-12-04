@@ -78,6 +78,7 @@ function Playlist() {
     const plyr = vidJsPlayer;
     plyr?.pause();
     changeVid({chapNum: vid.chapter, bookToUse});
+    // todo: debug. Both IOS and android simulators won't play now? Is it due to stale sources? Actually really important to check... Debugger web version here first, and then try to safari connect to an ios device and see?
     const httpsOnly = vid.sources.filter((srcObj) =>
       srcObj.src.startsWith("https")
     );
@@ -110,22 +111,10 @@ function Playlist() {
     if (newVid) {
       setCurrentVid(newVidReference);
     }
+    if (vidJsPlayer) {
+      vidJsPlayer.currentTime(0);
+    }
   }
-
-  /* 
-  const changeVid = useCallback(
-    ({chapNum, bookToUse}: changeVidParams) => {
-      let book = bookToUse || currentBook;
-      if (!chapNum || !book) return;
-      const newVid = book.find((vid) => vid.chapter == chapNum);
-      if (newVid) {
-        setCurrentVid(newVid);
-      }
-    },
-    [currentBook, currentVid]
-  );
-
-  */
 
   async function handleChapters(
     vid: IVidWithCustom,
@@ -151,32 +140,6 @@ function Playlist() {
     return chapters;
   }
 
-  /* 
-   const handleChapters = useCallback(
-    async (vid: IVidWithCustom, vidJsPlayer: IvidJsPlayer | undefined) => {
-      if (!vidJsPlayer) return;
-      const chapters = await getChaptersArrFromVtt(vid, vidJsPlayer);
-      console.log("HANDLED CHAPTERS RAN");
-      if (chapters) {
-        setCurrentVid((vid) => {
-          vid.chapterMarkers = chapters;
-          return vid;
-        });
-      } else {
-        setCurrentVid((vid) => {
-          vid.chapterMarkers = [];
-          return vid;
-        });
-      }
-      if (chapters) {
-        distributeChapterMarkers(chapters, vidJsPlayer);
-      }
-      return chapters;
-    },
-    [currentBook, currentVid]
-  );
-  */
-
   async function setNewBook(vids: IVidWithCustom[]) {
     const bookName = vids[0].book;
     // treat the fs as source of truth since it's getting saved to in various places
@@ -193,27 +156,7 @@ function Playlist() {
     setCurrentBook(vids);
     changePlayerSrc({vid: firstBook, bookToUse: vids});
   }
-  /* 
-  const setNewBook = useCallback(
-    async (vids: IVidWithCustom[]) => {
-      const bookName = vids[0].book;
-      // treat the fs as source of truth since it's getting saved to in various places
-      const mostRecentData = await getCurrentPlaylistDataFs(
-        playlistInfo.playlist
-      );
-      if (!mostRecentData) return;
-      let matchingSetVids =
-        mostRecentData && bookName
-          ? mostRecentData.formattedVideos[bookName]
-          : vids;
-      const firstBook = matchingSetVids[0];
-      console.log("setCurrentBook running");
-      setCurrentBook(vids);
-      changePlayerSrc({vid: firstBook, bookToUse: vids});
-    },
-    [currentBook, currentVid]
-  );
-  */
+
   async function fetchAndSetup() {
     try {
       const data = await fetchBcData(playlistInfo.playlist);
@@ -302,6 +245,15 @@ function Playlist() {
       vidJsPlayer.one("ended", autoPlayToNextBook);
     }
   }, [currentVid, vidJsPlayer]);
+  useEffect(() => {
+    async function refreshPlayer() {
+      if (vidJsPlayer) {
+        // make sure the srces haven't been deleted out from under us. Given the props given
+        changePlayerSrc({vid: currentVid, bookToUse: currentBook});
+      }
+    }
+    refreshPlayer();
+  }, [shapedPlaylist]);
 
   async function doInitialSetup(
     vids: IVidWithCustom[],
@@ -457,12 +409,10 @@ function Playlist() {
                   )}
                   <VidJsPlayer
                     handleChapters={handleChapters}
-                    changePlayerSrc={changePlayerSrc}
-                    currentBook={currentBook}
-                    setNewBook={setNewBook}
                     setJumpingBackAmount={setJumpingBackAmount}
                     setJumpingForwardAmount={setJumpingForwardAmount}
                     setPlayer={setVidJsPlayer}
+                    existingPlayer={vidJsPlayer}
                     playlistData={shapedPlaylist.formattedVideos}
                     currentVid={currentVid}
                   />
@@ -486,7 +436,7 @@ function Playlist() {
                   playlistData={shapedPlaylist}
                   currentBook={currentBook}
                   currentVid={currentVid}
-                  handleChapters={() => handleChapters(currentVid, vidJsPlayer)}
+                  handleChapters={handleChapters}
                   playlistSlug={playlistInfo.playlist}
                   setShapedPlaylist={setShapedPlaylist}
                   setCurrentBook={setCurrentBook}

@@ -54,8 +54,9 @@ Luc2:17-28
     .map((chapter) => {
       const parts = chapter.split("\n");
       const timeStamp = parts[0].split("-->");
-      const startTime = convertTimeToSeconds(timeStamp[0]);
-      const endTime = convertTimeToSeconds(timeStamp[1]);
+
+      const startTime = convertTimeToSeconds(timeStamp[0].trim());
+      const endTime = convertTimeToSeconds(timeStamp[1].trim());
       const totalDur = player.duration();
       const labelMatches = parts[1].match(labelRegex);
       const xPos = String((startTime / totalDur) * 100);
@@ -448,6 +449,7 @@ export async function fetchBcData(playlist: validPlaylistSlugs) {
   }
 }
 
+// todo delete?
 export function getAlreadySavedInBook(book: IVidWithCustom[]) {
   const savedSources = book.filter((vid) => !!vid.savedSources);
   return savedSources;
@@ -493,12 +495,14 @@ type updateStateFromFsParams = {
   vid: IVidWithCustom;
   setCurrentVid?: (value: SetStateAction<IVidWithCustom>) => void;
   setCurrentBook?: (value: SetStateAction<IVidWithCustom[]>) => void;
+  setShapedPlaylist?: Dispatch<SetStateAction<IPlaylistData | undefined>>;
 };
 export async function updateStateFromFs({
   playlistSlug,
   vid,
   setCurrentVid,
   setCurrentBook,
+  setShapedPlaylist,
 }: updateStateFromFsParams) {
   // These are essentially to trigger a rerender by making what's in memmory match what's newly on disk with updates savedSources urls;
   const currentPlaylistData = await getCurrentPlaylistDataFs(playlistSlug);
@@ -508,12 +512,16 @@ export async function updateStateFromFs({
     );
     const curBook = currentPlaylistData?.formattedVideos[vid.book];
     if (curVid && setCurrentVid) {
-      setCurrentVid(curVid);
+      const newRefVid = structuredClone(curVid);
+      setCurrentVid(newRefVid);
     }
     if (curBook && setCurrentBook) {
       const newRefBook = structuredClone(curBook);
       // new reference for state updates
       setCurrentBook(newRefBook);
+    }
+    if (setShapedPlaylist) {
+      setShapedPlaylist(currentPlaylistData);
     }
   }
 }

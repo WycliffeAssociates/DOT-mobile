@@ -24,11 +24,12 @@
     <meta name="apple-mobile-web-app-title" content="Ionic App" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <link href="./src/brightcove/vidJs.css" rel="stylesheet" />
-    <script type="module" src="./src/brightcove/willPlayer.js"></script>
   </head>
   <body>
     <div id="root"></div>
 
+    <!-- NOTE. We are manually vendoring in the bc player the vc player.  It can be in public folder bc we don't need to transform it since it's already a min file, and putting it in src folder creates a module type mismatch since it assumes  a CJS or UMD env, but not module -->
+    <script src="/brightcove/willPlayer.js"></script>
     <script type="module" src="./src/main.tsx"></script>
   </body>
 </html>

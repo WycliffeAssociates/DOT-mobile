@@ -22,7 +22,6 @@ export function VerseSegmentJump(props: IVerseSegmentJump) {
 
   function adjacentTrack() {
     if (!props.player) return;
-    console.log(props.currentVideo.reference_id);
     if (curTime > 0) {
       const {prev, next} = trackAdjacentChap(props.currentVideo, props.player);
       setAdjacentChaps({next, prev});
@@ -31,6 +30,9 @@ export function VerseSegmentJump(props: IVerseSegmentJump) {
   useEffect(() => {
     adjacentTrack();
   }, [curTime]);
+  useEffect(() => {
+    adjacentTrack();
+  }, [props.currentVideo]);
 
   function hideChapBtn(dir: "prev" | "next") {
     if (!adjacentChaps) return "hidden";

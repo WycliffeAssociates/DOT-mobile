@@ -83,10 +83,13 @@ export function DownloadButtons(props: IDownloadButtonsParams) {
     }, 1000);
   }
   function bookIsCompletelySaved() {
-    return (
-      getAlreadySavedInBook(props.currentBook).length ==
-      props.currentBook.length
-    );
+    // return (
+    //   getAlreadySavedInBook(props.currentBook).length ==
+    //   props.currentBook.length
+    // );
+    return props.currentBook.every((b) => {
+      return !!b.savedSources;
+    });
   }
 
   function DownloadSize() {
@@ -115,6 +118,12 @@ export function DownloadButtons(props: IDownloadButtonsParams) {
       );
     } else return null;
   }
+  const isDownloadBtnDisabled = () => {
+    return props.currentVid.savedSources?.video ||
+      props.downloadProgress?.started
+      ? true
+      : false;
+  };
 
   return (
     <div className="flex gap-2">
@@ -122,12 +131,7 @@ export function DownloadButtons(props: IDownloadButtonsParams) {
         size="small"
         fill="outline"
         className="p-0 m-0"
-        disabled={
-          props.currentVid.savedSources?.video ||
-          props.downloadProgress?.started
-            ? true
-            : false
-        }
+        disabled={isDownloadBtnDisabled()}
         onClick={async (e) => {
           await saveBooks([props.currentVid]);
         }}

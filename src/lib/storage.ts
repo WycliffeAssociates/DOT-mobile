@@ -337,6 +337,7 @@ export function makeVidSaver(
           recursive: true,
         });
       } catch (err) {
+        console.log(`err deleting folder ${`${playlist}/${vid.id}`}`);
         console.warn(err);
       } finally {
         // using the finally block since the rmdir might throw and negate rest. If a user wants to free this data, we are going to do it.

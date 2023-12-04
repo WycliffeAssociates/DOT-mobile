@@ -38,6 +38,7 @@ type IDownloadListing = {
   setCurrentBook: Dispatch<SetStateAction<IVidWithCustom[]>>;
   setCurrentVid: Dispatch<SetStateAction<IVidWithCustom>>;
   downloadProgress: downloadProgressInfo | undefined;
+  setShapedPlaylist: Dispatch<SetStateAction<IPlaylistData | undefined>>;
 };
 export function BulkListing({
   playlistData,
@@ -49,6 +50,7 @@ export function BulkListing({
   currentBook,
   currentVid,
   downloadProgress,
+  setShapedPlaylist,
 }: IDownloadListing) {
   const {t} = useTranslation();
 
@@ -59,6 +61,7 @@ export function BulkListing({
         inputString: value[0].custom_fields.localized_book_name,
         maxLength: 8,
       });
+
       return {
         bookName,
         value,
@@ -98,6 +101,7 @@ export function BulkListing({
 
   async function downloadSelectedBooks() {
     if (!booksSelected) return;
+    // Yes this loop is serial, but assuming poor internet taht might be interrupted and doing these as background tasks, I think it preferable to try to make sure each one gets completed when we are talking about downloading 50+ mb resources.
     for await (const book of booksSelected) {
       for await (const vidChapter of book) {
         if (
@@ -117,14 +121,10 @@ export function BulkListing({
             playlistSlug
           );
           await saveVidOffline(vidChapter, currentPlaylistData);
-          await updateStateFromFs({
-            playlistSlug,
-            vid: vidChapter,
-            setCurrentBook,
-          });
         }
       }
     }
+
     setTimeout(() => {
       setDownloadProgress({
         amount: 0,
@@ -147,6 +147,13 @@ export function BulkListing({
         }
       }
     }
+    await updateStateFromFs({
+      playlistSlug,
+      vid: currentVid,
+      setCurrentBook,
+      setShapedPlaylist: setShapedPlaylist,
+      setCurrentVid: setCurrentVid,
+    });
   }
   function determineShowBulkButtons() {
     return booksSelected && booksSelected.length;

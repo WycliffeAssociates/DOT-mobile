@@ -10,13 +10,11 @@ import {VideoJsPlayer} from "video.js";
 import {Capacitor} from "@capacitor/core";
 type Iplayer = {
   setPlayer: Dispatch<SetStateAction<VideoJsPlayer | undefined>>;
+  existingPlayer: VideoJsPlayer | undefined;
   playlistData: Record<string, IVidWithCustom[]>;
   currentVid: IVidWithCustom;
-  currentBook: IVidWithCustom[];
   setJumpingForwardAmount: Dispatch<SetStateAction<string | number | null>>;
   setJumpingBackAmount: Dispatch<SetStateAction<string | number | null>>;
-  changePlayerSrc({vid, bookToUse}: changePlayerSrcParams): void;
-  setNewBook(vids: IVidWithCustom[]): Promise<void>;
   handleChapters(
     vid: IVidWithCustom,
     vidJsPlayer: VideoJsPlayer | undefined
@@ -25,16 +23,15 @@ type Iplayer = {
 
 export function VidJsPlayer({
   setPlayer,
+  existingPlayer,
   playlistData,
-  currentBook,
   currentVid,
   setJumpingBackAmount,
   setJumpingForwardAmount,
-  changePlayerSrc,
-  setNewBook,
   handleChapters,
 }: Iplayer) {
   const vidPlayerRef = useRef(null);
+  const vidJsPlayerContainerRef = useRef<HTMLDivElement>(null);
 
   async function bootPlayer() {
     console.log("running boot");
@@ -44,6 +41,7 @@ export function VidJsPlayer({
       const preferredSpeed = curAppState?.preferredSpeed || 1;
       const jumpAmount = 5; //seconds to jump on double taps;
       const firstBook = currentVid;
+      // todo: debugger why android/ios not playing?
       // Resume src, offline or stream
       const firstVidSrces = firstBook.savedSources?.video
         ? {
@@ -59,6 +57,10 @@ export function VidJsPlayer({
       // instantiate player
       // window.bc is from /bc/willPlayer.  This is a brightcove player that has been manually downloaded and included to avoid the network request for a 200kb + video js player.  This allows us to bundle it for offline usage in mobile app more easily too.  We could just use video js, but the bundled / minified player includes brightcoves built in analytics. If we are offline, they won't send, but that's a noop at that point. The priority is availability.
       // SEe https://videojs.com/guides/options/ for options
+      // alert("alert works!");
+      // if ("bc" in window) {
+      //   alert("bc exist!");
+      // }
       const player = window.bc(vidPlayerRef.current, {
         responsive: true,
         fluid: true,
@@ -74,6 +76,11 @@ export function VidJsPlayer({
         poster: firstPoster,
         nativeControlsForTouch: true,
       });
+      // if (player) {
+      //   alert("player instantiated");
+      //   alert(`Player sources are ${firstVidSrces}`);
+      // }
+      // todo: adjust then wherever the speed is set
       player.playbackRate(preferredSpeed);
       player.language(navigator.languages[0]);
       player.playsinline(true); //ios
@@ -90,7 +97,7 @@ export function VidJsPlayer({
         rightDoubleFxn(number) {
           const curTime = player?.currentTime();
           if (!curTime) return;
-          // the extra minus jumpAmount is to account for fact that min tap amoutn is 2 to diff btw double and single taps, so we still want to allow the smallest measure of jump back;
+          // the extra minus jumpAmount on end of next line is to account for fact that min tap amount is 2 to diff btw double and single taps, so we still want to allow the smallest measure of jump back;
           const newTime = number * jumpAmount + curTime - jumpAmount;
           player?.currentTime(newTime);
           setJumpingForwardAmount(null);
@@ -160,12 +167,38 @@ export function VidJsPlayer({
     }
   }
 
+  function handleSpeedChangesInApp() {
+    if (vidJsPlayerContainerRef.current && existingPlayer) {
+      vidJsPlayerContainerRef.current.addEventListener(
+        "adjustPlayerSpeed",
+        (event: Event) => {
+          const customEvent = event as CustomEvent;
+
+          if (
+            customEvent.detail &&
+            typeof customEvent.detail.speed === "number"
+          ) {
+            const speed = customEvent.detail.speed;
+            existingPlayer.playbackRate(speed);
+          }
+        }
+      );
+    }
+  }
+
   useEffect(() => {
     bootPlayer();
-  }, [playlistData]);
-  useEffect(() => {}, [currentBook, currentVid]);
+  }, []);
+  useEffect(() => {
+    handleSpeedChangesInApp();
+  }, [existingPlayer]);
+
   return (
-    <div className="aspect-video  mx-auto">
+    <div
+      className="aspect-video  mx-auto"
+      ref={vidJsPlayerContainerRef}
+      id="vidJsPlayerContainer"
+    >
       {playlistData && (
         <video ref={vidPlayerRef} className="video-js" controls src=""></video>
       )}

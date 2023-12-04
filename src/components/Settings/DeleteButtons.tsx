@@ -1,12 +1,17 @@
 import {useTranslation} from "react-i18next";
 import {
+  IPlaylistData,
   IVidWithCustom,
   downloadProgressInfo,
   validPlaylistSlugs,
   vidInProgressInfo,
 } from "../../customTypes/types";
 import {IonButton} from "@ionic/react";
-import {getAlreadySavedInBook, getCurrentPlaylistDataFs} from "../../lib/Ui";
+import {
+  getAlreadySavedInBook,
+  getCurrentPlaylistDataFs,
+  updateStateFromFs,
+} from "../../lib/Ui";
 import {makeVidSaver} from "../../lib/storage";
 import {Dispatch, SetStateAction} from "react";
 
@@ -16,6 +21,7 @@ type IDeleteButtonParams = {
   currentVid: IVidWithCustom;
   setCurrentBook: Dispatch<SetStateAction<IVidWithCustom[]>>;
   setCurrentVid: Dispatch<SetStateAction<IVidWithCustom>>;
+  setShapedPlaylist: Dispatch<SetStateAction<IPlaylistData | undefined>>;
   downloadProgress: downloadProgressInfo | undefined;
 };
 export function DeleteButtons(props: IDeleteButtonParams) {
@@ -40,23 +46,13 @@ export function DeleteButtons(props: IDeleteButtonParams) {
       }
     }
 
-    const currentPlaylistData = await getCurrentPlaylistDataFs(
-      props.playlistSlug
-    );
-    if (currentPlaylistData && props.currentVid.book) {
-      const curVid = currentPlaylistData?.formattedVideos[
-        props.currentVid.book
-      ].find((v) => v.id == props.currentVid.id);
-      const curBook =
-        currentPlaylistData?.formattedVideos[props.currentVid.book];
-      // These are essentially to trigger a rerender by making what's in memmory match what's newly on disk
-      if (curVid) {
-        props.setCurrentVid(curVid);
-      }
-      if (curBook) {
-        props.setCurrentBook(curBook);
-      }
-    }
+    await updateStateFromFs({
+      playlistSlug: props.playlistSlug,
+      vid: props.currentVid,
+      setCurrentBook: props.setCurrentBook,
+      setShapedPlaylist: props.setShapedPlaylist,
+      setCurrentVid: props.setCurrentVid,
+    });
   }
 
   return (

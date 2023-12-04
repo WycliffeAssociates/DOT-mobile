@@ -40,6 +40,16 @@ export function SpeedControl(props: SpeedControlParams) {
       preferredSpeed: amount,
     };
     await updateSavedAppPreferences(newState);
+
+    const videoPlayerElement = document.querySelector("#vidJsPlayerContainer");
+    if (videoPlayerElement) {
+      const adjustPlayerSpeedEvent = new CustomEvent("adjustPlayerSpeed", {
+        detail: {
+          speed: amount,
+        },
+      });
+      videoPlayerElement.dispatchEvent(adjustPlayerSpeedEvent);
+    }
   }
 
   return (

@@ -1,11 +1,12 @@
-import {IonButton, IonModal, IonIcon} from "@ionic/react";
+import {IonButton, IonModal, IonIcon, IonContent} from "@ionic/react";
 import {Dispatch, SetStateAction, useEffect, useRef, useState} from "react";
-
+import {close} from "ionicons/icons";
 import {settingsOutline} from "ionicons/icons";
 import {
   IPlaylistData,
   IVidWithCustom,
   IdeviceInfo,
+  IvidJsPlayer,
   chapterMarkers,
   downloadProgressInfo,
   validPlaylistSlugs,
@@ -17,7 +18,11 @@ import {useTranslation} from "react-i18next";
 import {Device} from "@capacitor/device";
 import {VideoJsPlayer} from "video.js";
 import {SpeedControl} from "./Settings/SpeedControl";
-import {getCurrentPlaylistDataFs, getDownloadSize} from "../lib/Ui";
+import {
+  getCurrentPlaylistDataFs,
+  getDownloadSize,
+  updateStateFromFs,
+} from "../lib/Ui";
 import {formatBytesOrMbOrGb} from "../lib/utils";
 import {DownloadButtons} from "./Settings/DownloadButtons";
 import {DeleteButtons} from "./Settings/DeleteButtons";
@@ -31,7 +36,10 @@ type ISettings = {
   playlistSlug: validPlaylistSlugs;
   currentBook: IVidWithCustom[];
   currentVid: IVidWithCustom;
-  handleChapters: () => Promise<chapterMarkers | undefined>;
+  handleChapters: (
+    vid: IVidWithCustom,
+    vidJsPlayer: IvidJsPlayer | undefined
+  ) => Promise<chapterMarkers | undefined>;
   setCurrentBook: Dispatch<SetStateAction<IVidWithCustom[]>>;
   setShapedPlaylist: Dispatch<SetStateAction<IPlaylistData | undefined>>;
   setCurrentVid: Dispatch<SetStateAction<IVidWithCustom>>;
@@ -79,7 +87,6 @@ export function Settings(props: ISettings) {
     if (!vidToSave.book) return;
 
     const playlistClone = structuredClone(playlistData);
-    const currBookInThatClone = playlistClone.formattedVideos[vidToSave.book];
     const currentVidInThatClone = playlistClone.formattedVideos[
       vidToSave.book
     ].find((vid: IVidWithCustom) => vid.id == vidToSave.id);
@@ -98,7 +105,7 @@ export function Settings(props: ISettings) {
     currentVidInThatClone.savedSources.poster = posterSrc;
     // Get Chapter markers saved if they weren't for some reason
     if (!currentVidInThatClone.chapterMarkers) {
-      const chapters = await props.handleChapters();
+      const chapters = await props.handleChapters(vidToSave, props.player);
       currentVidInThatClone.chapterMarkers = chapters ? chapters : [];
     }
 
@@ -146,10 +153,15 @@ export function Settings(props: ISettings) {
     await vidSaver.deleteWipPrefsData();
     await vidSaver.updateCachedPlaylist(playlistClone);
 
-    // todo: call set state of playlistData now that we have some offline resource saved;
-    // update in memory
-    props.setShapedPlaylist(playlistClone);
     await vidSaver.updateCachedPlaylist(playlistClone);
+    // update in memory
+    await updateStateFromFs({
+      playlistSlug: props.playlistSlug,
+      vid: props.currentVid,
+      setShapedPlaylist: props.setShapedPlaylist,
+      setCurrentBook: props.setCurrentBook,
+      setCurrentVid: props.setCurrentVid,
+    });
     setDownloadProgress({
       amount: 1,
       started: true,
@@ -164,6 +176,14 @@ export function Settings(props: ISettings) {
       vidName: props.currentVid.name!,
       percentAlreadyDownloaded: currSaved,
     });
+  }
+
+  function dismiss() {
+    modal.current?.dismiss();
+  }
+
+  async function canDismiss(data?: any, role?: string) {
+    return role !== "gesture";
   }
 
   //=============== EFFECTS  =============
@@ -195,59 +215,79 @@ export function Settings(props: ISettings) {
           </span>
         )}
       </div>
-      {/* <div className="w-full"> */}
-      <IonModal
-        ref={modal}
-        trigger="open-modal"
-        initialBreakpoint={1}
-        breakpoints={[0, 1]}
-        backdropBreakpoint={0.9}
-      >
-        <div className="block h-[350px] p-2 overflow-auto">
-          <SpeedControl player={props.player} />
-          <div data-name="downloadSection">
-            <h2 className="font-bold mb-2">{t("downloadOptions")}</h2>
-            <DownloadButtons
+      <IonContent>
+        {/* <div className="w-full"> */}
+        <IonModal
+          ref={modal}
+          trigger="open-modal"
+          initialBreakpoint={1}
+          breakpoints={[0, 1]}
+          backdropBreakpoint={0.9}
+          canDismiss={canDismiss}
+        >
+          <div className="block h-[350px] p-2 overflow-auto">
+            <div className="w-full flex justify-end relative sticky top-0">
+              <IonButton
+                fill="outline"
+                size="small"
+                shape="round"
+                style={{
+                  "--padding-start": "0",
+                  "--padding-end": 0,
+                  "--color": "#9c2921",
+                  "--border-color": "#9c2921",
+                }}
+                onClick={() => dismiss()}
+              >
+                <IonIcon className="" slot="icon-only" icon={close}></IonIcon>
+              </IonButton>
+            </div>
+            <SpeedControl player={props.player} />
+            <div data-name="downloadSection">
+              <h2 className="font-bold mb-2">{t("downloadOptions")}</h2>
+              <DownloadButtons
+                downloadProgress={downloadProgress}
+                setCurrentVid={props.setCurrentVid}
+                setCurrentBook={props.setCurrentBook}
+                setDownloadProgress={setDownloadProgress}
+                currentBook={props.currentBook}
+                currentVid={props.currentVid}
+                playlistSlug={props.playlistSlug}
+                saveVidOffline={saveVidOffline}
+                currentWorkingVideoInfo={currentWorkingVideoInfo}
+              />
+            </div>
+            <DeleteButtons
+              setShapedPlaylist={props.setShapedPlaylist}
               downloadProgress={downloadProgress}
-              setCurrentVid={props.setCurrentVid}
               setCurrentBook={props.setCurrentBook}
-              setDownloadProgress={setDownloadProgress}
+              setCurrentVid={props.setCurrentVid}
               currentBook={props.currentBook}
               currentVid={props.currentVid}
               playlistSlug={props.playlistSlug}
-              saveVidOffline={saveVidOffline}
-              currentWorkingVideoInfo={currentWorkingVideoInfo}
             />
+            {/* <div> */}
+
+            <DownloadProgress downloadProgress={downloadProgress} />
+            {/* )} */}
+            {/* </div> */}
+            <BulkListing
+              downloadProgress={downloadProgress}
+              setCurrentBook={props.setCurrentBook}
+              setCurrentVid={props.setCurrentVid}
+              playlistSlug={props.playlistSlug}
+              playlistData={props.playlistData}
+              setDownloadProgress={setDownloadProgress}
+              saveVidOffline={saveVidOffline}
+              currentBook={props.currentBook}
+              currentVid={props.currentVid}
+              setShapedPlaylist={props.setShapedPlaylist}
+            />
+
+            <AppMemoryInfo deviceInfo={deviceInfo} />
           </div>
-
-          <DeleteButtons
-            downloadProgress={downloadProgress}
-            setCurrentBook={props.setCurrentBook}
-            setCurrentVid={props.setCurrentVid}
-            currentBook={props.currentBook}
-            currentVid={props.currentVid}
-            playlistSlug={props.playlistSlug}
-          />
-          {/* <div> */}
-
-          <DownloadProgress downloadProgress={downloadProgress} />
-          {/* )} */}
-          {/* </div> */}
-          <BulkListing
-            downloadProgress={downloadProgress}
-            setCurrentBook={props.setCurrentBook}
-            setCurrentVid={props.setCurrentVid}
-            playlistSlug={props.playlistSlug}
-            playlistData={props.playlistData}
-            setDownloadProgress={setDownloadProgress}
-            saveVidOffline={saveVidOffline}
-            currentBook={props.currentBook}
-            currentVid={props.currentVid}
-          />
-
-          <AppMemoryInfo deviceInfo={deviceInfo} />
-        </div>
-      </IonModal>
+        </IonModal>
+      </IonContent>
       {/* </div> */}
     </>
   );

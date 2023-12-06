@@ -47,13 +47,11 @@ export function BulkListing({
 	saveVidOffline,
 	setCurrentBook,
 	setCurrentVid,
-	currentBook,
 	currentVid,
 	downloadProgress,
 	setShapedPlaylist,
 }: IDownloadListing) {
 	const { t } = useTranslation();
-
 	const [booksSelected, setBooksSelected] = useState<Array<IVidWithCustom[]>>();
 	function allBooks() {
 		const allVals = Object.values(playlistData.formattedVideos).map((value) => {

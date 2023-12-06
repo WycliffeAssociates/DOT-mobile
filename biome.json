@@ -1,27 +1,27 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.4.1/schema.json",
-  "organizeImports": {
-    "enabled": true
-  },
-  "formatter": {
-    "enabled": true,
-    "formatWithErrors": false,
-    "indentStyle": "tab",
-    "indentWidth": 2,
-    "lineWidth": 80,
-    "ignore": []
-  },
-  "files": {
-    "include": ["src/**/*.{ts, tsx, js, jsx}"],
-    "ignore": ["node_modules", "bcApi.ts", "tests"]
-  },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true,
-      "suspicious": {
-        "noExplicitAny": "off"
-      }
-    }
-  }
+	"$schema": "https://biomejs.dev/schemas/1.4.1/schema.json",
+	"organizeImports": {
+		"enabled": true
+	},
+	"formatter": {
+		"enabled": true,
+		"formatWithErrors": false,
+		"indentStyle": "tab",
+		"indentWidth": 2,
+		"lineWidth": 80,
+		"ignore": []
+	},
+	"files": {
+		"include": ["src/**/*"],
+		"ignore": ["node_modules", "bcApi.ts", "tests"]
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"suspicious": {
+				"noExplicitAny": "off"
+			}
+		}
+	}
 }

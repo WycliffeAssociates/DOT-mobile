@@ -1,6 +1,6 @@
-import {Redirect, Route} from "react-router-dom";
-import {IonApp, IonRouterOutlet, setupIonicReact} from "@ionic/react";
-import {IonReactRouter} from "@ionic/react-router";
+import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
+import { IonReactRouter } from "@ionic/react-router";
+import { Redirect, Route } from "react-router-dom";
 import Home from "./pages/Home";
 
 /* Core CSS required for Ionic components to work properly */
@@ -20,32 +20,32 @@ import "@ionic/react/css/typography.css";
 // import "@ionic/react/css/display.css";
 import "@unocss/reset/tailwind.css";
 
+import Playlist from "./pages/Playlist";
+import "./theme/global.css";
 /* Theme variables */
 import "./theme/variables.css";
-import "./theme/global.css";
-import Playlist from "./pages/Playlist";
 setupIonicReact();
 
 const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route path="/" exact={true}>
-          <Home />
-        </Route>
-        <Route path="/:playlist">
-          <Playlist />
-        </Route>
-        {/* <Route path="/test2" exact={true}>
+	<IonApp>
+		<IonReactRouter>
+			<IonRouterOutlet>
+				<Route path="/" exact={true}>
+					<Home />
+				</Route>
+				<Route path="/:playlist">
+					<Playlist />
+				</Route>
+				{/* <Route path="/test2" exact={true}>
           <Test2 />
         </Route>
 
         <Route path="/another" exact={true}>
           <Another />
         </Route>  */}
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
+			</IonRouterOutlet>
+		</IonReactRouter>
+	</IonApp>
 );
 
 export default App;

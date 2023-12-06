@@ -5,16 +5,17 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "NODE_ENV=production npm run lint && tsc && vite build",
+    "build": "NODE_ENV=production tsc && vite build",
     "preview": "vite preview",
     "test.e2e": "playwright test",
     "test.unit": "vitest",
-    "lint": "biome check --apply ./src/**/*",
+    "lint": "biome check --apply --verbose  src/**/* src/",
     "ios": "npm run build && npm run sync && npx cap run ios",
     "android": "npm run build && npx cap run android",
     "sync": "npx cap sync",
     "iconGenerate": "npx @capacitor/assets generate --iconBackgroundColor '#eeeeee' --splashBackgroundColor '#eeeeee'",
-    "updateAllPackages": "npm outdated | awk 'NR>1 {print $1\"@\"$4}' | xargs npm install --legacy-peer-deps"
+    "updateAllPackages": "npm outdated | awk 'NR>1 {print $1\"@\"$4}' | xargs npm install --legacy-peer-deps",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@capacitor/android": "^5.5.1",
@@ -58,12 +59,17 @@
     "@unocss/transformer-variant-group": "^0.57.7",
     "@vitejs/plugin-legacy": "^5.2.0",
     "@vitejs/plugin-react": "^4.2.0",
+    "husky": "^8.0.0",
     "jsdom": "^23.0.1",
+    "lint-staged": "^15.2.0",
     "terser": "^5.4.0",
     "typescript": "^5.3.2",
     "unocss": "^0.57.7",
     "vite": "^5.0.4",
     "vitest": "^0.34.6"
+  },
+  "lint-staged": {
+    "*": "biome check --apply"
   },
   "description": "WA Sign language bibles app"
 }

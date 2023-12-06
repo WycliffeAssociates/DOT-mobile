@@ -31,3 +31,7 @@ yarn-error.log*
 .env
 vite.config.ts.*
 dist
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

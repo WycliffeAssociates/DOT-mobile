@@ -6,6 +6,7 @@ import "virtual:uno.css";
 
 const container = document.getElementById("root");
 const root = createRoot(container!);
+debugger;
 root.render(
   <React.StrictMode>
     <App />

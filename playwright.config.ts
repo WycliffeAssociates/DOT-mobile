@@ -77,6 +77,10 @@ export default defineConfig({
 			? "npm run build && npm run preview"
 			: "npm run dev",
 		url: process.env.CI ? "http://localhost:4173" : "http://localhost:5173",
+		env: {
+			VITE_POLICY_KEY: process.env.VITE_POLICY_KEY || "noKey",
+			VITE_BC_ACCOUNT_ID: process.env.VITE_BC_ACCOUNT_ID || "noKey",
+		},
 		reuseExistingServer: !process.env.CI,
 		// reuseExistingServer: true,
 	},

@@ -19,6 +19,9 @@ jobs:
         run: npx playwright install --with-deps
       - name: Run Playwright tests
         run: DEBUG=pw:api npx playwright test
+        env:
+          VITE_POLICY_KEY: ${{ secrets.VITE_POLICY_KEY }}
+          VITE_BC_ACCOUNT_ID: ${{ secrets.VITE_BC_ACCOUNT_ID }}
       - uses: actions/upload-artifact@v3
         if: always()
         with:

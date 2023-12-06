@@ -395,14 +395,14 @@ function Playlist() {
 				/>
 				<IonLoading message={t("loading")} isOpen={isFetching} />
 
-				<div
-					data-testid="stateChecker"
-					data-currentbook={currentVid?.book}
-					data-currentchap={currentVid?.chapter}
-				>
+				<div>
 					<div className="overflow-x-hidden max-w-[1000px] mx-auto w-full sm:rounded-lg">
 						{shapedPlaylist?.formattedVideos && (
-							<div>
+							<div
+								data-testid="stateChecker"
+								data-currentbook={currentVid.book}
+								data-currentchap={currentVid.chapter}
+							>
 								<div className="w-full mx-auto   relative  sm:(rounded-lg overflow-hidden)">
 									<VerseSegmentJump
 										currentVideo={currentVid}

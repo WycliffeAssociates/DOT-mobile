@@ -59,16 +59,10 @@ test("state data attributes for chapter / vid are correct", async ({page}) => {
   await page.goto("/benin");
 
   const stateChecker = page.getByTestId("stateChecker");
-  await stateChecker.waitFor({
-    state: "attached",
-  });
-  const dataCurBook = await stateChecker.getAttribute("data-currentbook");
-  const isMatthew = dataCurBook === "MAT";
-  const dataCur = await stateChecker.getAttribute("data-currentchap");
-  const isChap1 = Number(dataCur) === 1;
+  await stateChecker.waitFor();
 
-  expect(isMatthew).toBeTruthy();
-  expect(isChap1).toBeTruthy();
+  await expect(stateChecker).toHaveAttribute("data-currentbook", /MAT/);
+  await expect(stateChecker).toHaveAttribute("data-currentchap", /^0*1$/);
 });
 
 test("chapter changes on click", async ({page}) => {
@@ -79,14 +73,9 @@ test("chapter changes on click", async ({page}) => {
     .getByText("2", {exact: true});
 
   await chap2Btn.click();
-  const stateChecker = await page.getByTestId("stateChecker");
-  const dataCurBook = await stateChecker.getAttribute("data-currentbook");
-  const isMatthew = dataCurBook === "MAT";
-  const dataCur = await stateChecker.getAttribute("data-currentchap");
-  const isChap2 = Number(dataCur) === 2;
-
-  expect(isMatthew).toBeTruthy();
-  expect(isChap2).toBeTruthy();
+  const stateChecker = page.getByTestId("stateChecker");
+  await expect(stateChecker).toHaveAttribute("data-currentbook", /MAT/);
+  await expect(stateChecker).toHaveAttribute("data-currentchap", /^0*2$/);
 });
 
 test("book changes on click", async ({page}) => {
@@ -99,11 +88,8 @@ test("book changes on click", async ({page}) => {
     .locator("li")
     .getByText("Jude");
   await judeBtn.click();
-  const stateChecker = await page.getByTestId("stateChecker");
-  const dataCurBook = await stateChecker.getAttribute("data-currentbook");
-  const isJude = dataCurBook === "JUD";
-
-  expect(isJude).toBeTruthy();
+  const stateChecker = page.getByTestId("stateChecker");
+  expect(stateChecker).toHaveAttribute("data-currentbook", "JUD");
   await expect(bookPicked).toHaveText("Jude");
 });
 

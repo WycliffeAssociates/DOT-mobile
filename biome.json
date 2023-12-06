@@ -13,7 +13,7 @@
 	},
 	"files": {
 		"include": ["src/**/*"],
-		"ignore": ["node_modules", "bcApi.ts", "tests"]
+		"ignore": ["node_modules", "bcApi.ts", "tests", "playwright.config.ts"]
 	},
 	"linter": {
 		"enabled": true,

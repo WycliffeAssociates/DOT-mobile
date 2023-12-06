@@ -35,7 +35,7 @@ test("No horizontal scroll", async ({page}) => {
   );
   expect(doesNotHaveHorizontalScroll).toBe(true);
 });
-test.only("New Testament renders 27 books", async ({page}) => {
+test("New Testament renders 27 books", async ({page}) => {
   await page.goto("/benin");
   const playlistListing = page.getByTestId("booksAvailable");
   await playlistListing.waitFor({
@@ -71,7 +71,7 @@ test("state data attributes for chapter / vid are correct", async ({page}) => {
   expect(isChap1).toBeTruthy();
 });
 
-test.only("chapter changes on click", async ({page}) => {
+test("chapter changes on click", async ({page}) => {
   await page.goto("/benin");
 
   const chap2Btn = page

@@ -18,6 +18,9 @@ jobs:
         # ADD YOUR CUSTOM DEPENDENCY UPGRADE COMMANDS BELOW
         run: |
           npm ci && npm run build && npm run sync
+        env:
+          VITE_POLICY_KEY: ${{ secrets.VITE_POLICY_KEY }}
+          VITE_BC_ACCOUNT_ID: ${{ secrets.VITE_BC_ACCOUNT_ID }}
       - name: Load secret
         uses: 1password/load-secrets-action@v1
         with:

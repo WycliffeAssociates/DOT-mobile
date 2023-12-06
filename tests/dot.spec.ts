@@ -38,7 +38,9 @@ test("No horizontal scroll", async ({page}) => {
 test.only("New Testament renders 27 books", async ({page}) => {
   await page.goto("/benin");
   const playlistListing = page.getByTestId("booksAvailable");
-  await playlistListing.waitFor();
+  await playlistListing.waitFor({
+    state: "attached",
+  });
   const books = playlistListing.locator("li");
   await expect(books).toHaveCount(27);
 });
@@ -46,7 +48,9 @@ test("Matthew Renders 28 chapter buttons", async ({page}) => {
   await page.goto("/benin");
 
   const playlistListing = page.getByTestId("chapterSelector");
-  await playlistListing.waitFor();
+  await playlistListing.waitFor({
+    state: "attached",
+  });
   const chapters = playlistListing.locator("li");
 
   await expect(chapters).toHaveCount(28);
@@ -55,7 +59,9 @@ test("state data attributes for chapter / vid are correct", async ({page}) => {
   await page.goto("/benin");
 
   const stateChecker = page.getByTestId("stateChecker");
-  await stateChecker.waitFor();
+  await stateChecker.waitFor({
+    state: "attached",
+  });
   const dataCurBook = await stateChecker.getAttribute("data-currentbook");
   const isMatthew = dataCurBook === "MAT";
   const dataCur = await stateChecker.getAttribute("data-currentchap");

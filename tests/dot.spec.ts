@@ -24,19 +24,12 @@ test("Listing on home page navigates to proper playlist", async ({page}) => {
   const playlistListing = page.getByRole("link", {name: "benin"});
   await playlistListing.click();
   expect(page.url().includes("benin"));
-  // const listItems = playlistListing.getByRole("listitem");
-  // listItems.
-  // const alphabetizedKeys = Object.keys(
-  //   brightCovePlaylistConfig
-  // ).sort() as unknown as Array<keyof typeof brightCovePlaylistConfig>;
-
-  // await expect(listItems).toHaveCount(alphabetizedKeys.length);
 });
 test("No horizontal scroll", async ({page}) => {
   // Navigate to the provided URL
   await page.goto("/benin");
   // Use page.evaluate to run custom JavaScript code on the page
-  await page.waitForLoadState("networkidle");
+
   const doesNotHaveHorizontalScroll = await page.evaluate(
     () => document.body.scrollWidth <= window.innerWidth
   );
@@ -44,26 +37,25 @@ test("No horizontal scroll", async ({page}) => {
 });
 test("New Testament renders 27 books", async ({page}) => {
   await page.goto("/benin");
-  // await page.waitForLoadState("networkidle");
-  const playlistListing = await page
-    .getByTestId("booksAvailable")
-    .locator("li");
-  await expect(playlistListing).toHaveCount(27);
+  const playlistListing = page.getByTestId("booksAvailable");
+  await playlistListing.waitFor();
+  const books = playlistListing.locator("li");
+  await expect(books).toHaveCount(27);
 });
 test("Matthew Renders 28 chapter buttons", async ({page}) => {
   await page.goto("/benin");
-  // await page.waitForLoadState("networkidle");
-  const playlistListing = await page
-    .getByTestId("chapterSelector")
-    .locator("li");
 
-  await expect(playlistListing).toHaveCount(28);
+  const playlistListing = page.getByTestId("chapterSelector");
+  await playlistListing.waitFor();
+  const chapters = playlistListing.locator("li");
+
+  await expect(chapters).toHaveCount(28);
 });
 test("state data attributes for chapter / vid are correct", async ({page}) => {
   await page.goto("/benin");
 
-  await page.waitForLoadState("networkidle");
-  const stateChecker = await page.getByTestId("stateChecker");
+  const stateChecker = page.getByTestId("stateChecker");
+  await stateChecker.waitFor();
   const dataCurBook = await stateChecker.getAttribute("data-currentbook");
   const isMatthew = dataCurBook === "MAT";
   const dataCur = await stateChecker.getAttribute("data-currentchap");
@@ -76,8 +68,7 @@ test("state data attributes for chapter / vid are correct", async ({page}) => {
 test("chapter changes on click", async ({page}) => {
   await page.goto("/benin");
 
-  await page.waitForLoadState("networkidle");
-  const chap2Btn = await page
+  const chap2Btn = page
     .getByTestId("chapterSelector")
     .getByText("2", {exact: true});
 
@@ -95,11 +86,8 @@ test("chapter changes on click", async ({page}) => {
 test("book changes on click", async ({page}) => {
   await page.goto("/benin");
 
-  await page.waitForLoadState("networkidle");
-  // const chap2Btn = await page
-  //   .getByTestId("chapterSelector")
-  //   .getByText("2", {exact: true});
   const bookPicked = page.getByTestId("bookPicked");
+
   const judeBtn = page
     .getByTestId("booksAvailable")
     .locator("li")
@@ -112,3 +100,6 @@ test("book changes on click", async ({page}) => {
   expect(isJude).toBeTruthy();
   await expect(bookPicked).toHaveText("Jude");
 });
+
+// testing vido
+// How can i e2e test the player to ensure that it's playing once someone downloads somethign? Green check marks. But i'd like to actually test the player.

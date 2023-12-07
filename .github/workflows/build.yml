@@ -14,13 +14,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "20"
-      - name: Install JS dependencies and build
-        # ADD YOUR CUSTOM DEPENDENCY UPGRADE COMMANDS BELOW
-        run: |
-          npm ci && npm run build && npx ionic build && npx cap copy
-        env:
-          VITE_POLICY_KEY: ${{ secrets.VITE_POLICY_KEY }}
-          VITE_BC_ACCOUNT_ID: ${{ secrets.VITE_BC_ACCOUNT_ID }}
       - name: Load secret
         uses: 1password/load-secrets-action@v1
         with:
@@ -31,6 +24,14 @@ jobs:
           AWS_KEY_ID: "op://DevOps/cloudflare-r2-token/access-key-id"
           AWS_SECRET_ACCESS_KEY: "op://DevOps/cloudflare-r2-token/secret-access-key"
           ENDPOINT: "op://DevOps/cloudflare-r2-token/endpoint"
+      - name:
+          Install JS dependencies and build
+          # ADD YOUR CUSTOM DEPENDENCY UPGRADE COMMANDS BELOW
+        run: |
+          npx ci && npx ionic build && npx cap copy
+        env:
+          VITE_POLICY_KEY: ${{ secrets.VITE_POLICY_KEY }}
+          VITE_BC_ACCOUNT_ID: ${{ secrets.VITE_BC_ACCOUNT_ID }}
       - name: Get current date
         id: date
         run: echo "date=$(date +'%Y-%m-%d')"  >> "$GITHUB_OUTPUT"

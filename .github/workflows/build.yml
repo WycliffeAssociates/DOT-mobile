@@ -34,12 +34,14 @@ jobs:
       - name: Get current date
         id: date
         run: echo "date=$(date +'%Y-%m-%d')"  >> "$GITHUB_OUTPUT"
+      - name: zip the built folder
+        run: mkdir ./dottmp && zip -r ./dottmp/${{steps.date.outputs.date}}-dotapp ./ios/App
       - name: Upload IOS to R2
         uses: shallwefootball/s3-upload-action@master
         with:
           aws_key_id: ${{ env.AWS_KEY_ID }}
           aws_secret_access_key: ${{ env.AWS_SECRET_ACCESS_KEY}}
           aws_bucket: dot-mobile
-          source_dir: "./ios/App"
-          destination_dir: "/ios/${{steps.date.outputs.date}}/"
+          source_dir: "./dottmp"
+          destination_dir: "ios"
           endpoint: ${{ env.ENDPOINT }}

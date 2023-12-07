@@ -12,7 +12,7 @@
     "lint": "biome check --apply --verbose  src/**/* src/",
     "ios": "npm run build && npm run sync && npx cap run ios",
     "android": "npm run build && npx cap run android",
-    "sync": "npx cap sync",
+    "sync": "cap sync",
     "iconGenerate": "npx @capacitor/assets generate --iconBackgroundColor '#eeeeee' --splashBackgroundColor '#eeeeee'",
     "updateAllPackages": "npm outdated | awk 'NR>1 {print $1\"@\"$4}' | xargs npm install --legacy-peer-deps",
     "prepare": "husky install"
@@ -45,9 +45,10 @@
     "react-router-dom": "^5.3.4"
   },
   "devDependencies": {
+    "@ionic/cli": "^7.1.5",
+    "@capacitor/cli": "^5.5.1",
     "@biomejs/biome": "1.4.1",
     "@capacitor/assets": "^3.0.1",
-    "@capacitor/cli": "^5.5.1",
     "@playwright/test": "^1.40.1",
     "@testing-library/dom": ">=7.21.4",
     "@testing-library/jest-dom": "^6.1.5",

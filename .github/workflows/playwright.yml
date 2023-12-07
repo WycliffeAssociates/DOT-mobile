@@ -17,11 +17,19 @@ jobs:
         run: npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+      - name: Load vars
+        uses: 1password/load-secrets-action@v1
+        with:
+          export-env: true
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          VITE_POLICY_KEY: "op://DevOps/dot-mobile-env-vars/bc-account-id"
+          VITE_BC_ACCOUNT_ID: "op://DevOps/dot-mobile-env-vars/policy-key"
       - name: Run Playwright tests
         run: DEBUG=pw:api npx playwright test
         env:
-          VITE_POLICY_KEY: ${{ secrets.VITE_POLICY_KEY }}
-          VITE_BC_ACCOUNT_ID: ${{ secrets.VITE_BC_ACCOUNT_ID }}
+          VITE_POLICY_KEY: ${{ env.VITE_POLICY_KEY }}
+          VITE_BC_ACCOUNT_ID: ${{ env.VITE_BC_ACCOUNT_ID }}
       - uses: actions/upload-artifact@v3
         if: always()
         with:

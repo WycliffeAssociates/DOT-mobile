@@ -1,7 +1,7 @@
 on: [workflow_dispatch]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     name: Build the project
     steps:
       - name: Checkout
@@ -28,7 +28,7 @@ jobs:
           Install JS dependencies and build
           # ADD YOUR CUSTOM DEPENDENCY UPGRADE COMMANDS BELOW
         run: |
-          npm ci && npm run build && npm run sync
+          npm ci && npm run build-ios
         env:
           VITE_POLICY_KEY: ${{ secrets.VITE_POLICY_KEY }}
           VITE_BC_ACCOUNT_ID: ${{ secrets.VITE_BC_ACCOUNT_ID }}

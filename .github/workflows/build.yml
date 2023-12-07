@@ -17,7 +17,7 @@ jobs:
       - name: Install JS dependencies and build
         # ADD YOUR CUSTOM DEPENDENCY UPGRADE COMMANDS BELOW
         run: |
-          npm ci && npm run build && npm run sync
+          npm ci && npm run build && npx ionic build && npx cap copy
         env:
           VITE_POLICY_KEY: ${{ secrets.VITE_POLICY_KEY }}
           VITE_BC_ACCOUNT_ID: ${{ secrets.VITE_BC_ACCOUNT_ID }}

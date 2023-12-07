@@ -25,8 +25,8 @@ jobs:
           export-env: true
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          VITE_POLICY_KEY: "op://DevOps/dot-mobile-env-vars/bc-account-id"
-          VITE_BC_ACCOUNT_ID: "op://DevOps/dot-mobile-env-vars/policy-key"
+          VITE_POLICY_KEY: "op://DevOps/dot-mobile-env-vars/policy-key"
+          VITE_BC_ACCOUNT_ID: "op://DevOps/dot-mobile-env-vars/bc-account-id"
       - name: Run Playwright tests
         run: DEBUG=pw:api npx playwright test
         env:

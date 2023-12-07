@@ -35,7 +35,7 @@ jobs:
         id: date
         run: echo "date=$(date +'%Y-%m-%d')"  >> "$GITHUB_OUTPUT"
       - name: zip the built folder
-        run: mkdir ./dottmp && zip -r ./dottmp/${{steps.date.outputs.date}}-dotapp ./ios/App
+        run: mkdir ./dottmp && zip -r ./dottmp/${{steps.date.outputs.date}}-dotapp ./ios
       - name: Upload IOS to R2
         uses: shallwefootball/s3-upload-action@master
         with:

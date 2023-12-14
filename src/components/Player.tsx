@@ -1,11 +1,8 @@
 import { Capacitor } from "@capacitor/core";
+import { useIonViewWillLeave } from "@ionic/react";
 import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import { VideoJsPlayer } from "video.js";
-import {
-	IVidWithCustom,
-	changePlayerSrcParams,
-	chapterMarkers,
-} from "../customTypes/types";
+import { IVidWithCustom, chapterMarkers } from "../customTypes/types";
 import { handleVideoJsTaps, playerCustomHotKeys } from "../lib/Ui";
 import { getSavedAppPreferences } from "../lib/storage";
 type Iplayer = {
@@ -71,6 +68,7 @@ export function VidJsPlayer({
 				fullscreen: {
 					navigationUI: "show",
 				},
+				enableDocumentPictureInPicture: true,
 				sources: firstVidSrces,
 				poster: firstPoster,
 				nativeControlsForTouch: true,

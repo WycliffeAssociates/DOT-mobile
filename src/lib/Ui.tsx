@@ -81,6 +81,7 @@ export async function fetchRemoteChaptersFile(src: string) {
 }
 export function cleanUpOldChapters() {
 	const elements = document.querySelectorAll('[data-role="chapterMarker"]');
+
 	for (const element of elements) {
 		element.remove();
 	}

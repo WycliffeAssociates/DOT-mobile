@@ -1,14 +1,16 @@
 on: [workflow_dispatch]
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     name: Build the project
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # Run your project's build step
-      # - name: Build
-      #   run: npm install && npm run build
+      - name: Setup java
+        uses: actions/setup-java@v3
+        with:
+          distribution: "zulu"
+          java-version: "17"
       - name: Set up node
         # ADD YOUR CUSTOM DEPENDENCY UPGRADE COMMANDS BELOW
         uses: actions/setup-node@v3
@@ -30,21 +32,27 @@ jobs:
           Install JS dependencies and build
           # ADD YOUR CUSTOM DEPENDENCY UPGRADE COMMANDS BELOW
         run: |
-          npm ci && npm run build-ios && npm run build-android
+          npm ci && npm run build-android
         env:
           VITE_POLICY_KEY: ${{ secrets.VITE_POLICY_KEY }}
           VITE_BC_ACCOUNT_ID: ${{ secrets.VITE_BC_ACCOUNT_ID }}
       - name: Get current date
         id: date
         run: echo "date=$(date +'%Y-%m-%d')"  >> "$GITHUB_OUTPUT"
-      # - name: zip the built folder
-      #   run: mkdir ./dottmp && zip -r ./dottmp/${{steps.date.outputs.date}}-dotapp ./ios
-      # - name: Upload IOS to R2
-      #   uses: shallwefootball/s3-upload-action@master
-      #   with:
-      #     aws_key_id: ${{ env.AWS_KEY_ID }}
-      #     aws_secret_access_key: ${{ env.AWS_SECRET_ACCESS_KEY}}
-      #     aws_bucket: dot-mobile
-      #     source_dir: "./dottmp"
-      #     destination_dir: "ios"
-      #     endpoint: ${{ env.ENDPOINT }}
+      - name: Build app bundle
+        run: cd android && ./gradlew bundle
+      - name: Extract Android signing key from env
+        run: |
+          echo "${{ secrets.RELEASE_KEYSTORE }}" > android/release.jks.base64
+          base64 -d android/release.jks.base64 > android/release.decrypted.jks
+      - name: Sign dev build
+        run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ secrets.RELEASE_KEYSTORE_PASSWORD }}" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab release
+      - name: Upload Android to R2
+        uses: shallwefootball/s3-upload-action@master
+        with:
+          aws_key_id: ${{ env.AWS_KEY_ID }}
+          aws_secret_access_key: ${{ env.AWS_SECRET_ACCESS_KEY}}
+          aws_bucket: dot-mobile
+          source_dir: "./android/app/build/outputs/bundle/release"
+          destination_dir: "android/${{steps.date.outputs.date}}"
+          endpoint: ${{ env.ENDPOINT }}

@@ -1,3 +1,4 @@
+import { Capacitor } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
 import {
 	IonAlert,
@@ -8,6 +9,7 @@ import {
 	IonToolbar,
 	useIonViewWillEnter,
 } from "@ionic/react";
+import { useIonViewWillLeave } from "@ionic/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
@@ -363,7 +365,7 @@ function Playlist() {
 	useIonViewWillEnter(() => {
 		fetchAndSetup();
 	}, []);
-
+	// useIonViewWillLeave(() => {}, [vidJsPlayer]);
 	// MANAGE EFFECTS FOR HEN PLAYER CHANGES
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <biome not aware enough of code deps here to say>
@@ -450,6 +452,7 @@ function Playlist() {
 									setShapedPlaylist={setShapedPlaylist}
 									setCurrentBook={setCurrentBook}
 								/>
+
 								{currentBook && (
 									<ChapterSelector
 										showChapSliderButtons={showChapSliderButtons}

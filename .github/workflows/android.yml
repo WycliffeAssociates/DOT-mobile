@@ -27,6 +27,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: "op://DevOps/cloudflare-r2-token/secret-access-key"
           RELEASE_KEYSTORE: "op://DevOps/btt-android-keystore-key/base64-encoded-jks"
           RELEASE_KEYSTORE_PASSWORD: "op://DevOps/btt-android-keystore-key/keystore-password"
+          RELEASE_KEYSTORE_NAME: "op://DevOps/btt-android-keystore-key/key0-password"
           ENDPOINT: "op://DevOps/cloudflare-r2-token/endpoint"
       - name:
           Install JS dependencies and build
@@ -46,7 +47,7 @@ jobs:
           echo "${{ env.RELEASE_KEYSTORE }}" > android/release.jks.base64
           base64 -d android/release.jks.base64 > android/release.decrypted.jks
       - name: Sign dev build
-        run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.RELEASE_KEYSTORE_PASSWORD }}" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab release
+        run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.RELEASE_KEYSTORE_PASSWORD }}" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab ${{env.RELEASE_KEYSTORE_NAME}}
       - name: Upload Android to R2
         uses: shallwefootball/s3-upload-action@master
         with:

@@ -1,4 +1,6 @@
-on: [workflow_dispatch]
+on: 
+  workflow_dispatch:
+  push:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -6,6 +8,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - uses: FranzDiebold/github-env-vars-action@v2.1.0
       - name: Setup java
         uses: actions/setup-java@v3
         with:
@@ -25,9 +28,10 @@ jobs:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           AWS_KEY_ID: "op://DevOps/cloudflare-r2-token/access-key-id"
           AWS_SECRET_ACCESS_KEY: "op://DevOps/cloudflare-r2-token/secret-access-key"
-          RELEASE_KEYSTORE: "op://DevOps/btt-android-keystore-key/base64-encoded-jks"
-          RELEASE_KEYSTORE_PASSWORD: "op://DevOps/btt-android-keystore-key/keystore-password"
-          RELEASE_KEYSTORE_NAME: "op://DevOps/btt-android-keystore-key/key0-password"
+          KEYSTORE: "op://DevOps/btt-android-keystore-key/base64-encoded-jks"
+          KEYSTORE_PASSWORD: "op://DevOps/btt-android-keystore-key/text-details/storePassword"
+          KEY_ALIAS: "op://DevOps/btt-android-keystore-key/text-details/keyAlias"
+          KEY_PASSWORD: "op://DevOps/btt-android-keystore-key/text-details/keyPassword"
           ENDPOINT: "op://DevOps/cloudflare-r2-token/endpoint"
       - name:
           Install JS dependencies and build
@@ -44,16 +48,23 @@ jobs:
         run: cd android && ./gradlew bundle
       - name: Extract Android signing key from env
         run: |
-          echo "${{ env.RELEASE_KEYSTORE }}" > android/release.jks.base64
+          echo "${{ env.KEYSTORE }}" > android/release.jks.base64
           base64 -d android/release.jks.base64 > android/release.decrypted.jks
-      - name: Sign dev build
-        run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.RELEASE_KEYSTORE_PASSWORD }}" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab ${{env.RELEASE_KEYSTORE_NAME}}
+      - name: Sign dev build aab
+        run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.KEYSTORE_PASSWORD }}" -keypass "${{ env.KEY_PASSWORD }}" -signedjar ./outputs/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab "${{env.KEY_ALIAS}}"
+      - name: Sign dev build apk
+        run: |
+          # jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.KEYSTORE_PASSWORD }}" -keypass "${{ env.KEY_PASSWORD }}" -signedjar ./outputs/app-release-signed.apk ./android/app/build/outputs/apk/release/app-release.apk "${{env.KEY_ALIAS}}"
+          ls ./android/app/build/outputs/apk/release/
+          ls -r ./android/app/build/outputs/apk/
+      - name: set s3 destination_dir for nightly-builds
+        run: echo "CURRENT_S3_DESTINATION=$CI_REPOSITORY_OWNER/$CI_REPOSITORY_NAME/$CI_REF_NAME_SLUG/$CI_RUN_NUMBER" >> $GITHUB_ENV
       - name: Upload Android to R2
         uses: shallwefootball/s3-upload-action@master
         with:
           aws_key_id: ${{ env.AWS_KEY_ID }}
           aws_secret_access_key: ${{ env.AWS_SECRET_ACCESS_KEY}}
           aws_bucket: dot-mobile
-          source_dir: "./android/app/build/outputs/bundle/release"
-          destination_dir: "android/${{steps.date.outputs.date}}"
+          source_dir: "./outputs"
+          destination_dir: ${{ env.CURRENT_S3_DESTINATION }}
           endpoint: ${{ env.ENDPOINT }}

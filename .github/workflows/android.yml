@@ -57,8 +57,7 @@ jobs:
       - name: Sign dev build apk
         run: |
           # jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.KEYSTORE_PASSWORD }}" -keypass "${{ env.KEY_PASSWORD }}" -signedjar ./output/app-release-signed.apk ./android/app/build/outputs/apk/release/app-release.apk "${{env.KEY_ALIAS}}"
-          ls ./android/app/build/outputs/apk/release/
-          ls -r ./android/app/build/outputs/apk/
+          ls -r ./android/app/build/outputs/
       - name: set s3 destination_dir for nightly-builds
         run: echo "CURRENT_S3_DESTINATION=$CI_REPOSITORY_OWNER/$CI_REPOSITORY_NAME/$CI_REF_NAME_SLUG/$CI_RUN_NUMBER" >> $GITHUB_ENV
       - name: Upload Android to R2

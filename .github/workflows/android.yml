@@ -51,13 +51,13 @@ jobs:
           echo "${{ env.KEYSTORE }}" > android/release.jks.base64
           base64 -d android/release.jks.base64 > android/release.decrypted.jks
       - name: make output dir
-        run: mkdir ./output
+        run: mkdir ./outputs
       - name: Sign dev build aab
-        run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.KEYSTORE_PASSWORD }}" -keypass "${{ env.KEY_PASSWORD }}" -signedjar ./output/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab "${{env.KEY_ALIAS}}"
+        run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.KEYSTORE_PASSWORD }}" -keypass "${{ env.KEY_PASSWORD }}" -signedjar ./outputs/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab "${{env.KEY_ALIAS}}"
       - name: Sign dev build apk
         run: |
-          # jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.KEYSTORE_PASSWORD }}" -keypass "${{ env.KEY_PASSWORD }}" -signedjar ./output/app-release-signed.apk ./android/app/build/outputs/apk/release/app-release.apk "${{env.KEY_ALIAS}}"
-          ls -r ./android/app/build/outputs/
+          # jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.KEYSTORE_PASSWORD }}" -keypass "${{ env.KEY_PASSWORD }}" -signedjar ./outputs/app-release-signed.apk ./android/app/build/outputs/apk/release/app-release.apk "${{env.KEY_ALIAS}}"
+          ls -r ./android/app/build/outputs/apk
       - name: set s3 destination_dir for nightly-builds
         run: echo "CURRENT_S3_DESTINATION=$CI_REPOSITORY_OWNER/$CI_REPOSITORY_NAME/$CI_REF_NAME_SLUG/$CI_RUN_NUMBER" >> $GITHUB_ENV
       - name: Upload Android to R2

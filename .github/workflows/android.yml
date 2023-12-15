@@ -53,10 +53,10 @@ jobs:
       - name: make output dir
         run: mkdir ./output
       - name: Sign dev build aab
-        run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.KEYSTORE_PASSWORD }}" -keypass "${{ env.KEY_PASSWORD }}" -signedjar ./outputs/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab "${{env.KEY_ALIAS}}"
+        run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.KEYSTORE_PASSWORD }}" -keypass "${{ env.KEY_PASSWORD }}" -signedjar ./output/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab "${{env.KEY_ALIAS}}"
       - name: Sign dev build apk
         run: |
-          # jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.KEYSTORE_PASSWORD }}" -keypass "${{ env.KEY_PASSWORD }}" -signedjar ./outputs/app-release-signed.apk ./android/app/build/outputs/apk/release/app-release.apk "${{env.KEY_ALIAS}}"
+          # jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.KEYSTORE_PASSWORD }}" -keypass "${{ env.KEY_PASSWORD }}" -signedjar ./output/app-release-signed.apk ./android/app/build/outputs/apk/release/app-release.apk "${{env.KEY_ALIAS}}"
           ls ./android/app/build/outputs/apk/release/
           ls -r ./android/app/build/outputs/apk/
       - name: set s3 destination_dir for nightly-builds

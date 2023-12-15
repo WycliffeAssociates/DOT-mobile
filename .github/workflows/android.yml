@@ -50,7 +50,7 @@ jobs:
           Create apk in addition to aab
           # ADD YOUR CUSTOM DEPENDENCY UPGRADE COMMANDS BELOW
         run: |
-          npx cap build android --androidreleasetype=APK --keystorealias="${{ env.KEYSTORE }}" --keystorealiaspass="${{ env.KEY_PASSWORD }}" --keystorepass="${{ env.KEYSTORE_PASSWORD }}" --keystorepath="android/release.decrypted.jks"
+          npx cap build android --androidreleasetype=APK --keystorealias="${{env.KEY_ALIAS}}" --keystorealiaspass="${{ env.KEY_PASSWORD }}" --keystorepass="${{ env.KEYSTORE_PASSWORD }}" --keystorepath=android/release.decrypted.jks
       - name: Get current date
         id: date
         run: echo "date=$(date +'%Y-%m-%d')"  >> "$GITHUB_OUTPUT"

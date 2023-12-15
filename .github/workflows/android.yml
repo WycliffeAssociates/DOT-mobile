@@ -45,7 +45,7 @@ jobs:
         id: date
         run: echo "date=$(date +'%Y-%m-%d')"  >> "$GITHUB_OUTPUT"
       - name: Build app bundle
-        run: cd android && ./gradlew bundle
+        run: cd android && ./gradlew bundle assembleDebug
       - name: Extract Android signing key from env
         run: |
           echo "${{ env.KEYSTORE }}" > android/release.jks.base64

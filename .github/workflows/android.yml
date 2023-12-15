@@ -1,4 +1,4 @@
-on: 
+on:
   workflow_dispatch:
   push:
 jobs:
@@ -33,11 +33,15 @@ jobs:
           KEY_ALIAS: "op://DevOps/btt-android-keystore-key/text-details/keyAlias"
           KEY_PASSWORD: "op://DevOps/btt-android-keystore-key/text-details/keyPassword"
           ENDPOINT: "op://DevOps/cloudflare-r2-token/endpoint"
+      - name: Extract Android signing key from env
+        run: |
+          echo "${{ env.KEYSTORE }}" > android/release.jks.base64
+            base64 -d android/release.jks.base64 > android/release.decrypted.jks
       - name:
           Install JS dependencies and build
           # ADD YOUR CUSTOM DEPENDENCY UPGRADE COMMANDS BELOW
         run: |
-          npm ci && npm run build-android
+          npm ci && npm run build-android && npx cap build android --androidreleasetype=APK --keystorealias="${{ env.KEYSTORE }}" --keystorealiaspass="${{ env.KEY_PASSWORD }}" --keystorepass=${{ env.KEYSTORE_PASSWORD }} --keystorepath="android/release.decrypted.jks"
         env:
           VITE_POLICY_KEY: ${{ secrets.VITE_POLICY_KEY }}
           VITE_BC_ACCOUNT_ID: ${{ secrets.VITE_BC_ACCOUNT_ID }}
@@ -46,17 +50,15 @@ jobs:
         run: echo "date=$(date +'%Y-%m-%d')"  >> "$GITHUB_OUTPUT"
       - name: Build app bundle
         run: cd android && ./gradlew bundle assembleDebug
-      - name: Extract Android signing key from env
-        run: |
-          echo "${{ env.KEYSTORE }}" > android/release.jks.base64
-          base64 -d android/release.jks.base64 > android/release.decrypted.jks
       - name: make output dir
         run: mkdir ./outputs
       - name: Sign dev build aab
         run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.KEYSTORE_PASSWORD }}" -keypass "${{ env.KEY_PASSWORD }}" -signedjar ./outputs/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab "${{env.KEY_ALIAS}}"
-      - name: Sign dev build apk
-        run: |
-          jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.KEYSTORE_PASSWORD }}" -keypass "${{ env.KEY_PASSWORD }}" -signedjar ./outputs/app-debug-signed.apk ./android/app/build/outputs/apk/debug/app-debug.apk "${{env.KEY_ALIAS}}"
+      - name: Move apk to outputs folder too
+        run: cp ./android/app/build/outputs/apk/release/app-release-signed.apk ./outputs
+      # - name: Sign dev build apk
+      #   run: |
+      #     jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.KEYSTORE_PASSWORD }}" -keypass "${{ env.KEY_PASSWORD }}" -signedjar ./outputs/app-debug-signed.apk ./android/app/build/outputs/apk/debug/app-debug.apk "${{env.KEY_ALIAS}}"
       - name: set s3 destination_dir for nightly-builds
         run: echo "CURRENT_S3_DESTINATION=$CI_REPOSITORY_OWNER/$CI_REPOSITORY_NAME/$CI_REF_NAME_SLUG/$CI_RUN_NUMBER" >> $GITHUB_ENV
       - name: Upload Android to R2

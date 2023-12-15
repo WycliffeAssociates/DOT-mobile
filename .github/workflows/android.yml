@@ -50,6 +50,8 @@ jobs:
         run: |
           echo "${{ env.KEYSTORE }}" > android/release.jks.base64
           base64 -d android/release.jks.base64 > android/release.decrypted.jks
+      - name: make output dir
+        run: mkdir ./output
       - name: Sign dev build aab
         run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.KEYSTORE_PASSWORD }}" -keypass "${{ env.KEY_PASSWORD }}" -signedjar ./outputs/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab "${{env.KEY_ALIAS}}"
       - name: Sign dev build apk

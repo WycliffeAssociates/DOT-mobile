@@ -45,26 +45,17 @@ jobs:
         env:
           VITE_POLICY_KEY: ${{ secrets.VITE_POLICY_KEY }}
           VITE_BC_ACCOUNT_ID: ${{ secrets.VITE_BC_ACCOUNT_ID }}
-
-      - name:
-          Create apk in addition to aab
-          # ADD YOUR CUSTOM DEPENDENCY UPGRADE COMMANDS BELOW
-        run: |
-          npx cap build android --androidreleasetype=APK --keystorealias="${{env.KEY_ALIAS}}" --keystorealiaspass="${{ env.KEY_PASSWORD }}" --keystorepass="${{ env.KEYSTORE_PASSWORD }}" --keystorepath=android/release.decrypted.jks
       - name: Get current date
         id: date
         run: echo "date=$(date +'%Y-%m-%d')"  >> "$GITHUB_OUTPUT"
       - name: Build app bundle
-        run: cd android && ./gradlew bundle assembleDebug
+        run: cd android && ./gradlew assembleDebug
       - name: make output dir
         run: mkdir ./outputs
       - name: Sign dev build aab
         run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.KEYSTORE_PASSWORD }}" -keypass "${{ env.KEY_PASSWORD }}" -signedjar ./outputs/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab "${{env.KEY_ALIAS}}"
       - name: Move apk to outputs folder too
-        run: cp ./android/app/build/outputs/apk/release/app-release-signed.apk ./outputs
-      # - name: Sign dev build apk
-      #   run: |
-      #     jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.KEYSTORE_PASSWORD }}" -keypass "${{ env.KEY_PASSWORD }}" -signedjar ./outputs/app-debug-signed.apk ./android/app/build/outputs/apk/debug/app-debug.apk "${{env.KEY_ALIAS}}"
+        run: cp ./android/app/build/outputs/apk/debug/app-debug.apk ./outputs
       - name: set s3 destination_dir for nightly-builds
         run: echo "CURRENT_S3_DESTINATION=$CI_REPOSITORY_OWNER/$CI_REPOSITORY_NAME/$CI_REF_NAME_SLUG/$CI_RUN_NUMBER" >> $GITHUB_ENV
       - name: Upload Android to R2

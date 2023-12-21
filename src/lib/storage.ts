@@ -1,10 +1,9 @@
 import { Capacitor } from "@capacitor/core";
-import { Directory, Encoding, Filesystem } from "@capacitor/filesystem";
+import { Directory, Filesystem } from "@capacitor/filesystem";
 import { Preferences } from "@capacitor/preferences";
 import write_blob from "capacitor-blob-writer";
 import {
 	IPlaylistData,
-	IPlaylistResponse,
 	IVidWithCustom,
 	fetchSession,
 	writeAnInProgressBlobParams,
@@ -14,6 +13,7 @@ import {
 	validPlaylistSlugs,
 	vidSavingWipData,
 } from "../customTypes/types";
+import { cacheBcPlaylistJson } from "./Ui";
 
 const fsDirToUse = Directory.Documents;
 
@@ -21,7 +21,7 @@ export function makeVidSaver(
 	playlist: validPlaylistSlugs,
 	vid: IVidWithCustom,
 ) {
-	// todo: change to smaller inc?
+	// NOTE: We could change this, but 10 seems like a reasonsable amount for avoiding timeouts.
 	const increment = 1024 * 1000 * 10; //1 kilobyte * 1000 (= 1mb) * 10 = (10mb)
 	// const increment = 10 * 10 * 1024; //10mb
 	const mp4FileName = `${vid.id}_mp4`;
@@ -249,19 +249,32 @@ export function makeVidSaver(
 					path: getInProgressDir(),
 					directory: fsDirToUse,
 				});
+
 				const blobsToConcat = [];
-				const allAccountedFor = allPartialBlobs.files.every((file) => {
-					const withStartEnd = file.name.match(/(\d+)_(\d+)/);
-					if (!withStartEnd || !withStartEnd[1] || !withStartEnd[2])
-						return false;
-					const start = Number(withStartEnd[1]);
-					const end = Number(withStartEnd[2]);
-					const isInExpected = expectedChunks.find(
-						(chunk) => chunk.end === end && chunk.start === start,
-					);
-					return isInExpected;
+				const allAccounted = expectedChunks.every((chunk) => {
+					const matchingFile = allPartialBlobs.files.find((file) => {
+						const withStartEnd = file.name.match(/(\d+)_(\d+)/);
+						if (!withStartEnd || !withStartEnd[1] || !withStartEnd[2])
+							return false;
+						const start = Number(withStartEnd[1]);
+						const end = Number(withStartEnd[2]);
+						const matches = chunk.end === end && chunk.start === start;
+						return matches;
+					});
+					return !!matchingFile;
 				});
-				if (!allAccountedFor)
+				// const allAccountedFor = allPartialBlobs.files.every((file) => {
+				//   const withStartEnd = file.name.match(/(\d+)_(\d+)/);
+				//   if (!withStartEnd || !withStartEnd[1] || !withStartEnd[2])
+				//     return false;
+				//   const start = Number(withStartEnd[1]);
+				//   const end = Number(withStartEnd[2]);
+				//   const isInExpected = expectedChunks.find(
+				//     (chunk) => chunk.end === end && chunk.start === start
+				//   );
+				//   return isInExpected;
+				// });
+				if (!allAccounted)
 					return {
 						error: "not all accounted for",
 						ok: false,
@@ -346,7 +359,6 @@ export function makeVidSaver(
 					recursive: true,
 				});
 			} catch (err) {
-				console.log(`err deleting folder ${`${playlist}/${vid.id}`}`);
 				console.warn(err);
 			} finally {
 				// using the finally block since the rmdir might throw and negate rest. If a user wants to free this data, we are going to do it.
@@ -354,7 +366,7 @@ export function makeVidSaver(
 					key: mp4FileName,
 				});
 				if (vid.book) {
-					const playlistClone = structuredClone(playlistData);
+					const playlistClone = JSON.parse(JSON.stringify(playlistData));
 					const currentVidInThatClone = playlistClone.formattedVideos[
 						vid.book
 					].find((thisVid: IVidWithCustom) => thisVid.id === vid.id);
@@ -363,17 +375,13 @@ export function makeVidSaver(
 						await this.updateCachedPlaylist(playlistClone);
 					}
 				}
-				// if (!currentVidInThatClone) return;
 			}
-
-			// Edite the cachedPlaylist
 		},
-		// todo: removeAllPlaylistInfo
 		// Remove from preferences, remove from cached playlist, remove final blob
 		async updateCachedPlaylist(newPlaylist: IPlaylistData) {
-			await Preferences.set({
-				key: playlist,
-				value: JSON.stringify(newPlaylist),
+			await cacheBcPlaylistJson({
+				data: JSON.stringify(newPlaylist),
+				playlistSlug: playlist,
 			});
 		},
 	};

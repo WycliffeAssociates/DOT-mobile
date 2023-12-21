@@ -55,10 +55,10 @@ export function SpeedControl(props: SpeedControlParams) {
 	return (
 		<div data-name="videoSpeedControl" className="mb-4">
 			<p>{t("preferredVideoSpeed")}</p>
-			<span className="inline-flex gap-1 items-center">
+			<span className="inline-flex gap-1 items-center w-full">
 				<input
 					type="range"
-					className="speedRange appearance-none bg-transparent cursor-pointer w-60 "
+					className="speedRange appearance-none bg-transparent cursor-pointer w-full! max-w-100 "
 					min=".2"
 					max="5"
 					step=".1"

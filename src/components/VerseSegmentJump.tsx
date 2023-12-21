@@ -1,12 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
-import { VideoJsPlayer } from "video.js";
+import { useEffect, useState } from "react";
+
 import {
 	IVidWithCustom,
 	IadjacentChap,
 	IvidJsPlayer,
 } from "../customTypes/types";
-import { vidSavingWipData } from "../customTypes/types";
-import { getAdjacentChap, jumpToNextChap, trackAdjacentChap } from "../lib/Ui";
+import { trackAdjacentChap } from "../lib/Ui";
 import { IconChapBack, IconChapNext } from "./Icons";
 type IVerseSegmentJump = {
 	player: IvidJsPlayer | undefined;
@@ -49,7 +48,7 @@ export function VerseSegmentJump(props: IVerseSegmentJump) {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <Pretty sure these are the only deps I want to run effect on>
 	useEffect(() => {
 		if (props.player) {
-			// These is slightly convulated to have to use a local state variable, but the player.off or remove event listener isn't working, once doesn't work bc we need continual updates, and if you don't remove the event listener, you end up with duplicate listeners using conflicting or stale values.  This way we can just let the effect above run based on the current time, and then it's getting fresh props on rerender instead of any stale values captured in the event listener
+			// These is slightly convoluted to have to use a local state variable, but the player.off or remove event listener isn't working like I'd expect, "once" as event listener doesn't work bc we need continual updates, and if you don't remove the event listener, you end up with duplicate listeners using conflicting or stale values.  This way we can just let the effect above run based on the current time, and then it's getting fresh props on rerender of the state var instead of any stale values captured in the event listener
 			props.player.on("timeupdate", () => {
 				if (!props.player) return;
 				const currentTime = props.player.currentTime();
@@ -63,7 +62,7 @@ export function VerseSegmentJump(props: IVerseSegmentJump) {
 	if (props.dir === "back") {
 		return (
 			<span
-				className={`flex flex-col absolute left-2 top-4  z-30 font-bold items-center text-primary/70 ${hideChapBtn(
+				className={`flex flex-col absolute left-2 top-10  z-30 font-bold items-center text-primary/70 ${hideChapBtn(
 					"prev",
 				)}`}
 			>
@@ -81,7 +80,7 @@ export function VerseSegmentJump(props: IVerseSegmentJump) {
 				>
 					<IconChapBack />
 				</button>
-				<span className="w-16 text-xs  text-center text-white/90">
+				<span className="w-26 text-xs  text-center text-white/90">
 					{adjacentChaps?.prev?.label}
 				</span>
 			</span>
@@ -89,7 +88,7 @@ export function VerseSegmentJump(props: IVerseSegmentJump) {
 	}
 	return (
 		<span
-			className={`flex flex-col absolute right-2 top-4  z-30 font-bold items-center ${hideChapBtn(
+			className={`flex flex-col absolute right-2 top-10  z-30 font-bold items-center ${hideChapBtn(
 				"next",
 			)}`}
 		>
@@ -107,7 +106,7 @@ export function VerseSegmentJump(props: IVerseSegmentJump) {
 			>
 				<IconChapNext />
 			</button>
-			<span className="w-16 text-xs  text-center text-white/90 bg-blend-difference	">
+			<span className="w-26 text-xs  text-center text-white/90 bg-blend-difference	">
 				{adjacentChaps?.next?.label}
 			</span>
 		</span>

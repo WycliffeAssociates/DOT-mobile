@@ -1,4 +1,5 @@
-import { Preferences } from "@capacitor/preferences";
+import { Directory, Encoding, Filesystem } from "@capacitor/filesystem";
+
 import { Dispatch, SetStateAction } from "react";
 import {
 	IPlaylistData,
@@ -20,9 +21,11 @@ import {
 
 export async function getChaptersArrFromVtt(
 	vid: IVidWithCustom,
-	player: IvidJsPlayer,
+	cleanUpUiMarkers = true,
 ) {
-	cleanUpOldChapters();
+	if (cleanUpUiMarkers) {
+		cleanUpOldChapters();
+	}
 	const chapterObj = vid.text_tracks?.find((tt) => tt.kind === "chapters");
 	if (!chapterObj || !chapterObj.src || !chapterObj.sources) {
 		return [];
@@ -30,7 +33,11 @@ export async function getChaptersArrFromVtt(
 	const srcToFetch = chapterObj.sources.find((srcO) =>
 		srcO.src?.startsWith("https"),
 	);
+	if (!vid.duration) return;
 	if (!srcToFetch || !srcToFetch.src) return;
+	const vidDur = vid.duration / 1000;
+
+	// NOTE: consider a force bypass to refresh?
 	if (vid.chapterMarkers) return vid.chapterMarkers;
 
 	const chapterVtt = await fetchRemoteChaptersFile(srcToFetch.src);
@@ -54,7 +61,7 @@ Luc2:17-28
 
 			const startTime = convertTimeToSeconds(timeStamp[0].trim());
 			const endTime = convertTimeToSeconds(timeStamp[1].trim());
-			const totalDur = player.duration();
+			const totalDur = vidDur;
 			const labelMatches = parts[1].match(labelRegex);
 			const xPos = String((startTime / totalDur) * 100);
 			return {
@@ -317,12 +324,18 @@ export function jumpToNextChap(
 export async function getCurrentPlaylistDataFs(
 	playlistSlug: validPlaylistSlugs,
 ) {
-	const upToDatePlaylistData = await Preferences.get({
-		key: playlistSlug,
-	});
-
-	if (!upToDatePlaylistData.value) return undefined;
-	return JSON.parse(upToDatePlaylistData.value) as IPlaylistData;
+	try {
+		const savedVersionFs = await Filesystem.readFile({
+			path: `playlists/${playlistSlug}`,
+			directory: Directory.Cache,
+			encoding: Encoding.UTF8,
+		});
+		if (!savedVersionFs || typeof savedVersionFs.data !== "string")
+			return undefined;
+		return JSON.parse(savedVersionFs.data) as IPlaylistData;
+	} catch (error) {
+		console.error(error);
+	}
 }
 
 export function mutateTimeStampBcResponse(data: Partial<IPlaylistResponse>) {
@@ -348,7 +361,6 @@ export async function updatePrefsInBackground({
 	if (!existingPlaylistData) return;
 	const data = await fetchBcApiEndpoint(playlist);
 	if (!data || !data.videos) return;
-	const { videos, formattedVideos, ...restPlaylistData } = data;
 
 	const castedVids = data.videos as IVidWithCustom[];
 	const { sortedVids, filteredByMatchingReferenceId } =
@@ -379,13 +391,32 @@ export async function updatePrefsInBackground({
 		}
 	}
 
+	// biome-ignore lint/correctness/noUnusedVariables: I'm destructuring to pick off the videos and formatted because we are using updating those properties with the spread on cacheBcPlaylistJson
+	const { videos, formattedVideos, ...restPlaylistData } = data;
 	mutateTimeStampBcResponse(restPlaylistData);
-	await Preferences.set({
-		key: playlist,
-		value: JSON.stringify({
+
+	await cacheBcPlaylistJson({
+		data: JSON.stringify({
 			formattedVideos: groupedBy,
 			...restPlaylistData,
 		}),
+		playlistSlug: playlist,
+	});
+}
+type cacheBcPlaylistJsonArgs = {
+	data: string | Blob;
+	playlistSlug: string;
+};
+export async function cacheBcPlaylistJson({
+	data,
+	playlistSlug,
+}: cacheBcPlaylistJsonArgs) {
+	await Filesystem.writeFile({
+		data: data,
+		path: `playlists/${playlistSlug}`,
+		directory: Directory.Cache,
+		encoding: Encoding.UTF8,
+		recursive: true,
 	});
 }
 async function fetchBcApiEndpoint(playlist: string) {
@@ -410,13 +441,20 @@ async function fetchBcApiEndpoint(playlist: string) {
 }
 export async function fetchBcData(playlist: validPlaylistSlugs) {
 	try {
-		const savedVersionJson = await Preferences.get({
-			key: playlist,
-		});
-		// Check if we've saved a version in last 3 hours
 		let savedData: IPlaylistResponse | null = null;
-		if (savedVersionJson.value) {
-			savedData = JSON.parse(savedVersionJson.value);
+		try {
+			const savedVersionFs = await Filesystem.readFile({
+				path: `playlists/${playlist}`,
+				directory: Directory.Cache,
+				encoding: Encoding.UTF8,
+			});
+
+			// Check if we've saved a version previously
+			if (savedVersionFs?.data && typeof savedVersionFs?.data === "string") {
+				savedData = JSON.parse(savedVersionFs.data);
+			}
+		} catch (error) {
+			console.error(error);
 		}
 
 		if (savedData) {
@@ -444,12 +482,6 @@ export async function fetchBcData(playlist: validPlaylistSlugs) {
 		console.error(error);
 		return;
 	}
-}
-
-// todo delete?
-export function getAlreadySavedInBook(book: IVidWithCustom[]) {
-	const savedSources = book.filter((vid) => !!vid.savedSources);
-	return savedSources;
 }
 
 type getDownloadSizeParams = {
@@ -510,11 +542,11 @@ export async function updateStateFromFs({
 		);
 		const curBook = currentPlaylistData?.formattedVideos[vid.book];
 		if (curVid && setCurrentVid) {
-			const newRefVid = structuredClone(curVid);
+			const newRefVid = JSON.parse(JSON.stringify(curVid));
 			setCurrentVid(newRefVid);
 		}
 		if (curBook && setCurrentBook) {
-			const newRefBook = structuredClone(curBook);
+			const newRefBook = JSON.parse(JSON.stringify(curBook));
 			// new reference for state updates
 			setCurrentBook(newRefBook);
 		}

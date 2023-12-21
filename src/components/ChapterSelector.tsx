@@ -20,11 +20,11 @@ export function ChapterSelector({
 }: IChapterSelector) {
 	const chaptersContainerRef = useRef(null);
 	return (
-		<div className="flex">
+		<div className="flex gap-2">
 			{showChapSliderButtons && (
 				<button
 					type="button"
-					className="pr-3 text-2xl"
+					className="text-2xl"
 					onClick={() => {
 						const chapterBtnTrack = document.querySelector(
 							'[data-js="chapterButtonTrack"]',
@@ -56,7 +56,7 @@ export function ChapterSelector({
 			{showChapSliderButtons && (
 				<button
 					type="button"
-					className="pl-3 text-2xl"
+					className="text-2xl"
 					onClick={() => {
 						const chapterBtnTrack = document.querySelector(
 							'[data-js="chapterButtonTrack"]',

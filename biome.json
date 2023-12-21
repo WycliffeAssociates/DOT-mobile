@@ -20,7 +20,14 @@
 		"rules": {
 			"recommended": true,
 			"suspicious": {
-				"noExplicitAny": "off"
+				"noExplicitAny": "off",
+				"noConsoleLog": "warn"
+			},
+			"correctness": {
+				"noUnusedVariables": "error"
+			},
+			"complexity": {
+				"noUselessCatch": "warn"
 			}
 		}
 	}

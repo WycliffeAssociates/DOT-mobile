@@ -1,5 +1,4 @@
-import { Device } from "@capacitor/device";
-import { IonButton, IonContent, IonIcon, IonModal } from "@ionic/react";
+import { IonButton, IonIcon, IonModal } from "@ionic/react";
 import { close } from "ionicons/icons";
 import { settingsOutline } from "ionicons/icons";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
@@ -8,26 +7,16 @@ import { VideoJsPlayer } from "video.js";
 import {
 	IPlaylistData,
 	IVidWithCustom,
-	IdeviceInfo,
-	IvidJsPlayer,
-	chapterMarkers,
 	downloadProgressInfo,
 	validPlaylistSlugs,
-	vidInProgressInfo,
 } from "../customTypes/types";
 import {
+	getChaptersArrFromVtt,
 	getCurrentPlaylistDataFs,
-	getDownloadSize,
 	updateStateFromFs,
 } from "../lib/Ui";
 import { makeVidSaver } from "../lib/storage";
-import { formatBytesOrMbOrGb } from "../lib/utils";
-import { IconMaterialSymbolsCheckCircle } from "./Icons";
 import { BulkListing } from "./Settings/BulkListing";
-import { DeleteButtons } from "./Settings/DeleteButtons";
-import { AppMemoryInfo } from "./Settings/DeviceInfo";
-import { DownloadButtons } from "./Settings/DownloadButtons";
-import { DownloadProgress } from "./Settings/DownloadProgress";
 import { SpeedControl } from "./Settings/SpeedControl";
 
 type ISettings = {
@@ -36,44 +25,21 @@ type ISettings = {
 	playlistSlug: validPlaylistSlugs;
 	currentBook: IVidWithCustom[];
 	currentVid: IVidWithCustom;
-	handleChapters: (
-		vid: IVidWithCustom,
-		vidJsPlayer: IvidJsPlayer | undefined,
-	) => Promise<chapterMarkers | undefined>;
 	setCurrentBook: Dispatch<SetStateAction<IVidWithCustom[]>>;
 	setShapedPlaylist: Dispatch<SetStateAction<IPlaylistData | undefined>>;
 	setCurrentVid: Dispatch<SetStateAction<IVidWithCustom>>;
 };
 export function Settings(props: ISettings) {
 	const modal = useRef<HTMLIonModalElement>(null);
+	const settingsRef = useRef<HTMLDivElement>(null);
 	const [downloadProgress, setDownloadProgress] =
 		useState<downloadProgressInfo>();
-
-	const [deviceInfo, setDeviceInfo] = useState<IdeviceInfo>();
-	const [currentWorkingVideoInfo, setCurrentWorkingVideoInfo] =
-		useState<vidInProgressInfo>();
 	const { t } = useTranslation();
-
-	async function getDeviceInfo() {
-		const info = await Device.getInfo();
-
-		const memUsedMb = info.memUsed ? formatBytesOrMbOrGb(info.memUsed) : null;
-		const realDiskFree = info.realDiskFree
-			? formatBytesOrMbOrGb(info.realDiskFree)
-			: null;
-		const realDiskTotal = info.realDiskTotal
-			? formatBytesOrMbOrGb(info.realDiskTotal)
-			: null;
-		setDeviceInfo({
-			memUsed: memUsedMb,
-			realDiskFree: realDiskFree,
-			realDiskTotal,
-		});
-	}
 
 	async function saveVidOffline(
 		vidToSave: IVidWithCustom = props.currentVid,
 		playlistData: IPlaylistData = props.playlistData,
+		vidForState: IVidWithCustom = props.currentVid,
 	) {
 		const vidName =
 			vidToSave.name || vidToSave.reference_id || vidToSave.id || "Unnamed Vid";
@@ -81,12 +47,13 @@ export function Settings(props: ISettings) {
 			amount: 0,
 			started: true,
 			vidName,
+			vidId: vidToSave.id || "",
 		});
 		const vidSaver = makeVidSaver(props.playlistSlug, vidToSave);
 
 		if (!vidToSave.book) return;
 
-		const playlistClone = structuredClone(playlistData);
+		const playlistClone = JSON.parse(JSON.stringify(playlistData));
 		const currentVidInThatClone = playlistClone.formattedVideos[
 			vidToSave.book
 		].find((vid: IVidWithCustom) => vid.id === vidToSave.id);
@@ -103,10 +70,20 @@ export function Settings(props: ISettings) {
 			currentVidInThatClone.savedSources = {};
 		}
 		currentVidInThatClone.savedSources.poster = posterSrc;
+
 		// Get Chapter markers saved if they weren't for some reason
-		if (!currentVidInThatClone.chapterMarkers) {
-			const chapters = await props.handleChapters(vidToSave, props.player);
-			currentVidInThatClone.chapterMarkers = chapters ? chapters : [];
+		if (!currentVidInThatClone.chapterMarkers && props.player) {
+			const chapters = await getChaptersArrFromVtt(vidToSave, false);
+			if (
+				chapters?.length &&
+				chapters?.every((chap) => {
+					return (
+						chap.xPos?.toLowerCase() !== "nan" && typeof chap.xPos === "string"
+					);
+				})
+			) {
+				currentVidInThatClone.chapterMarkers = chapters ? chapters : [];
+			}
 		}
 
 		const fileSize = await vidSaver.getFileSize(smallestMp4.src);
@@ -118,32 +95,54 @@ export function Settings(props: ISettings) {
 		let fetchNum = alreadyFetched === 0 ? 1 : alreadyFetched;
 		const fetchSession = [...chunksRequestsToMake]; //need a copy to mutate in method below;
 
-		for await (const segmentToFetch of chunksRequestsToMake) {
-			await vidSaver.writeBlobChunk({
-				segmentToFetch,
-				url: smallestMp4.src,
-			});
-			await vidSaver.updateWipAndGetNewFetchSession(fetchSession);
-			let progressAmount = fetchNum / allExpectedChunks.length;
-
-			if (progressAmount === 1) {
-				// artificially set the progress at just below 100 to finish up this last been of code in which we are cleaning caches / combining the blob parts etc;
-				progressAmount = 0.98;
+		function bookDownloadRequestIsAborted() {
+			if (
+				window.dotAppBooksToCancel &&
+				Array.isArray(window.dotAppBooksToCancel) &&
+				window.dotAppBooksToCancel.some((bookToCancel) =>
+					bookToCancel.toLowerCase().includes(vidToSave.id || ""),
+				)
+			) {
+				return true;
 			}
-			const updatedAmount = {
-				started: true,
-				amount: progressAmount,
-				vidName,
-			};
-			setDownloadProgress(updatedAmount);
-			fetchNum += 1;
+		}
+		function breakLoop() {
+			if (window.dotAppStopAllDownloads) {
+				return true;
+			}
+			if (bookDownloadRequestIsAborted()) {
+				return true;
+			}
+			return false;
+		}
+
+		for await (const segmentToFetch of chunksRequestsToMake) {
+			if (!breakLoop()) {
+				await vidSaver.writeBlobChunk({
+					segmentToFetch,
+					url: smallestMp4.src,
+				});
+				await vidSaver.updateWipAndGetNewFetchSession(fetchSession);
+				let progressAmount = fetchNum / allExpectedChunks.length;
+				if (progressAmount === 1) {
+					// artificially set the progress at just below 100 to finish up this last bit of code in which we are cleaning caches / combining the blob parts etc;
+					progressAmount = 0.98;
+				}
+				const updatedAmount = {
+					started: true,
+					amount: progressAmount,
+					vidName,
+					vidId: vidToSave.id || "",
+				};
+				setDownloadProgress(updatedAmount);
+				fetchNum += 1;
+			}
 		}
 
 		const result =
 			await vidSaver.aggregateWipBlobsIntoOneAndWriteFs(allExpectedChunks);
-		// todo: some error handling here?
+		// todo maybe?: some error handling here? Returning here is fine right now, the jobs that called it just assumes the download completed, the state is read from fs as source of truth (so no falsy UI since we don't actually combine the final blob). This right now just means that some fetch went wrong (don't know why), but if the job is started again from here, well, no big problem.
 		if (result && !result.ok) return;
-		// await vidSaver.
 		const mp4FsSource = await vidSaver.getCapacitorSrcForFinalBlob();
 		currentVidInThatClone.savedSources.video = mp4FsSource;
 		currentVidInThatClone.savedSources.dateSavedIso = new Date().toISOString();
@@ -156,7 +155,7 @@ export function Settings(props: ISettings) {
 		// update in memory
 		await updateStateFromFs({
 			playlistSlug: props.playlistSlug,
-			vid: props.currentVid,
+			vid: vidForState,
 			setShapedPlaylist: props.setShapedPlaylist,
 			setCurrentBook: props.setCurrentBook,
 			setCurrentVid: props.setCurrentVid,
@@ -165,131 +164,131 @@ export function Settings(props: ISettings) {
 			amount: 1,
 			started: true,
 			vidName,
+			vidId: vidToSave.id || "",
 		});
-	}
-
-	async function checkCurrentDownloadedStatus() {
-		const vidSaver = makeVidSaver(props.playlistSlug, props.currentVid);
-		const currSaved = await vidSaver.getCurrentAmountFetched();
-		if (props.currentVid.name) {
-			setCurrentWorkingVideoInfo({
-				vidName: props.currentVid.name,
-				percentAlreadyDownloaded: currSaved,
-			});
-		}
 	}
 
 	function dismiss() {
 		modal.current?.dismiss();
-	}
-
-	async function canDismiss(data?: any, role?: string) {
-		return role !== "gesture";
+		props.player?.play();
 	}
 
 	//=============== EFFECTS  =============
+
+	async function handleSingleVidDownload(vid: IVidWithCustom) {
+		const currentPlaylistData = await getCurrentPlaylistDataFs(
+			props.playlistSlug,
+		);
+		await saveVidOffline(vid, currentPlaylistData, vid);
+		setTimeout(() => {
+			setDownloadProgress({
+				amount: 0,
+				started: false,
+				vidName: vid.name || "",
+				vidId: vid.id || "",
+			});
+		}, 1000);
+	}
+	async function handleSingleVidDelete(vid: IVidWithCustom) {
+		const vidSaver = makeVidSaver(props.playlistSlug, vid);
+		const currentPlaylistData = await getCurrentPlaylistDataFs(
+			props.playlistSlug,
+		);
+		if (currentPlaylistData) {
+			await vidSaver.deleteAllVidData(currentPlaylistData, vid);
+		}
+		await updateStateFromFs({
+			playlistSlug: props.playlistSlug,
+			vid: vid,
+			setShapedPlaylist: props.setShapedPlaylist,
+			setCurrentBook: props.setCurrentBook,
+			setCurrentVid: props.setCurrentVid,
+		});
+	}
 	useEffect(() => {
-		getDeviceInfo();
-		checkCurrentDownloadedStatus();
+		if (settingsRef?.current) {
+			if (!settingsRef.current.dataset.listening) {
+				settingsRef.current.addEventListener(
+					"manageSingleVideoStorage",
+					(event: Event) => {
+						const customEvent = event as CustomEvent;
+						if (customEvent.detail) {
+							const videoToSave = customEvent.detail.video as IVidWithCustom;
+							const action = customEvent.detail.action;
+
+							if (action === "DOWNLOAD") {
+								handleSingleVidDownload(videoToSave);
+							} else if (action === "DELETE") {
+								handleSingleVidDelete(videoToSave);
+							}
+						}
+					},
+				);
+				settingsRef.current.dataset.listening = "true";
+			}
+		}
 	}, []);
 
 	return (
 		<>
-			<div className="flex">
+			<div className="flex" id="settingsRef" ref={settingsRef}>
 				<IonButton
 					id="open-modal"
 					shape="round"
 					fill="clear"
-					className="text-surface"
+					className="text-surface focus:(ring ring-solid ring-primary ring-offset-2) rounded-999px h-6 w-10"
 					style={{
-						"--padding-start": ".25rem",
+						"--padding-start": 0,
 						"--padding-end": 0,
+						"--background-activated": "transparent",
+						"--background-focused": "transparent",
 					}}
 				>
-					{/* <IconMaterialSymbolsSettingsOutline  className="text-surface" /> */}
-					<IonIcon slot="icon-only" icon={settingsOutline} />
+					<IonIcon color="dark" slot="icon-only" icon={settingsOutline} />
 				</IonButton>
-
-				{props.currentVid.savedSources?.video && (
-					<span className="w-6 inline-block ml-2">
-						<IconMaterialSymbolsCheckCircle className="text-green-800 w-full h-full" />
-					</span>
-				)}
 			</div>
-			<IonContent>
-				{/* <div className="w-full"> */}
-				<IonModal
-					ref={modal}
-					trigger="open-modal"
-					initialBreakpoint={1}
-					breakpoints={[0, 1]}
-					backdropBreakpoint={0.9}
-					canDismiss={canDismiss}
-				>
-					<div className="block h-[350px] p-2 overflow-auto">
-						<div className="w-full flex justify-end relative sticky top-0">
-							<IonButton
-								fill="outline"
-								size="small"
-								shape="round"
-								style={{
-									"--padding-start": "0",
-									"--padding-end": 0,
-									"--color": "#9c2921",
-									"--border-color": "#9c2921",
-								}}
-								onClick={() => dismiss()}
-							>
-								<IonIcon className="" slot="icon-only" icon={close} />
-							</IonButton>
-						</div>
-						<SpeedControl player={props.player} />
-						<div data-name="downloadSection">
-							<h2 className="font-bold mb-2">{t("downloadOptions")}</h2>
-							<DownloadButtons
-								downloadProgress={downloadProgress}
-								setCurrentVid={props.setCurrentVid}
-								setCurrentBook={props.setCurrentBook}
-								setDownloadProgress={setDownloadProgress}
-								currentBook={props.currentBook}
-								currentVid={props.currentVid}
-								playlistSlug={props.playlistSlug}
-								saveVidOffline={saveVidOffline}
-								currentWorkingVideoInfo={currentWorkingVideoInfo}
-							/>
-						</div>
-						<DeleteButtons
-							setShapedPlaylist={props.setShapedPlaylist}
-							downloadProgress={downloadProgress}
-							setCurrentBook={props.setCurrentBook}
-							setCurrentVid={props.setCurrentVid}
-							currentBook={props.currentBook}
-							currentVid={props.currentVid}
-							playlistSlug={props.playlistSlug}
-						/>
-						{/* <div> */}
-
-						<DownloadProgress downloadProgress={downloadProgress} />
-						{/* )} */}
-						{/* </div> */}
-						<BulkListing
-							downloadProgress={downloadProgress}
-							setCurrentBook={props.setCurrentBook}
-							setCurrentVid={props.setCurrentVid}
-							playlistSlug={props.playlistSlug}
-							playlistData={props.playlistData}
-							setDownloadProgress={setDownloadProgress}
-							saveVidOffline={saveVidOffline}
-							currentBook={props.currentBook}
-							currentVid={props.currentVid}
-							setShapedPlaylist={props.setShapedPlaylist}
-						/>
-
-						<AppMemoryInfo deviceInfo={deviceInfo} />
+			<IonModal
+				ref={modal}
+				onIonModalDidPresent={() => props.player?.pause()}
+				onDidDismiss={() => props.player?.play()}
+				trigger="open-modal"
+				className="grid place-content-end"
+			>
+				<div className="block h-[90vh]  p-2 overflow-auto pt-5 px-5 relative">
+					<div className="w-full flex justify-end relative ">
+						<IonButton
+							fill="outline"
+							size="small"
+							shape="round"
+							style={{
+								"--padding-start": "0",
+								"--padding-end": 0,
+								"--color": "#9c2921",
+								"--border-color": "#9c2921",
+							}}
+							onClick={() => dismiss()}
+						>
+							<IonIcon className="" slot="icon-only" icon={close} />
+						</IonButton>
 					</div>
-				</IonModal>
-			</IonContent>
-			{/* </div> */}
+					<SpeedControl player={props.player} />
+					<div data-name="downloadSection" className="sticky top-0 bg-white">
+						<h2 className="font-bold mb-4">{t("downloadOptions")}</h2>
+					</div>
+					<BulkListing
+						downloadProgress={downloadProgress}
+						setCurrentBook={props.setCurrentBook}
+						setCurrentVid={props.setCurrentVid}
+						playlistSlug={props.playlistSlug}
+						playlistData={props.playlistData}
+						setDownloadProgress={setDownloadProgress}
+						saveVidOffline={saveVidOffline}
+						currentBook={props.currentBook}
+						currentVid={props.currentVid}
+						setShapedPlaylist={props.setShapedPlaylist}
+					/>
+				</div>
+			</IonModal>
 		</>
 	);
 }

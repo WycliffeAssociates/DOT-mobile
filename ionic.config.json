@@ -1,7 +1,7 @@
 {
-  "name": "DotMobile",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "react-vite"
+	"name": "WA DOT",
+	"integrations": {
+		"capacitor": {}
+	},
+	"type": "react-vite"
 }

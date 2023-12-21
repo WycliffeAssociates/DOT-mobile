@@ -1,8 +1,4 @@
-import {
-	AnyFunction,
-	IVidWithCustom,
-	validPlaylistSlugs,
-} from "../customTypes/types";
+import { IVidWithCustom, validPlaylistSlugs } from "../customTypes/types";
 
 interface sortOrderI {
 	[key: string]: number;
@@ -267,52 +263,4 @@ export function reduceToLowestSize(list: number[]) {
 		return acc + curr;
 	}, 0);
 	return totalSize;
-}
-
-export function formatBytesOrMbOrGb(
-	bytes: number | undefined,
-	maxSigDigits = 5,
-) {
-	if (!bytes) return "Unknown";
-	let amount: number;
-	let unit: string;
-	if (bytes >= 1000 * 1000 * 1000) {
-		amount = bytes / 1048576 / 1000;
-		unit = "gb";
-	} else {
-		amount = bytes / 1048576;
-		unit = "mb";
-	}
-	return `${new Intl.NumberFormat(navigator.language, {
-		maximumSignificantDigits: maxSigDigits,
-	}).format(amount)} ${unit}`;
-}
-
-export function groupArrayIntoSubarrays<T>(arr: T[], size: number): T[][] {
-	if (size <= 0) {
-		throw new Error("Size should be greater than zero.");
-	}
-
-	const subarrays: T[][] = [];
-
-	for (let i = 0; i < arr.length; i += size) {
-		subarrays.push(arr.slice(i, i + size));
-	}
-
-	return subarrays;
-}
-
-export function truncateString({
-	inputString,
-	maxLength,
-}: {
-	inputString: string | undefined;
-	maxLength: number;
-}): string {
-	if (!inputString) return "";
-	if (inputString.length <= maxLength) {
-		return inputString;
-	}
-
-	return inputString.slice(0, maxLength);
 }

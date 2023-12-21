@@ -1,5 +1,3 @@
-import { Capacitor } from "@capacitor/core";
-import { useIonViewWillLeave } from "@ionic/react";
 import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import { VideoJsPlayer } from "video.js";
 import { IVidWithCustom, chapterMarkers } from "../customTypes/types";
@@ -31,7 +29,6 @@ export function VidJsPlayer({
 	const vidJsPlayerContainerRef = useRef<HTMLDivElement>(null);
 
 	async function bootPlayer() {
-		console.log("running boot");
 		if (playlistData) {
 			const curAppState = await getSavedAppPreferences();
 			// SPEED
@@ -52,15 +49,10 @@ export function VidJsPlayer({
 
 			// instantiate player
 			// window.bc is from /bc/willPlayer.  This is a brightcove player that has been manually downloaded and included to avoid the network request for a 200kb + video js player.  This allows us to bundle it for offline usage in mobile app more easily too.  We could just use video js, but the bundled / minified player includes brightcoves built in analytics. If we are offline, they won't send, but that's a noop at that point. The priority is availability.
-			// SEe https://videojs.com/guides/options/ for options
-			// alert("alert works!");
-			// if ("bc" in window) {
-			//   alert("bc exist!");
-			// }
+			// SEe https://videojs.com/guides/options
 			const player = window.bc(vidPlayerRef.current, {
 				responsive: true,
 				fluid: true,
-				fill: true,
 				controls: true,
 				playbackRates: [0.5, 1, 1.5, 2, 2.5],
 				preload: "auto",
@@ -73,17 +65,14 @@ export function VidJsPlayer({
 				poster: firstPoster,
 				nativeControlsForTouch: true,
 			});
-			// if (player) {
-			//   alert("player instantiated");
-			//   alert(`Player sources are ${firstVidSrces}`);
-			// }
-			// todo: adjust then wherever the speed is set
+
 			player.playbackRate(preferredSpeed);
+			player.on("loadstart", () => maintainPlayerSpeed(player));
 			player.language(navigator.languages[0]);
 			player.playsinline(true); //ios
 
 			// Get initial chapters if present
-			player?.one("loadedmetadata", () => {
+			player.one("loadedmetadata", () => {
 				handleChapters(currentVid, player);
 			});
 
@@ -139,31 +128,17 @@ export function VidJsPlayer({
 				}),
 			);
 
-			player.on("fullscreenchange", (e) => {
-				const isFullScreen = player.isFullscreen();
-				if (Capacitor.getPlatform() === "ios") {
-					// noop IOS handles it
-				} else if (Capacitor.getPlatform() === "android") {
-					if (isFullScreen) {
-						// document.body.style.transform = "rotate(90deg)";
-					} else {
-						// document.body.style.transform = "rotate(0deg)";
-					}
-				} else {
-					console.log("web");
-					if (isFullScreen) {
-						// document.body.style.transform = "rotate(90deg)";
-					} else {
-						// document.body.style.transform = "rotate(0deg)";
-					}
-				}
-			});
-
 			// Finally set state
 			setPlayer(player);
 		}
 	}
-
+	async function maintainPlayerSpeed(player: VideoJsPlayer) {
+		if (vidJsPlayerContainerRef.current) {
+			const curAppState = await getSavedAppPreferences();
+			const preferredSpeed = curAppState?.preferredSpeed || 1;
+			player.playbackRate(preferredSpeed);
+		}
+	}
 	function handleSpeedChangesInApp() {
 		if (vidJsPlayerContainerRef.current && existingPlayer) {
 			vidJsPlayerContainerRef.current.addEventListener(
@@ -187,18 +162,24 @@ export function VidJsPlayer({
 		bootPlayer();
 	}, []);
 	useEffect(() => {
+		// a custom event dispatch listener
 		handleSpeedChangesInApp();
 	}, []);
 
 	return (
 		<div
-			className="aspect-video  mx-auto"
+			className="mx-auto absolute inset-0 "
 			ref={vidJsPlayerContainerRef}
 			id="vidJsPlayerContainer"
 		>
 			{playlistData && (
 				// biome-ignore lint/a11y/useMediaCaption: captions provided through chap segments
-				<video ref={vidPlayerRef} className="video-js" controls src="" />
+				<video
+					ref={vidPlayerRef}
+					className="video-js object-cover absolute inset-0"
+					controls
+					src=""
+				/>
 			)}
 		</div>
 	);

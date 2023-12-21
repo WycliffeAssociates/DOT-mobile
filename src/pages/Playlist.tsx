@@ -1,4 +1,3 @@
-import { Capacitor } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
 import {
 	IonAlert,
@@ -9,13 +8,13 @@ import {
 	IonToolbar,
 	useIonViewWillEnter,
 } from "@ionic/react";
-import { useIonViewWillLeave } from "@ionic/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { IonButton } from "@ionic/react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import brightCovePlaylistConfig from "../brightcove/playlist-mappers";
 import { ChapterSelector } from "../components/ChapterSelector";
-import { DotLogo } from "../components/Icons";
+import { ArrowBack, DotLogo } from "../components/Icons";
 import { JumpDisplay } from "../components/JumpDisplay";
 import { VidJsPlayer } from "../components/Player";
 import { PlaylistBookPicker } from "../components/PlaylistBookPicker";
@@ -33,32 +32,26 @@ import {
 	formattedPlaylist,
 } from "../customTypes/types";
 import {
+	cacheBcPlaylistJson,
 	distributeChapterMarkers,
 	fetchBcData,
 	getChaptersArrFromVtt,
 	getCurrentPlaylistDataFs,
-	handleVideoJsTaps,
-	playerCustomHotKeys,
 } from "../lib/Ui";
-import { trackAdjacentChap } from "../lib/Ui";
 import {
 	getSavedAppPreferences,
 	updateSavedAppPreferences,
 } from "../lib/storage";
-import {
-	formatPlayListName,
-	groupObjectsByKey,
-	massageVidsArray,
-} from "../lib/utils";
+import { groupObjectsByKey, massageVidsArray } from "../lib/utils";
 
 function Playlist() {
 	const { playlist: urlSlug } = useParams<{ playlist: string }>();
 
-	const pi = Object.values(brightCovePlaylistConfig).find(
+	const playInfo = Object.values(brightCovePlaylistConfig).find(
 		(value) => value.path === urlSlug,
 	);
-	if (!pi) return null;
-	const playlistInfo = pi; //@ extra assignemnt for typescripts narrowing
+	if (!playInfo) return null;
+	const playlistInfo = playInfo; //@ extra assignemnt for typescripts narrowing
 	const { t } = useTranslation();
 	const [isFetching, setIsFetching] = useState(true);
 	const [shapedPlaylist, setShapedPlaylist] = useState<IPlaylistData>();
@@ -74,7 +67,7 @@ function Playlist() {
 	const [jumpingForwardAmount, setJumpingForwardAmount] =
 		useState<jumpParam>(null);
 	const [jumpingBackAmount, setJumpingBackAmount] = useState<jumpParam>(null);
-	// todo: see about typing ionic compoennts
+	const [isSavingSingle, setIsSavingSingle] = useState(false);
 	const alertRef: any = useRef(null);
 
 	/*// #===============  PAGE FUNCTIONS   =============   */
@@ -83,7 +76,6 @@ function Playlist() {
 		const plyr = vidJsPlayer;
 		plyr?.pause();
 		changeVid({ chapNum: vid.chapter, bookToUse });
-		// todo: debug. Both IOS and android simulators won't play now? Is it due to stale sources? Actually really important to check... Debugger web version here first, and then try to safari connect to an ios device and see?
 		const httpsOnly = vid.sources.filter((srcObj) =>
 			srcObj.src.startsWith("https"),
 		);
@@ -99,11 +91,9 @@ function Playlist() {
 			: vid.poster
 			  ? plyr?.poster(vid.poster)
 			  : null;
-		// plyr?.load();
 		plyr?.one("loadedmetadata", () => {
 			handleChapters(vid, plyr);
 		});
-		// plyr?.play();
 	}
 
 	function changeVid({ chapNum, bookToUse }: changeVidParams) {
@@ -112,9 +102,9 @@ function Playlist() {
 		const newVid = book.find((vid) => vid.chapter === chapNum);
 		if (!newVid) return;
 		// Basically anything watching newVid needs to rerender.   Ran into some issues with some stale closures (I think) in callbacks and event listeners with video js
-		const newVidReference = structuredClone(newVid);
+		const newVidReference = JSON.parse(JSON.stringify(newVid));
 		if (newVid) {
-			setCurrentVid(newVidReference);
+			setCurrentVid(() => newVidReference);
 		}
 		if (vidJsPlayer) {
 			vidJsPlayer.currentTime(0);
@@ -124,10 +114,10 @@ function Playlist() {
 	async function handleChapters(
 		vid: IVidWithCustom,
 		vidJsPlayer: IvidJsPlayer | undefined,
+		cleanUpUiMarkers = true,
 	) {
 		if (!vidJsPlayer) return;
-		const chapters = await getChaptersArrFromVtt(vid, vidJsPlayer);
-		console.log("HANDLED CHAPTERS RAN");
+		const chapters = await getChaptersArrFromVtt(vid, cleanUpUiMarkers);
 		if (chapters) {
 			setCurrentVid((vid) => {
 				vid.chapterMarkers = chapters;
@@ -135,11 +125,25 @@ function Playlist() {
 			});
 		} else {
 			setCurrentVid((vid) => {
+				// intentionally and empty arr and not undefined
 				vid.chapterMarkers = [];
 				return vid;
 			});
 		}
-		if (chapters) {
+		const allMarkersHaveValidXPos = chapters?.every((chap) => {
+			return (
+				chap.xPos?.toLowerCase() !== "nan" && typeof chap.xPos === "string"
+			);
+		});
+		if (!allMarkersHaveValidXPos) {
+			setCurrentVid((vid) => {
+				// intentionally set to undefined now that we realize something is corrupt.  Will fetch chapter markers new if needed next time video is loaded
+				vid.chapterMarkers = undefined;
+				return vid;
+			});
+		}
+		// Protect against some data corruption:
+		if (chapters && allMarkersHaveValidXPos) {
 			distributeChapterMarkers(chapters, vidJsPlayer);
 		}
 		return chapters;
@@ -157,8 +161,7 @@ function Playlist() {
 				? mostRecentData.formattedVideos[bookName]
 				: vids;
 		const firstBook = matchingSetVids[0];
-		console.log("setCurrentBook running");
-		setCurrentBook(vids);
+		setCurrentBook(() => vids);
 		changePlayerSrc({ vid: firstBook, bookToUse: vids });
 	}
 
@@ -171,9 +174,10 @@ function Playlist() {
 			}
 
 			const vids = data.videos as IVidWithCustom[];
-			const { videos, formattedVideos, ...restPlaylistData } = data;
+			const { formattedVideos, ...restPlaylistData } = data;
 			doInitialSetup(vids, formattedVideos, restPlaylistData);
 		} catch (error) {
+			console.error(error);
 			const loading = document.querySelector("ion-loading");
 			if (loading) {
 				loading.remove();
@@ -185,51 +189,26 @@ function Playlist() {
 			}
 		}
 	}
-
-	/* 
-  
-  const fetchAndSetup = useCallback(async () => {
-    try {
-      const data = await fetchBcData(playlistInfo.playlist);
-      // Put into state setter here;
-      if (!data) {
-        throw new Error("fetching failed");
-      }
-
-      const vids = data.videos as IVidWithCustom[];
-      const {videos, formattedVideos, ...restPlaylistData} = data;
-      doInitialSetup(vids, formattedVideos, restPlaylistData);
-    } catch (error) {
-      let loading = document.querySelector("ion-loading");
-      if (loading) {
-        loading.remove();
-      }
-      if (alertRef.current) {
-        alertRef.current.message = t("errorOccured");
-        alertRef.current.header = t("error");
-        alertRef.current.isOpen = true;
-      }
-    }
-  }, []);
-  */
-
+	function getCurVid() {
+		return currentVid;
+	}
 	function autoPlayToNextBook() {
 		const player = vidJsPlayer;
 		if (!player || !shapedPlaylist) return;
-		const curVid = currentBook.find((v) => v.id === currentVid.id);
-		if (!curVid) return;
-		const currentIdx = currentBook.indexOf(curVid);
-		if (currentIdx < currentBook.length - 1) {
-			const nextVidInBook = currentBook[currentIdx + 1];
-			console.log(`calling changePlayerSrc with ${nextVidInBook.chapter}`);
-			player.currentTime(0);
-			// todo: pass the player, cause Idk why the player is being undefined from when called here.  Just use the state as default and make this optional.
 
+		const nextVid = currentBook.find(
+			(b) => Number(b.chapter) === Number(getCurVid().chapter) + 1,
+		);
+		const allChapters = currentBook.map((vid) => Number(vid.chapter));
+		const isLastChapter =
+			Math.max(...allChapters) === Number(getCurVid().chapter);
+		if (nextVid) {
+			player.currentTime(0);
 			changePlayerSrc({
-				vid: nextVidInBook,
+				vid: nextVid,
 				bookToUse: currentBook,
 			});
-		} else if (currentIdx === currentBook.length - 1) {
+		} else if (isLastChapter) {
 			if (!currentVid.book) return;
 			const keys = Object.keys(shapedPlaylist?.formattedVideos);
 			const keyIdx = keys.indexOf(currentVid.book);
@@ -244,13 +223,16 @@ function Playlist() {
 		}
 	}
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <autoplay has a dep on the currentVid, and if we only hook this up using "on" it creates a stale closure on the state variables>
 	useEffect(() => {
 		if (vidJsPlayer) {
 			// Using one each time a vid ends to try to avoid a stale closures issue that has cropped up some with react and videos js
+			vidJsPlayer.off("ended", autoPlayToNextBook);
 			vidJsPlayer.one("ended", autoPlayToNextBook);
 		}
-	}, [vidJsPlayer]);
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <I'm purposely running this effect only on playlist cause the src we'll only shift from blob to https if the shapedPlaylist that is saved to fs is edited>
+	}, [currentVid, vidJsPlayer]);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <I'm purposely running this effect only on playlist cause the src we'll only shift from blob to https if the shapedPlaylist that is saved to fs is edited.  The fs version of the shapedPlaylist is the real source of truth for what the UI should show more than the state is>
 	useEffect(() => {
 		async function refreshPlayer() {
 			if (vidJsPlayer) {
@@ -266,9 +248,6 @@ function Playlist() {
 		alreadyBucketizedData: formattedPlaylist | undefined,
 		restPlaylistData: Omit<IPlaylistResponse, "videos" | "formattedVideos">,
 	) {
-		// todo also for initial setup:
-		// get preferred watching speed from saved "state.json"
-		// get currentVid, currentBook, current
 		const alreadySavedState = await Preferences.get({
 			key: "appState",
 		});
@@ -301,8 +280,6 @@ function Playlist() {
 			}
 		}
 
-		// todo: set other initial stuff based on routing and not just firstBook/chapter
-
 		const keys = Object.keys(bucketToUse);
 		let firstBookShow: IVidWithCustom[] = bucketToUse[keys[0]]; //default
 		if (parsedState?.currentBookName) {
@@ -325,16 +302,17 @@ function Playlist() {
 			...restPlaylistData,
 		};
 
-		setCurrentBook(firstBookShow);
-		setCurrentVid(firstVid);
+		setCurrentBook(() => firstBookShow);
+		setCurrentVid(() => firstVid);
 		setShapedPlaylist(shapedPlaylist);
 		setIsFetching(false);
-		await Preferences.set({
-			key: playlistInfo.playlist,
-			value: JSON.stringify({
+
+		await cacheBcPlaylistJson({
+			data: JSON.stringify({
 				formattedVideos: bucketToUse,
 				...restPlaylistData,
 			}),
+			playlistSlug: playlistInfo.playlist,
 		});
 	}
 
@@ -352,12 +330,43 @@ function Playlist() {
 				...stateToSave,
 			};
 			await updateSavedAppPreferences(newAppPrefs);
-
-			console.log(
-				`updated stateToSave ${currentVid.book} and ${currentVid.chapter}`,
-			);
-			console.log(currentVid.chapter);
 		}
+	}
+
+	function singleVideoDownloadControls() {
+		const commonAction = (action: "DOWNLOAD" | "DELETE") => {
+			const settingsEl = document.querySelector("#settingsRef");
+			if (settingsEl) {
+				const adjustPlayerSpeedEvent = new CustomEvent(
+					"manageSingleVideoStorage",
+					{
+						detail: {
+							video: currentVid,
+							action: action,
+						},
+					},
+				);
+				settingsEl.dispatchEvent(adjustPlayerSpeedEvent);
+				if (action === "DOWNLOAD") {
+					setIsSavingSingle(true);
+				}
+			}
+		};
+		if (!currentVid.savedSources?.video) {
+			return {
+				text: t("downloadChapterNumber", {
+					chapter: String(Number(currentVid.chapter)),
+				}),
+				action: () => commonAction("DOWNLOAD"),
+			};
+		}
+
+		return {
+			text: t("deleteChapterNumber", {
+				chapter: String(Number(currentVid.chapter)),
+			}),
+			action: () => commonAction("DELETE"),
+		};
 	}
 
 	/*// #=============== END PAGE FUNCTIONS   =============   */
@@ -365,24 +374,43 @@ function Playlist() {
 	useIonViewWillEnter(() => {
 		fetchAndSetup();
 	}, []);
-	// useIonViewWillLeave(() => {}, [vidJsPlayer]);
-	// MANAGE EFFECTS FOR HEN PLAYER CHANGES
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <biome not aware enough of code deps here to say>
 	useEffect(() => {
 		updateCachedStateDuringProgress();
 	}, [currentVid, currentBook]);
 
+	useEffect(() => {
+		if (currentVid.savedSources?.video) {
+			setIsSavingSingle(false);
+		}
+	}, [currentVid.savedSources?.video]);
+
 	/*//# ===============  MARKUP   =============   */
 	return (
-		<IonPage id="test-page">
+		<IonPage id="">
 			<IonHeader className=" bg-base">
 				<IonToolbar>
-					<span className="w-32 block mx-auto">
+					<div className="flex content-center items-center justify-between w-full px-2.5">
 						<a href="/">
-							<DotLogo />
+							<ArrowBack />
 						</a>
-					</span>
+						<span className="w-32 block mx-auto">
+							<DotLogo />
+						</span>
+						{shapedPlaylist && (
+							<Settings
+								setCurrentVid={setCurrentVid}
+								player={vidJsPlayer}
+								playlistData={shapedPlaylist}
+								currentBook={currentBook}
+								currentVid={currentVid}
+								playlistSlug={playlistInfo.playlist}
+								setShapedPlaylist={setShapedPlaylist}
+								setCurrentBook={setCurrentBook}
+							/>
+						)}
+					</div>
 				</IonToolbar>
 			</IonHeader>
 
@@ -390,7 +418,7 @@ function Playlist() {
 				<IonAlert
 					ref={alertRef}
 					header={t("errorOccurred")}
-					buttons={["OK"]}
+					buttons={["Ok"]}
 					onDidDismiss={() => {
 						alertRef.current.isOpen = false;
 					}}
@@ -398,83 +426,109 @@ function Playlist() {
 				<IonLoading message={t("loading")} isOpen={isFetching} />
 
 				<div>
-					<div className="overflow-x-hidden max-w-[1000px] mx-auto w-full sm:rounded-lg">
+					<div className="overflow-x-hidden max-w-[1400px] mx-auto w-full ">
 						{shapedPlaylist?.formattedVideos && (
 							<div
 								data-testid="stateChecker"
 								data-currentbook={currentVid.book}
 								data-currentchap={currentVid.chapter}
+								className="lg:grid lg:grid-cols-[70%_30%] h-90vh"
 							>
-								<div className="w-full mx-auto   relative  sm:(rounded-lg overflow-hidden)">
-									<VerseSegmentJump
-										currentVideo={currentVid}
-										player={vidJsPlayer}
-										dir="back"
-									/>
-									{jumpingBackAmount && (
-										<JumpDisplay
+								{/* player parts */}
+								<div className="aspect-video lg:aspect-ratio-initial">
+									<div className="w-full mx-auto   relative  sm:overflow-hidden h-full">
+										<VerseSegmentJump
+											currentVideo={currentVid}
+											player={vidJsPlayer}
 											dir="back"
-											id="seekRippleBackward"
-											text={String(jumpingBackAmount)}
 										/>
-									)}
-									<VidJsPlayer
-										handleChapters={handleChapters}
-										setJumpingBackAmount={setJumpingBackAmount}
-										setJumpingForwardAmount={setJumpingForwardAmount}
-										setPlayer={setVidJsPlayer}
-										existingPlayer={vidJsPlayer}
-										playlistData={shapedPlaylist.formattedVideos}
-										currentVid={currentVid}
-									/>
-									{jumpingForwardAmount && (
-										<JumpDisplay
+										{jumpingBackAmount && (
+											<JumpDisplay
+												dir="back"
+												id="seekRippleBackward"
+												text={String(jumpingBackAmount)}
+											/>
+										)}
+										<VidJsPlayer
+											handleChapters={handleChapters}
+											setJumpingBackAmount={setJumpingBackAmount}
+											setJumpingForwardAmount={setJumpingForwardAmount}
+											setPlayer={setVidJsPlayer}
+											existingPlayer={vidJsPlayer}
+											playlistData={shapedPlaylist.formattedVideos}
+											currentVid={currentVid}
+										/>
+										{jumpingForwardAmount && (
+											<JumpDisplay
+												dir="forward"
+												id="seekRippleForward"
+												text={String(jumpingForwardAmount)}
+											/>
+										)}
+										<VerseSegmentJump
+											currentVideo={currentVid}
+											player={vidJsPlayer}
 											dir="forward"
-											id="seekRippleForward"
-											text={String(jumpingForwardAmount)}
 										/>
-									)}
-									<VerseSegmentJump
-										currentVideo={currentVid}
-										player={vidJsPlayer}
-										dir="forward"
+									</div>
+									{/* end player parts */}
+								</div>
+								{/* end player parts */}
+
+								{/* All parts but video player */}
+								<div className="lg:(h-[90vh] flex flex-col)">
+									<div className="mt-4 flex justify-between px-5 gap-2">
+										<PlaylistInfo
+											currentVid={currentVid}
+											playlist={playlistInfo.playlist}
+											isSavingSingle={isSavingSingle}
+										/>
+										<div data-name="downloadSingleBtn">
+											<IonButton
+												id=""
+												size="small"
+												fill="outline"
+												color="primary"
+												className="text-surface"
+												onClick={() => {
+													singleVideoDownloadControls().action();
+												}}
+												style={{
+													"--border-width": "1px",
+													"--border-radius": "0px",
+													"--padding-start": ".625rem",
+													"--padding-end": ".625rem",
+													"--padding-bottom": ".625rem",
+													"--padding-top": ".625rem",
+												}}
+											>
+												{singleVideoDownloadControls().text}
+											</IonButton>
+										</div>
+									</div>
+
+									<div className="px-5">
+										{currentBook && (
+											<ChapterSelector
+												showChapSliderButtons={showChapSliderButtons}
+												chapterButtonOnClick={(vid: IVidWithCustom) => {
+													changePlayerSrc({
+														vid,
+													});
+												}}
+												currentVid={currentVid}
+												currentBook={currentBook}
+											/>
+										)}
+									</div>
+
+									<PlaylistBookPicker
+										vids={shapedPlaylist.formattedVideos}
+										setShowChapSliderButtons={setShowChapSliderButtons}
+										setNewBook={setNewBook}
 									/>
 								</div>
-
-								<Settings
-									setCurrentVid={setCurrentVid}
-									player={vidJsPlayer}
-									playlistData={shapedPlaylist}
-									currentBook={currentBook}
-									currentVid={currentVid}
-									handleChapters={handleChapters}
-									playlistSlug={playlistInfo.playlist}
-									setShapedPlaylist={setShapedPlaylist}
-									setCurrentBook={setCurrentBook}
-								/>
-
-								{currentBook && (
-									<ChapterSelector
-										showChapSliderButtons={showChapSliderButtons}
-										chapterButtonOnClick={(vid: IVidWithCustom) => {
-											changePlayerSrc({
-												vid,
-											});
-										}}
-										currentVid={currentVid}
-										currentBook={currentBook}
-									/>
-								)}
-								<PlaylistInfo
-									currentVid={currentVid}
-									playlist={playlistInfo.playlist}
-								/>
-								<PlaylistBookPicker
-									currentVid={currentVid}
-									vids={shapedPlaylist.formattedVideos}
-									setShowChapSliderButtons={setShowChapSliderButtons}
-									setNewBook={setNewBook}
-								/>
+								{/*  All parts but the video player */}
 							</div>
 						)}
 					</div>

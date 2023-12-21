@@ -15,7 +15,7 @@
     "ios": "npm run build && npm run sync && npx cap run ios",
     "android": "npm run build && npx cap run android",
     "sync": "cap sync",
-    "iconGenerate": "npx @capacitor/assets generate --iconBackgroundColor '#eeeeee' --splashBackgroundColor '#eeeeee'",
+    "iconGenerate": "npx @capacitor/assets generate --iconBackgroundColor '#ff6a1f' --splashBackgroundColor '#ff6a1f'",
     "updateAllPackages": "npm outdated | awk 'NR>1 {print $1\"@\"$4}' | xargs npm install --legacy-peer-deps",
     "prepare": "husky install"
   },

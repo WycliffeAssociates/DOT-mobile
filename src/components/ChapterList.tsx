@@ -17,10 +17,10 @@ export function ChapterList({
 			data-js="chapterButtonTrack"
 			data-testid="chapterSelector"
 			className={
-				"flex flex-nowrap gap-3 items-start content-start px-2 py-4 overflow-x-auto scrollbar-hide  list-none scroll-smooth motion-reduce:scroll-auto w-full"
+				"flex flex-nowrap gap-2.5 items-start content-start px-2 py-4 overflow-x-auto scrollbar-hide  list-none scroll-smooth motion-reduce:scroll-auto w-full"
 			}
 		>
-			{currentBook.map((vid, idx) => {
+			{currentBook.map((vid) => {
 				return (
 					<li key={vid.id}>
 						<ChapterButton

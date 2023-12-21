@@ -1,7 +1,7 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='utf-8' ?>
 <resources>
-    <string name="app_name">DotMobile</string>
-    <string name="title_activity_main">DotMobile</string>
+    <string name="app_name">WA Sign Bibles</string>
+    <string name="title_activity_main">WA Sign Bibles</string>
     <string name="package_name">com.slbible</string>
     <string name="custom_url_scheme">com.slbible</string>
 </resources>

@@ -5,7 +5,7 @@ type IJumpDisplay = {
 };
 export function JumpDisplay(props: IJumpDisplay) {
 	const baseClassName =
-		"absolute w-1/4  top-0 bottom-0 seekRipple grid grid place-content-center  z-40 text-base pointer-events-none capitalize font-bold";
+		"absolute w-1/4  top-0 bottom-0 seekRipple grid grid place-content-center  z-40 text-primary pointer-events-none capitalize font-bold";
 	const addlClassName =
 		props.dir === "back"
 			? "left-0    rounded-[0%_100%_100%_0%_/_50%_50%_50%_50%] "

@@ -1,10 +1,12 @@
-import videojs, { VideoJsPlayer } from "video.js";
+import videojs from "video.js";
 import brightCovePlaylistConfig from "../brightcove/playlist-mappers";
 import type { PlaylistResponse, Video, VideoSources } from "./bcApi";
 
 declare global {
 	interface Window {
 		bc: (...args: any[]) => videojs.Player;
+		dotAppBooksToCancel: string[];
+		dotAppStopAllDownloads: boolean;
 	}
 }
 export type formattedPlaylist = Record<string, IVidWithCustom[]>;
@@ -35,7 +37,7 @@ export interface IVidWithCustom extends Video {
 		localized_book_name?: string;
 	};
 	sources: customVideoSources[];
-	chapterMarkers: chapterMarkers;
+	chapterMarkers: chapterMarkers | undefined;
 	savedSources?: {
 		poster?: string;
 		video?: string;
@@ -93,15 +95,11 @@ export type IappState = {
 export type validPlaylistSlugs =
 	(typeof brightCovePlaylistConfig)[keyof typeof brightCovePlaylistConfig]["playlist"];
 
-export type vidInProgressInfo = {
-	vidName: string;
-	percentAlreadyDownloaded: number;
-};
-
 export type downloadProgressInfo = {
 	started: boolean;
 	amount: number;
 	vidName: string;
+	vidId: string;
 };
 
 export type changeVidParams = {

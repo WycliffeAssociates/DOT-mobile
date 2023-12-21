@@ -1,38 +1,32 @@
-import {
-	IonContent,
-	IonHeader,
-	IonPage,
-	IonTitle,
-	IonToolbar,
-} from "@ionic/react";
+import { IonContent, IonHeader, IonPage, IonToolbar } from "@ionic/react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import brightCovePlaylistConfig from "../brightcove/playlist-mappers";
+import { DotLogo } from "../components/Icons";
 import "./Home.css";
 
 const Home: React.FC = () => {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 	const alphabetizedKeys = Object.keys(
 		brightCovePlaylistConfig,
 	).sort() as unknown as Array<keyof typeof brightCovePlaylistConfig>;
 
 	return (
 		<IonPage id="home-page">
-			<IonHeader>
-				<IonToolbar>
-					<div className="flex content-center">
-						<span className="inline-block w-24 relative">
+			<IonHeader className="ion-no-border ">
+				<IonToolbar style={{ "--min-height": "auto" }}>
+					<div className="flex content-center py-2 border border-b border-b-[#e1e1e1]">
+						<span className="w-32 block mx-auto">
 							<a href="/">
-								<img src="assets/WA-Logo.png" alt="WA logo" />
+								<DotLogo />
 							</a>
 						</span>
-						<IonTitle>Sign Language Bible</IonTitle>
 					</div>
 				</IonToolbar>
 			</IonHeader>
 			<IonContent fullscreen>
-				<div>
-					<h1 className="w-full text-center text-3xl my-4">
+				<div className="px-5 max-w-[1200px] mx-auto ">
+					<h1 className="w-full text-center  mt-10 mb-5 font-bold  capitalize">
 						{t("pickSignBible")}
 					</h1>
 					<ul data-testid="playlistsAvailable" className="flex flex-col  gap-3">
@@ -41,10 +35,10 @@ const Home: React.FC = () => {
 							return (
 								<li
 									key={value.path}
-									className="flex items-center  w-full gap-3 mx-2"
+									className="flex items-center  w-full gap-3 py-4 border-b-[#E9E9E9] border-b"
 								>
 									<img
-										className="block max-w-16"
+										className="block max-w-8"
 										src={`assets/flags/${value.flag}`}
 										alt=""
 									/>
@@ -52,7 +46,7 @@ const Home: React.FC = () => {
 										<Link
 											to={{ pathname: value.path, state: { routeInfo: value } }}
 										>
-											<h2 className="text-2xl">{value.display}</h2>
+											<h2 className="">{value.display}</h2>
 										</Link>
 									</div>
 								</li>
@@ -60,7 +54,6 @@ const Home: React.FC = () => {
 						})}
 					</ul>
 				</div>
-				{/* <h1>{t("slb")}</h1> */}
 			</IonContent>
 		</IonPage>
 	);

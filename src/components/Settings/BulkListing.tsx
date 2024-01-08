@@ -56,6 +56,7 @@ export function BulkListing({
 	const [booksToCancel, setBooksToCancel] = useState<Array<string | undefined>>(
 		[],
 	);
+
 	function allBooks() {
 		const allVals = Object.values(playlistData.formattedVideos).map((value) => {
 			return {
@@ -102,7 +103,7 @@ export function BulkListing({
 			}
 		}
 	}
-	function cancelButonText() {
+	function cancelButtonText() {
 		if (window.dotAppStopAllDownloads) {
 			return t("cancelling");
 		}
@@ -161,13 +162,17 @@ export function BulkListing({
 				vidName: currentVid.name || currentVid.reference_id || "unknown video",
 				vidId: currentVid.id || "",
 			});
+			// reset selection when action is finished
+			setBooksSelected(undefined);
+			setBookNamesSelected([]);
 		}, 1000);
 		window.dotAppBooksToCancel = [];
 		window.dotAppStopAllDownloads = false;
 	}
-	async function deleteSelectedBooks() {
-		if (!booksSelected) return;
-		for await (const book of booksSelected) {
+	async function deleteSelectedBooks(books?: IVidWithCustom[][]) {
+		const booksToUse = books ? books : booksSelected;
+		if (!booksToUse) return;
+		for await (const book of booksToUse) {
 			for await (const vidChapter of book) {
 				const vidSaver = makeVidSaver(playlistSlug, vidChapter);
 				const currentPlaylistData =
@@ -184,14 +189,19 @@ export function BulkListing({
 			setShapedPlaylist: setShapedPlaylist,
 			setCurrentVid: setCurrentVid,
 		});
+		// reset selection when action is finished
+		setBooksSelected(undefined);
+		setBookNamesSelected([]);
 	}
 
-	function addAllVidsFromBook(videos: IVidWithCustom[]) {
+	function clearBookFromFs(videos: IVidWithCustom[]) {
 		setBooksSelected((prev) => {
 			if (prev) {
 				const newState = [...prev, videos];
 				return newState;
 			}
+			// A side cb
+			deleteSelectedBooks([videos]);
 			return [videos];
 		});
 	}
@@ -222,7 +232,7 @@ export function BulkListing({
 						"--padding-top": ".625rem",
 					}}
 				>
-					{cancelButonText()}
+					{cancelButtonText()}
 				</IonButton>
 			</div>
 			<ul className="gap-4">
@@ -235,8 +245,7 @@ export function BulkListing({
 						bookNamesSelected={bookNamesSelected}
 						booksToCancel={booksToCancel}
 						setBooksToCancel={setBooksToCancel}
-						addAllVidsFromBook={addAllVidsFromBook}
-						deleteSelectedBooks={deleteSelectedBooks}
+						clearBookFromFs={clearBookFromFs}
 					/>
 				))}
 			</ul>

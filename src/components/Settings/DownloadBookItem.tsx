@@ -21,9 +21,11 @@ type BookToDownloadProps = {
 	bookNamesSelected: string[];
 	booksToCancel: (string | undefined)[];
 	setBooksToCancel: Dispatch<SetStateAction<(string | undefined)[]>>;
-	addAllVidsFromBook(videos: IVidWithCustom[]): void;
-	deleteSelectedBooks(): Promise<void>;
+	clearBookFromFs(videos: IVidWithCustom[]): void;
 };
+function bookIsFullyDownloaded(book: IVidWithCustom[]) {
+	return book.every((vid) => !!vid.savedSources?.video);
+}
 export function BookToDownload(props: BookToDownloadProps) {
 	const { t } = useTranslation();
 	const { book } = props;
@@ -65,6 +67,9 @@ export function BookToDownload(props: BookToDownloadProps) {
 	function getCurrentProgress() {
 		return props.downloadProgress?.amount || 0;
 	}
+	function isChecked() {
+		return props.bookNamesSelected.includes(bookName || "");
+	}
 	return (
 		<li
 			key={book.bookName}
@@ -76,7 +81,9 @@ export function BookToDownload(props: BookToDownloadProps) {
 					onIonChange={(e) => {
 						props.handleChecked(e, book.value, bookName || "");
 					}}
+					checked={isChecked()}
 					labelPlacement="end"
+					disabled={bookIsFullyDownloaded(book.value)}
 				>
 					<span className="flex gap-1">
 						{book.bookName}{" "}
@@ -98,8 +105,7 @@ export function BookToDownload(props: BookToDownloadProps) {
 					color="primary"
 					className="text-surface"
 					onClick={() => {
-						props.addAllVidsFromBook(book.value);
-						props.deleteSelectedBooks();
+						props.clearBookFromFs(book.value);
 					}}
 					style={{
 						"--border-width": "1px",

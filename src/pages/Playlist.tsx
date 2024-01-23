@@ -396,7 +396,9 @@ function Playlist() {
 							<ArrowBack />
 						</a>
 						<span className="w-32 block mx-auto">
-							<DotLogo />
+							<a href="/">
+								<DotLogo />
+							</a>
 						</span>
 						{shapedPlaylist && (
 							<Settings

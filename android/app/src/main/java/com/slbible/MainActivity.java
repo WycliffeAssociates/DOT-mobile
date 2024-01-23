@@ -1,4 +1,4 @@
-package com.slbible;
+package com.slbible.dotapp;
 
 import com.getcapacitor.BridgeActivity;
 

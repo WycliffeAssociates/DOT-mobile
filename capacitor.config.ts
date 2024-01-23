@@ -1,8 +1,8 @@
 import { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-	appId: "com.slbible",
-	appName: "WA Sign Bibles",
+	appId: "com.slbible.dotapp",
+	appName: "Sign Language Bibles",
 	webDir: "dist",
 	server: {
 		androidScheme: "https",

@@ -3,7 +3,7 @@
   <head>
     <!-- <link href="https://vjs.zencdn.net/8.0.4/video-js.css" rel="stylesheet" /> -->
     <meta charset="utf-8" />
-    <title>WA Sign Bibles</title>
+    <title>Sign Language Bibles</title>
 
     <base href="/" />
 
@@ -33,7 +33,7 @@
     <div id="root"></div>
 
     <!-- NOTE. We are manually vendoring in the bc player the vc player.  It can be in public folder bc we don't need to transform it since it's already a min file, and putting it in src folder creates a module type mismatch since it assumes  a CJS or UMD env, but not module -->
-    <script src="/brightcove/willPlayer.js"></script>
+    <script src="/brightcove/dotPlayer.js"></script>
     <script type="module" src="./src/main.tsx"></script>
   </body>
 </html>

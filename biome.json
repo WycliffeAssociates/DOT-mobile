@@ -13,7 +13,13 @@
 	},
 	"files": {
 		"include": ["src/**/*"],
-		"ignore": ["node_modules", "bcApi.ts", "tests", "playwright.config.ts"]
+		"ignore": [
+			"node_modules",
+			"bcApi.ts",
+			"tests",
+			"playwright.config.ts",
+			"dotPlayer.js"
+		]
 	},
 	"linter": {
 		"enabled": true,

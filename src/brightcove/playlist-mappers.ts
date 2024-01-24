@@ -1,4 +1,12 @@
-const config = {
+type entry = {
+	playlist: string;
+	path: string;
+	display: string;
+	flag: string;
+};
+type configType = Record<string, entry>;
+
+const config: configType = {
 	benin: {
 		playlist: "benin-new-testament",
 		path: "benin",
@@ -28,6 +36,18 @@ const config = {
 		path: "malawi",
 		display: "Malawi",
 		flag: "mw.png",
+	},
+	tanzania: {
+		playlist: "tanzania-new-testament",
+		path: "tanzania",
+		display: "Tanzania",
+		flag: "tz.png",
+	},
+	cameroon: {
+		playlist: "cameroon-new-testament",
+		path: "cameroon",
+		display: "Cameroon",
+		flag: "cm.png",
 	},
 } as const;
 export default config;

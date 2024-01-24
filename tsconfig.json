@@ -18,6 +18,6 @@
     "jsx": "react-jsx",
     "baseUrl": "."
   },
-  "include": ["src", "public/bc", "public/brightcove/willPlayer.js"],
+  "include": ["src", "public/bc", "public/brightcove/dotPlayer.js"],
   "references": [{"path": "./tsconfig.node.json"}]
 }

@@ -28,10 +28,9 @@ jobs:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           AWS_KEY_ID: "op://DevOps/cloudflare-r2-token/access-key-id"
           AWS_SECRET_ACCESS_KEY: "op://DevOps/cloudflare-r2-token/secret-access-key"
-          KEYSTORE: "op://DevOps/btt-android-keystore-key/base64-encoded-jks"
-          KEYSTORE_PASSWORD: "op://DevOps/btt-android-keystore-key/text-details/storePassword"
-          KEY_ALIAS: "op://DevOps/btt-android-keystore-key/text-details/keyAlias"
-          KEY_PASSWORD: "op://DevOps/btt-android-keystore-key/text-details/keyPassword"
+          KEYSTORE: "op://DevOps/dot-android-keystore/base64-encoded-jks"
+          KEYSTORE_PASSWORD: "op://DevOps/dot-android-keystore/storePassword"
+          KEY_ALIAS: "op://DevOps/dot-android-keystore/alias"
           ENDPOINT: "op://DevOps/cloudflare-r2-token/endpoint"
       - name: Extract Android signing key from env
         run: |
@@ -53,7 +52,7 @@ jobs:
       - name: make output dir
         run: mkdir ./outputs
       - name: Sign dev build aab
-        run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.KEYSTORE_PASSWORD }}" -keypass "${{ env.KEY_PASSWORD }}" -signedjar ./outputs/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab "${{env.KEY_ALIAS}}"
+        run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ env.KEYSTORE_PASSWORD }}" -signedjar ./outputs/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab "${{env.KEY_ALIAS}}"
       - name: Move apk to outputs folder too
         run: cp ./android/app/build/outputs/apk/debug/app-debug.apk ./outputs
       - name: set s3 destination_dir for nightly-builds

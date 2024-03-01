@@ -68,6 +68,9 @@ jobs:
       - name: Build project app
         run: npm run build
 
+      - name: Capacitor sync
+        run: npx cap sync
+
       - name: Capacitor update
         run: npx cap update
 

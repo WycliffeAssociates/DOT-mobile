@@ -4,5 +4,10 @@
 <dict>
 <key>method</key>
 <string>app-store</string>
+<key>provisioningProfiles</key>
+<dict>
+    <key>com.slbible.dotapp</key>
+    <string>dot-mobile-ci</string>
+</dict>
 </dict>
 </plist>

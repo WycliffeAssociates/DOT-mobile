@@ -16,7 +16,7 @@ const Home: React.FC = () => {
 			<IonHeader className="ion-no-border ">
 				<IonToolbar style={{ "--min-height": "auto" }}>
 					<div className="flex content-center py-2 border border-b border-b-[#e1e1e1]">
-						<span className="w-32 block mx-auto">
+						<span className="w-44 block mx-auto">
 							<a href="/">
 								<DotLogo />
 							</a>

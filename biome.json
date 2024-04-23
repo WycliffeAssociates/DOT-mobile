@@ -12,7 +12,7 @@
 		"ignore": []
 	},
 	"files": {
-		"include": ["src/**/*"],
+		"include": ["./src/**/*"],
 		"ignore": [
 			"node_modules",
 			"bcApi.ts",

@@ -395,7 +395,7 @@ function Playlist() {
 						<a href="/">
 							<ArrowBack />
 						</a>
-						<span className="w-32 block mx-auto">
+						<span className="w-44 block mx-auto">
 							<a href="/">
 								<DotLogo />
 							</a>

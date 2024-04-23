@@ -21,7 +21,7 @@ import { PlaylistBookPicker } from "../components/PlaylistBookPicker";
 import { PlaylistInfo } from "../components/PlaylistInfo";
 import { Settings } from "../components/Settings";
 import { VerseSegmentJump } from "../components/VerseSegmentJump";
-import {
+import type {
 	IPlaylistData,
 	IPlaylistResponse,
 	IVidWithCustom,
@@ -89,8 +89,8 @@ function Playlist() {
 		savedPoster
 			? plyr?.poster(savedPoster)
 			: vid.poster
-			  ? plyr?.poster(vid.poster)
-			  : null;
+				? plyr?.poster(vid.poster)
+				: null;
 		plyr?.one("loadedmetadata", () => {
 			handleChapters(vid, plyr);
 		});
@@ -395,7 +395,7 @@ function Playlist() {
 						<a href="/">
 							<ArrowBack />
 						</a>
-						<span className="w-32 block mx-auto">
+						<span className="w-44 block mx-auto">
 							<a href="/">
 								<DotLogo />
 							</a>

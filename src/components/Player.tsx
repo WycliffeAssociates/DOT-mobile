@@ -158,9 +158,12 @@ export function VidJsPlayer({
 		}
 	}
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <custom event listener>
 	useEffect(() => {
 		bootPlayer();
 	}, []);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <custom event listener>
 	useEffect(() => {
 		// a custom event dispatch listener
 		handleSpeedChangesInApp();

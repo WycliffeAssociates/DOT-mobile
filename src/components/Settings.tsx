@@ -211,6 +211,7 @@ export function Settings(props: ISettings) {
 			setCurrentVid: props.setCurrentVid,
 		});
 	}
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		if (settingsRef?.current) {
 			if (!settingsRef.current.dataset.listening) {

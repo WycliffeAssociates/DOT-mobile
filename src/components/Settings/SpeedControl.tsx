@@ -21,6 +21,7 @@ export function SpeedControl(props: SpeedControlParams) {
 		setPreferredSpeed(curAppState.preferredSpeed);
 	}
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		setInitialPlayerSpeed();
 	}, []);

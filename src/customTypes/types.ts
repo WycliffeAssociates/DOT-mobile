@@ -1,5 +1,5 @@
-import videojs from "video.js";
-import brightCovePlaylistConfig from "../brightcove/playlist-mappers";
+import type videojs from "video.js";
+import type brightCovePlaylistConfig from "../brightcove/playlist-mappers";
 import type { PlaylistResponse, Video, VideoSources } from "./bcApi";
 
 declare global {

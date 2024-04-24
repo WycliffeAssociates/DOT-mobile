@@ -1,7 +1,7 @@
 import { Directory, Encoding, Filesystem } from "@capacitor/filesystem";
 
-import { Dispatch, SetStateAction } from "react";
-import {
+import type { Dispatch, SetStateAction } from "react";
+import type {
 	IPlaylistData,
 	IPlaylistResponse,
 	IVidWithCustom,
@@ -391,7 +391,6 @@ export async function updatePrefsInBackground({
 		}
 	}
 
-	// biome-ignore lint/correctness/noUnusedVariables: I'm destructuring to pick off the videos and formatted because we are using updating those properties with the spread on cacheBcPlaylistJson
 	const { videos, formattedVideos, ...restPlaylistData } = data;
 	mutateTimeStampBcResponse(restPlaylistData);
 

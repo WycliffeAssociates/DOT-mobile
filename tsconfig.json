@@ -1,23 +1,23 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "downlevelIteration": true,
-    "useDefineForClassFields": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": false,
-    "skipLibCheck": true,
-    "esModuleInterop": false,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "baseUrl": "."
-  },
-  "include": ["src", "public/bc", "public/brightcove/dotPlayer.js"],
-  "references": [{"path": "./tsconfig.node.json"}]
+	"compilerOptions": {
+		"target": "es5",
+		"downlevelIteration": true,
+		"useDefineForClassFields": true,
+		"lib": ["DOM", "DOM.Iterable", "ESNext"],
+		"allowJs": false,
+		"skipLibCheck": true,
+		"esModuleInterop": false,
+		"allowSyntheticDefaultImports": true,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"module": "ESNext",
+		"moduleResolution": "Node",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"noEmit": true,
+		"jsx": "react-jsx",
+		"baseUrl": "."
+	},
+	"include": ["src", "public/bc", "public/brightcove/dotPlayer.js"],
+	"references": [{ "path": "./tsconfig.node.json" }]
 }

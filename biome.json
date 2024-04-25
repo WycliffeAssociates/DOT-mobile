@@ -30,7 +30,8 @@
 				"noConsoleLog": "warn"
 			},
 			"correctness": {
-				"noUnusedVariables": "error"
+				"noUnusedVariables": "error",
+				"useExhaustiveDependencies": "warn"
 			},
 			"complexity": {
 				"noUselessCatch": "warn"

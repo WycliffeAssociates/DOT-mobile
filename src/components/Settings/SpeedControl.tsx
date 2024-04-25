@@ -1,6 +1,6 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { type ChangeEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { VideoJsPlayer } from "video.js";
+import type { VideoJsPlayer } from "video.js";
 import {
 	getSavedAppPreferences,
 	updateSavedAppPreferences,

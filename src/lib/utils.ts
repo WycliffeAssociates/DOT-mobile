@@ -1,4 +1,4 @@
-import { IVidWithCustom, validPlaylistSlugs } from "../customTypes/types";
+import type { IVidWithCustom, validPlaylistSlugs } from "../customTypes/types";
 
 interface sortOrderI {
 	[key: string]: number;
@@ -179,7 +179,7 @@ export function massageVidsArray(vids: IVidWithCustom[]) {
 		const bBookSort = getBibleBookSort(bCustomBook);
 		const aChap = Number(a.custom_fields?.chapter);
 		const bChap = Number(b.custom_fields?.chapter);
-		let retVal;
+		let retVal: undefined | number;
 		if (aBookSort === bBookSort) {
 			retVal = aChap < bChap ? -1 : aChap === bChap ? 0 : 1;
 		} else {

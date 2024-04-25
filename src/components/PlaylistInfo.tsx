@@ -1,4 +1,4 @@
-import { IVidWithCustom, validPlaylistSlugs } from "../customTypes/types";
+import type { IVidWithCustom, validPlaylistSlugs } from "../customTypes/types";
 import { formatPlayListName, normalizeBookName } from "../lib/utils";
 import { IconMaterialSymbolsCheckCircle } from "./Icons";
 type IPlaylistInfo = {

@@ -1,6 +1,6 @@
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
-import { IVidWithCustom } from "../customTypes/types";
+import type { IVidWithCustom } from "../customTypes/types";
 import { manageShowingChapterArrows } from "../lib/Ui";
 import { normalizeBookName } from "../lib/utils";
 import { IconMaterialSymbolsCheckCircle } from "./Icons";

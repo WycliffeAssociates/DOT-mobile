@@ -1,12 +1,12 @@
-import { CheckboxCustomEvent, IonButton } from "@ionic/react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { type CheckboxCustomEvent, IonButton } from "@ionic/react";
+import { type Dispatch, type SetStateAction, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
+import type {
 	IPlaylistData,
 	IVidWithCustom,
 	validPlaylistSlugs,
 } from "../../customTypes/types";
-import { downloadProgressInfo } from "../../customTypes/types";
+import type { downloadProgressInfo } from "../../customTypes/types";
 import {
 	getCurrentPlaylistDataFs,
 	getDownloadSize,
@@ -214,7 +214,7 @@ export function BulkListing({
 					size="small"
 					fill="outline"
 					color="primary"
-					disabled={booksSelected?.length ? false : true}
+					disabled={!booksSelected?.length}
 					className="text-surface"
 					onClick={() => {
 						if (downloadProgress?.started) {

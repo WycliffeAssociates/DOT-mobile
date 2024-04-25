@@ -2,13 +2,13 @@ import { Capacitor } from "@capacitor/core";
 import { Directory, Filesystem } from "@capacitor/filesystem";
 import { Preferences } from "@capacitor/preferences";
 import write_blob from "capacitor-blob-writer";
-import {
+import type {
 	IPlaylistData,
 	IVidWithCustom,
 	fetchSession,
 	writeAnInProgressBlobParams,
 } from "src/customTypes/types";
-import {
+import type {
 	IappState,
 	validPlaylistSlugs,
 	vidSavingWipData,
@@ -65,7 +65,7 @@ export function makeVidSaver(
 			return lowestMp4Size;
 		},
 		async savePosterBlobAndGetSrc() {
-			let posterBlob;
+			let posterBlob: Blob | undefined;
 			const posterPath = `${playlist}/${vid.id}/poster.jpeg`;
 			if (vid.poster) {
 				try {
@@ -107,7 +107,7 @@ export function makeVidSaver(
 				if (contentLength === null) {
 					return -1;
 				}
-				const fileSize = parseInt(contentLength, 10);
+				const fileSize = Number.parseInt(contentLength, 10);
 				return fileSize;
 			} catch (error) {
 				console.warn(error);

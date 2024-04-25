@@ -1,8 +1,11 @@
-import { CheckboxCustomEvent } from "@ionic/core";
+import type { CheckboxCustomEvent } from "@ionic/core";
 import { IonButton, IonCheckbox, IonProgressBar } from "@ionic/react";
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
-import { IVidWithCustom, downloadProgressInfo } from "../../customTypes/types";
+import type {
+	IVidWithCustom,
+	downloadProgressInfo,
+} from "../../customTypes/types";
 import { IconCancelX, IconMaterialSymbolsCheckCircle } from "../Icons";
 
 type BookToDownloadProps = {

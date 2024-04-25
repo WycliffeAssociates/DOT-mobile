@@ -1,10 +1,16 @@
 import { IonButton, IonIcon, IonModal } from "@ionic/react";
 import { close } from "ionicons/icons";
 import { settingsOutline } from "ionicons/icons";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { VideoJsPlayer } from "video.js";
 import {
+	type Dispatch,
+	type SetStateAction,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
+import { useTranslation } from "react-i18next";
+import type { VideoJsPlayer } from "video.js";
+import type {
 	IPlaylistData,
 	IVidWithCustom,
 	downloadProgressInfo,

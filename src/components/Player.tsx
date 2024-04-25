@@ -1,6 +1,6 @@
-import { Dispatch, SetStateAction, useEffect, useRef } from "react";
-import { VideoJsPlayer } from "video.js";
-import { IVidWithCustom, chapterMarkers } from "../customTypes/types";
+import { type Dispatch, type SetStateAction, useEffect, useRef } from "react";
+import type { VideoJsPlayer } from "video.js";
+import type { IVidWithCustom, chapterMarkers } from "../customTypes/types";
 import { handleVideoJsTaps, playerCustomHotKeys } from "../lib/Ui";
 import { getSavedAppPreferences } from "../lib/storage";
 type Iplayer = {
@@ -40,7 +40,7 @@ export function VidJsPlayer({
 				? {
 						src: `${firstBook.savedSources?.video}`,
 						type: "video/mp4",
-				  }
+					}
 				: firstBook.sources;
 
 			const firstPoster = firstBook.savedSources?.poster

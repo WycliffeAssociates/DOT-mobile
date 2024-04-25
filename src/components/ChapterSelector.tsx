@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { IVidWithCustom } from "../customTypes/types";
+import type { IVidWithCustom } from "../customTypes/types";
 import { ChapterList } from "./ChapterList";
 import {
 	IconMaterialSymbolsChevronLeft,

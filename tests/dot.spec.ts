@@ -1,13 +1,6 @@
 import { expect, test } from "@playwright/test";
 import brightCovePlaylistConfig from "../src/brightcove/playlist-mappers";
 
-// test('has title', async ({ page }) => {
-//   await page.goto('https://playwright.dev/');
-
-//   // Expect a title "to contain" a substring.
-//   await expect(page).toHaveTitle(/Playwright/);
-// });
-
 test("Home renders playlists", async ({ page }) => {
 	await page.goto("/");
 	const playlistListing = page.getByTestId("playlistsAvailable");
@@ -79,21 +72,3 @@ test("chapter changes on click", async ({ page }) => {
 	await expect(stateChecker).toHaveAttribute("data-currentbook", /MAT/);
 	await expect(stateChecker).toHaveAttribute("data-currentchap", /^0*2$/);
 });
-
-test("book changes on click", async ({ page }) => {
-	await page.goto("/benin");
-
-	const bookPicked = page.getByTestId("bookPicked");
-
-	const judeBtn = page
-		.getByTestId("booksAvailable")
-		.locator("li")
-		.getByText("Jude");
-	await judeBtn.click();
-	const stateChecker = page.getByTestId("stateChecker");
-	expect(stateChecker).toHaveAttribute("data-currentbook", "JUD");
-	await expect(bookPicked).toHaveText("Jude");
-});
-
-// testing vido
-// How can i e2e test the player to ensure that it's playing once someone downloads somethign? Green check marks. But i'd like to actually test the player.

@@ -62,7 +62,7 @@ export function VerseSegmentJump(props: IVerseSegmentJump) {
 	if (props.dir === "back") {
 		return (
 			<span
-				className={`flex flex-col absolute left-2 top-10  z-30 font-bold items-center text-primary/70 ${hideChapBtn(
+				className={`flex flex-col absolute left-0 top-5  z-30 font-bold items-center text-primary/70 ${hideChapBtn(
 					"prev",
 				)}`}
 			>
@@ -70,7 +70,7 @@ export function VerseSegmentJump(props: IVerseSegmentJump) {
 					type="button"
 					data-title="chapBack"
 					className={
-						"text-surface w-12 h-12 md:w-20 md:h-20 bg-gray-200/40 grid place-content-center rounded-full hover:( text-primary bg-primary/10)"
+						"text-surface  w-10 h-10 md:w-20 md:h-20 bg-gray-200/40! grid place-content-center rounded-full hover:( text-primary bg-primary/10!)"
 					}
 					onClick={() => {
 						if (props.player && adjacentChaps?.prev?.chapterStart) {
@@ -80,7 +80,7 @@ export function VerseSegmentJump(props: IVerseSegmentJump) {
 				>
 					<IconChapBack />
 				</button>
-				<span className="w-26 text-xs  text-center text-white/90">
+				<span className="w-24 text-[.65rem]  text-center text-white/90">
 					{adjacentChaps?.prev?.label}
 				</span>
 			</span>
@@ -88,7 +88,7 @@ export function VerseSegmentJump(props: IVerseSegmentJump) {
 	}
 	return (
 		<span
-			className={`flex flex-col absolute right-2 top-10  z-30 font-bold items-center ${hideChapBtn(
+			className={`flex flex-col absolute right-0 top-5  z-30 font-bold items-center ${hideChapBtn(
 				"next",
 			)}`}
 		>
@@ -96,7 +96,7 @@ export function VerseSegmentJump(props: IVerseSegmentJump) {
 				type="button"
 				data-title="chapNext"
 				className={
-					"text-surface w-12 h-12 md:w-20 md:h-20 bg-gray-200/40 grid place-content-center rounded-full hover:( text-primary bg-primary/10) "
+					"text-surface w-10 h-10 md:w-20 md:h-20 bg-gray-200/40 grid place-content-center rounded-full hover:( text-primary bg-primary/10) "
 				}
 				onClick={() => {
 					if (props.player && adjacentChaps?.next?.chapterStart) {
@@ -106,7 +106,7 @@ export function VerseSegmentJump(props: IVerseSegmentJump) {
 			>
 				<IconChapNext />
 			</button>
-			<span className="w-26 text-xs  text-center text-white/90 bg-blend-difference	">
+			<span className="w-24 text-[.65rem]  text-center text-white/90 bg-blend-difference	">
 				{adjacentChaps?.next?.label}
 			</span>
 		</span>

@@ -32,6 +32,8 @@ jobs:
           KEYSTORE_PASSWORD: "op://DevOps/dot-android-keystore/storePassword"
           KEY_ALIAS: "op://DevOps/dot-android-keystore/alias"
           ENDPOINT: "op://DevOps/cloudflare-r2-token/endpoint"
+          VITE_BC_ACCOUNT_ID: "op://DevOps/dot-mobile-env-vars/bc-account-id"
+          VITE_POLICY_KEY: "op://DevOps/dot-mobile-env-vars/policy-key"
       - name: Extract Android signing key from env
         run: |
           echo "${{ env.KEYSTORE }}" > android/release.jks.base64
@@ -42,8 +44,8 @@ jobs:
         run: |
           npm ci && npm run build-android
         env:
-          VITE_POLICY_KEY: ${{ secrets.VITE_POLICY_KEY }}
-          VITE_BC_ACCOUNT_ID: ${{ secrets.VITE_BC_ACCOUNT_ID }}
+          VITE_POLICY_KEY: ${{ env.VITE_POLICY_KEY }}
+          VITE_BC_ACCOUNT_ID: ${{ env.VITE_BC_ACCOUNT_ID }}
       - name: Get current date
         id: date
         run: echo "date=$(date +'%Y-%m-%d')"  >> "$GITHUB_OUTPUT"

@@ -214,7 +214,7 @@ export function BulkListing({
 					size="small"
 					fill="outline"
 					color="primary"
-					disabled={!!booksSelected?.length}
+					disabled={!booksSelected?.length}
 					className="text-surface"
 					onClick={() => {
 						if (downloadProgress?.started) {

@@ -9,7 +9,7 @@
 		"preview": "vite preview",
 		"test.e2e": "playwright test",
 		"test.unit": "vitest",
-		"lint": "biome check --apply --verbose  src/**/* src/",
+		"lint": "biome check --write --verbose  src/**/* src/",
 		"build-ios": "ionic capacitor build ios --release --prod --no-open",
 		"build-android": "ionic capacitor build android --release --prod --no-open",
 		"ios": "npm run build && npm run sync && npx cap run ios",

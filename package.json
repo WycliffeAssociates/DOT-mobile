@@ -67,7 +67,7 @@
 		"vitest": "^1.6.0"
 	},
 	"lint-staged": {
-		"*": "biome check --apply --verbose  src/**/* src/"
+		"*": "biome check --write --verbose  src/**/* src/"
 	},
 	"description": "WA Sign language bibles app"
 }

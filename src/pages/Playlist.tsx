@@ -229,8 +229,21 @@ function Playlist() {
 			// Using one each time a vid ends to try to avoid a stale closures issue that has cropped up some with react and videos js
 			vidJsPlayer.off("ended", autoPlayToNextBook);
 			vidJsPlayer.one("ended", autoPlayToNextBook);
+			// MAYBE: I HAD ERROR HANDLING FOR  EXPIRED SRC errors on media not supported, but now fetchAndSetup no already fetches the latest sources, but leaving here in case need to troubleshoot more later
+			// vidJsPlayer.on("error", handleVidJsError);
 		}
 	}, [currentVid, vidJsPlayer]);
+
+	// async function handleVidJsError() {
+	// if (!vidJsPlayer) return;
+	// const err = vidJsPlayer.error();
+	// if (!err) return;
+	// if (err.code === 4) {
+	// 4 is mdia src not supported.
+	// await fetchAndSetup();
+	// }
+	// console.error(event);
+	// }
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <I'm purposely running this effect only on playlist cause the src we'll only shift from blob to https if the shapedPlaylist that is saved to fs is edited.  The fs version of the shapedPlaylist is the real source of truth for what the UI should show more than the state is>
 	useEffect(() => {
@@ -284,7 +297,7 @@ function Playlist() {
 		let firstBookShow: IVidWithCustom[] = bucketToUse[keys[0]]; //default
 		if (parsedState?.currentBookName) {
 			const key = parsedState?.currentBookName;
-			if (key) {
+			if (key && bucketToUse[key]) {
 				firstBookShow = bucketToUse[key];
 			}
 		}

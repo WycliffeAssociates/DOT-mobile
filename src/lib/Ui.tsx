@@ -354,7 +354,7 @@ type IupdatePrefsInBackground = {
 	existingPlaylistData?: formattedPlaylist;
 	playlist: string;
 };
-export async function updatePrefsInBackground({
+export async function mergeInPreviouslySavedVids({
 	existingPlaylistData,
 	playlist,
 }: IupdatePrefsInBackground) {
@@ -394,13 +394,16 @@ export async function updatePrefsInBackground({
 	const { videos, formattedVideos, ...restPlaylistData } = data;
 	mutateTimeStampBcResponse(restPlaylistData);
 
-	await cacheBcPlaylistJson({
+	// no need to await this write to fs here
+	cacheBcPlaylistJson({
 		data: JSON.stringify({
 			formattedVideos: groupedBy,
 			...restPlaylistData,
 		}),
 		playlistSlug: playlist,
 	});
+	// return api response after it's been mutated with any savedSources from FS
+	return data;
 }
 type cacheBcPlaylistJsonArgs = {
 	data: string | Blob;
@@ -438,9 +441,11 @@ async function fetchBcApiEndpoint(playlist: string) {
 		console.warn(error);
 	}
 }
+
 export async function fetchBcData(playlist: validPlaylistSlugs) {
 	try {
 		let savedData: IPlaylistResponse | null = null;
+		// if (!options?.bypassCache) {
 		try {
 			const savedVersionFs = await Filesystem.readFile({
 				path: `playlists/${playlist}`,
@@ -456,23 +461,24 @@ export async function fetchBcData(playlist: validPlaylistSlugs) {
 			console.error(error);
 		}
 
+		// Always refresh savedData with freshest from api right now, but do merge in anythign previously saved. We can look at doing the caching stuff again later, but for now, prioritize freshness
 		if (savedData) {
-			if (savedData.refreshBy > Date.now()) {
-				return savedData;
-			}
-			if (
-				savedData.refreshBy < Date.now() &&
-				savedData.expiresBy > Date.now()
-			) {
-				// This is a background update. If it fails while offline or whatever, it
-				updatePrefsInBackground({
-					existingPlaylistData: savedData.formattedVideos,
-					playlist,
-				});
-				return savedData;
-			}
+			// if (savedData.refreshBy > Date.now()) {
+			//   return savedData;
+			// }
+			// if (
+			//   savedData.refreshBy < Date.now() &&
+			//   savedData.expiresBy > Date.now()
+			// ) {
+			// This is a background update. If it fails while offline or whatever, it
+			const mergedWithSavedSource = await mergeInPreviouslySavedVids({
+				existingPlaylistData: savedData.formattedVideos,
+				playlist,
+			});
+			return mergedWithSavedSource;
+			// }
+			// }
 		}
-
 		const data = await fetchBcApiEndpoint(playlist);
 		if (!data) throw new Error("fetch failed");
 		mutateTimeStampBcResponse(data);

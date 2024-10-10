@@ -114,11 +114,8 @@ export function Settings(props: ISettings) {
 			}
 		}
 		function breakLoop() {
-			if (window.dotAppStopAllDownloads) {
+			if (window.dotAppStopAllDownloads || bookDownloadRequestIsAborted()) {
 				props.setIsSavingSingle([]);
-				return true;
-			}
-			if (bookDownloadRequestIsAborted()) {
 				return true;
 			}
 			return false;
@@ -146,7 +143,6 @@ export function Settings(props: ISettings) {
 				fetchNum += 1;
 			}
 		}
-
 		const result =
 			await vidSaver.aggregateWipBlobsIntoOneAndWriteFs(allExpectedChunks);
 		// todo maybe?: some error handling here? Returning here is fine right now, the jobs that called it just assumes the download completed, the state is read from fs as source of truth (so no falsy UI since we don't actually combine the final blob). This right now just means that some fetch went wrong (don't know why), but if the job is started again from here, well, no big problem.
@@ -195,6 +191,9 @@ export function Settings(props: ISettings) {
 				vidName: vid.name || "",
 				vidId: vid.id || "",
 			});
+			window.dotAppBooksToCancel = [];
+			window.dotAppStopAllDownloads = false;
+			props.setIsSavingSingle((prev) => prev.filter((id) => id !== vid.id));
 		}, 1000);
 	}
 	async function handleSingleVidDelete(vid: IVidWithCustom) {

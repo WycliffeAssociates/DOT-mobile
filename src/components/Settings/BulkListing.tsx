@@ -160,7 +160,6 @@ export function BulkListing({
 				await saveVidOffline(vidChapter, currentPlaylistData);
 			}
 		}
-
 		setTimeout(() => {
 			setDownloadProgress({
 				amount: 0,
@@ -169,12 +168,13 @@ export function BulkListing({
 				vidId: currentVid.id || "",
 			});
 			// reset selection when action is finished
+			window.dotAppBooksToCancel = [];
+			window.dotAppStopAllDownloads = false;
 			setBooksSelected(undefined);
 			setBookNamesSelected([]);
 		}, 1000);
-		window.dotAppBooksToCancel = [];
-		window.dotAppStopAllDownloads = false;
 	}
+
 	async function deleteSelectedBooks(books?: IVidWithCustom[][]) {
 		const booksToUse = books ? books : booksSelected;
 		if (!booksToUse) return;

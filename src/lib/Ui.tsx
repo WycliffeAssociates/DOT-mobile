@@ -463,6 +463,7 @@ export async function fetchBcData(playlist: validPlaylistSlugs) {
 
 		// Always refresh savedData with freshest from api right now, but do merge in anythign previously saved. We can look at doing the caching stuff again later, but for now, prioritize freshness
 		if (savedData) {
+			// NOTE: THERE WAS SOME BANDWIDTH SAVING HERE BY ONLY REFRESHING AFTER SO LONG, BUT WE'RE JUST GONNA EAT THE BANDWIDTH FOR A PLAYLIST FETCH HERE AND NOT HAVE ANYTHING STALE
 			// if (savedData.refreshBy > Date.now()) {
 			//   return savedData;
 			// }
@@ -471,14 +472,16 @@ export async function fetchBcData(playlist: validPlaylistSlugs) {
 			//   savedData.expiresBy > Date.now()
 			// ) {
 			// This is a background update. If it fails while offline or whatever, it
-			const mergedWithSavedSource = await mergeInPreviouslySavedVids({
+			mergeInPreviouslySavedVids({
 				existingPlaylistData: savedData.formattedVideos,
 				playlist,
 			});
-			return mergedWithSavedSource;
+			return savedData;
+			// }
 			// }
 			// }
 		}
+		// if we are fetching fresh, we have nothing cached and don't need to worry about mergeing in previously saved vids
 		const data = await fetchBcApiEndpoint(playlist);
 		if (!data) throw new Error("fetch failed");
 		mutateTimeStampBcResponse(data);

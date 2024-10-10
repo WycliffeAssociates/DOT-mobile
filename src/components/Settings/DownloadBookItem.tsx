@@ -25,6 +25,7 @@ type BookToDownloadProps = {
 	booksToCancel: (string | undefined)[];
 	setBooksToCancel: Dispatch<SetStateAction<(string | undefined)[]>>;
 	clearBookFromFs(videos: IVidWithCustom[]): void;
+	setIsSavingSingle: Dispatch<SetStateAction<string[]>>;
 };
 function bookIsFullyDownloaded(book: IVidWithCustom[]) {
 	return book.every((vid) => !!vid.savedSources?.video);
@@ -153,6 +154,9 @@ export function BookToDownload(props: BookToDownloadProps) {
 								const vidsWithIds = book.value
 									.filter((v) => !!v.id)
 									.map((v) => v.id) as string[];
+								props.setIsSavingSingle((prev) =>
+									prev.filter((id) => !vidsWithIds.includes(id)),
+								);
 								if (
 									window.dotAppBooksToCancel &&
 									Array.isArray(window.dotAppBooksToCancel) &&

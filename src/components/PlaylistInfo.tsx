@@ -4,7 +4,7 @@ import { IconMaterialSymbolsCheckCircle } from "./Icons";
 type IPlaylistInfo = {
 	currentVid: IVidWithCustom;
 	playlist: validPlaylistSlugs;
-	isSavingSingle: boolean;
+	isSavingSingle: string[];
 };
 export function PlaylistInfo({
 	currentVid,
@@ -26,7 +26,7 @@ export function PlaylistInfo({
 						<IconMaterialSymbolsCheckCircle className="text-[#339E35] w-full h-full" />
 					</span>
 				)}
-				{isSavingSingle && (
+				{currentVid.id && isSavingSingle.includes(currentVid.id) && (
 					<div role="status">
 						<svg
 							aria-hidden="true"

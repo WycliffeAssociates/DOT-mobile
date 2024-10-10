@@ -34,6 +34,7 @@ type ISettings = {
 	setCurrentBook: Dispatch<SetStateAction<IVidWithCustom[]>>;
 	setShapedPlaylist: Dispatch<SetStateAction<IPlaylistData | undefined>>;
 	setCurrentVid: Dispatch<SetStateAction<IVidWithCustom>>;
+	setIsSavingSingle: Dispatch<SetStateAction<string[]>>;
 };
 export function Settings(props: ISettings) {
 	const modal = useRef<HTMLIonModalElement>(null);
@@ -114,6 +115,7 @@ export function Settings(props: ISettings) {
 		}
 		function breakLoop() {
 			if (window.dotAppStopAllDownloads) {
+				props.setIsSavingSingle([]);
 				return true;
 			}
 			if (bookDownloadRequestIsAborted()) {
@@ -132,7 +134,7 @@ export function Settings(props: ISettings) {
 				let progressAmount = fetchNum / allExpectedChunks.length;
 				if (progressAmount === 1) {
 					// artificially set the progress at just below 100 to finish up this last bit of code in which we are cleaning caches / combining the blob parts etc;
-					progressAmount = 0.98;
+					progressAmount = 0.99;
 				}
 				const updatedAmount = {
 					started: true,
@@ -293,6 +295,7 @@ export function Settings(props: ISettings) {
 						currentBook={props.currentBook}
 						currentVid={props.currentVid}
 						setShapedPlaylist={props.setShapedPlaylist}
+						setIsSavingSingle={props.setIsSavingSingle}
 					/>
 				</div>
 			</IonModal>

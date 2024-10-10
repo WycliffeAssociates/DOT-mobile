@@ -67,7 +67,7 @@ function Playlist() {
 	const [jumpingForwardAmount, setJumpingForwardAmount] =
 		useState<jumpParam>(null);
 	const [jumpingBackAmount, setJumpingBackAmount] = useState<jumpParam>(null);
-	const [isSavingSingle, setIsSavingSingle] = useState(false);
+	const [isSavingSingle, setIsSavingSingle] = useState<string[]>([]);
 	const alertRef: any = useRef(null);
 
 	/*// #===============  PAGE FUNCTIONS   =============   */
@@ -229,8 +229,22 @@ function Playlist() {
 			// Using one each time a vid ends to try to avoid a stale closures issue that has cropped up some with react and videos js
 			vidJsPlayer.off("ended", autoPlayToNextBook);
 			vidJsPlayer.one("ended", autoPlayToNextBook);
+			// MAYBE: I HAD ERROR HANDLING FOR  EXPIRED SRC errors on media not supported, but now fetchAndSetup no already fetches the latest sources, but leaving here in case need to troubleshoot more later
+			vidJsPlayer.on("error", handleVidJsError);
 		}
 	}, [currentVid, vidJsPlayer]);
+
+	async function handleVidJsError() {
+		if (!vidJsPlayer) return;
+		const err = vidJsPlayer.error();
+		if (!err) return;
+		console.error({ err });
+		if (err.code === 4) {
+			// 4 is mdia src not supported.
+			// await fetchAndSetup();
+		}
+		// console.error(event);
+	}
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <I'm purposely running this effect only on playlist cause the src we'll only shift from blob to https if the shapedPlaylist that is saved to fs is edited.  The fs version of the shapedPlaylist is the real source of truth for what the UI should show more than the state is>
 	useEffect(() => {
@@ -284,7 +298,7 @@ function Playlist() {
 		let firstBookShow: IVidWithCustom[] = bucketToUse[keys[0]]; //default
 		if (parsedState?.currentBookName) {
 			const key = parsedState?.currentBookName;
-			if (key) {
+			if (key && bucketToUse[key]) {
 				firstBookShow = bucketToUse[key];
 			}
 		}
@@ -337,7 +351,7 @@ function Playlist() {
 		const commonAction = (action: "DOWNLOAD" | "DELETE") => {
 			const settingsEl = document.querySelector("#settingsRef");
 			if (settingsEl) {
-				const adjustPlayerSpeedEvent = new CustomEvent(
+				const manageSingleVideoStorage = new CustomEvent(
 					"manageSingleVideoStorage",
 					{
 						detail: {
@@ -346,9 +360,10 @@ function Playlist() {
 						},
 					},
 				);
-				settingsEl.dispatchEvent(adjustPlayerSpeedEvent);
-				if (action === "DOWNLOAD") {
-					setIsSavingSingle(true);
+				settingsEl.dispatchEvent(manageSingleVideoStorage);
+				const curId = currentVid.id;
+				if (action === "DOWNLOAD" && curId) {
+					setIsSavingSingle((prev) => [...prev, curId]);
 				}
 			}
 		};
@@ -382,9 +397,9 @@ function Playlist() {
 
 	useEffect(() => {
 		if (currentVid.savedSources?.video) {
-			setIsSavingSingle(false);
+			setIsSavingSingle((prev) => prev.filter((id) => id !== currentVid.id));
 		}
-	}, [currentVid.savedSources?.video]);
+	}, [currentVid.savedSources?.video, currentVid.id]);
 
 	/*//# ===============  MARKUP   =============   */
 	return (
@@ -410,6 +425,7 @@ function Playlist() {
 								playlistSlug={playlistInfo.playlist}
 								setShapedPlaylist={setShapedPlaylist}
 								setCurrentBook={setCurrentBook}
+								setIsSavingSingle={setIsSavingSingle}
 							/>
 						)}
 					</div>

@@ -22,8 +22,8 @@ export function makeVidSaver(
 	vid: IVidWithCustom,
 ) {
 	// NOTE: We could change this, but 10 seems like a reasonsable amount for avoiding timeouts.
-	const increment = 1024 * 1000 * 10; //1 kilobyte * 1000 (= 1mb) * 10 = (10mb)
-	// const increment = 10 * 10 * 1024; //10mb
+	// const increment = 1024 * 1000 * 10; //1 kilobyte * 1000 (= 1mb) * 10 = (10mb)
+	const increment = 1024 * 300; //1kb * 250 = 300kb
 	const mp4FileName = `${vid.id}_mp4`;
 
 	function getAggregatedBlobPath() {

@@ -38,6 +38,7 @@ type IDownloadListing = {
 	setCurrentVid: Dispatch<SetStateAction<IVidWithCustom>>;
 	downloadProgress: downloadProgressInfo | undefined;
 	setShapedPlaylist: Dispatch<SetStateAction<IPlaylistData | undefined>>;
+	setIsSavingSingle: Dispatch<SetStateAction<string[]>>;
 };
 export function BulkListing({
 	playlistData,
@@ -49,6 +50,7 @@ export function BulkListing({
 	currentVid,
 	downloadProgress,
 	setShapedPlaylist,
+	setIsSavingSingle,
 }: IDownloadListing) {
 	const { t } = useTranslation();
 	const [booksSelected, setBooksSelected] = useState<Array<IVidWithCustom[]>>();
@@ -138,6 +140,10 @@ export function BulkListing({
 
 		for await (const vidChapter of flattenedBooks) {
 			if (skipVidDownload(vidChapter)) continue;
+			setIsSavingSingle((prev) => {
+				// biome-ignore lint/style/noNonNullAssertion:
+				return [...prev, ...flattenedBooks.map((vid) => vid.id!)];
+			});
 			if (!vidChapter.savedSources?.poster || !vidChapter.savedSources?.video) {
 				setDownloadProgress({
 					amount: 0,
@@ -214,7 +220,7 @@ export function BulkListing({
 					size="small"
 					fill="outline"
 					color="primary"
-					disabled={!booksSelected?.length}
+					disabled={!booksSelected?.length && !downloadProgress?.started}
 					className="text-surface"
 					onClick={() => {
 						if (downloadProgress?.started) {
@@ -246,6 +252,7 @@ export function BulkListing({
 						booksToCancel={booksToCancel}
 						setBooksToCancel={setBooksToCancel}
 						clearBookFromFs={clearBookFromFs}
+						setIsSavingSingle={setIsSavingSingle}
 					/>
 				))}
 			</ul>

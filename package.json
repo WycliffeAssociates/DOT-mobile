@@ -17,7 +17,7 @@
 		"sync": "cap sync",
 		"iconGenerate": "npx @capacitor/assets generate --iconBackgroundColor '#eeeeee' --iconBackgroundColorDark '#1E1F1D' --splashBackgroundColor '#eeeeee' --splashBackgroundColorDark '#1E1F1D'",
 		"updateAllPackages": "npx npm-check-updates -i",
-		"prepare": "husky install"
+		"prepare": "husky"
 	},
 	"dependencies": {
 		"@capacitor/android": "^6.2.0",

@@ -5,7 +5,7 @@ type entry = {
 	flag: string;
 };
 type configType = Record<string, entry>;
-
+// flags: https://github.com/hampusborgos/country-flags
 const config: configType = {
 	benin: {
 		playlist: "benin-new-testament",
@@ -48,6 +48,18 @@ const config: configType = {
 		path: "cameroon",
 		display: "Cameroon",
 		flag: "cm.png",
+	},
+	congodrc: {
+		playlist: "congo-french-nt",
+		path: "congodrc",
+		display: "Republic of Congo (French)",
+		flag: "cg.svg",
+	},
+	marathi: {
+		playlist: "marathi-nt",
+		path: "marathi",
+		display: "Marathi",
+		flag: "in.svg",
 	},
 } as const;
 export default config;

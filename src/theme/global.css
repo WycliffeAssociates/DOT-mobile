@@ -1,21 +1,21 @@
 @font-face {
-  font-family: "Montserrat";
-  src: local("Montserrat Regular"), local("Montserrat-Regular"),
-    url("/fonts/montserrat/Montserrat-Regular.woff2") format("woff2"),
-    url("/fonts/montserrat/Montserrat-Regular.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+	font-family: "Montserrat";
+	src: local("Montserrat Regular"), local("Montserrat-Regular"),
+		url("/fonts/montserrat/Montserrat-Regular.woff2") format("woff2"),
+		url("/fonts/montserrat/Montserrat-Regular.woff") format("woff");
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
 }
 
 @font-face {
-  font-family: "Montserrat";
-  src: local("Montserrat Bold"), local("Montserrat-Bold"),
-    url("/fonts/montserrat/Montserrat-Bold.woff2") format("woff2"),
-    url("/fonts/montserrat/Montserrat-Bold.woff") format("woff");
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
+	font-family: "Montserrat";
+	src: local("Montserrat Bold"), local("Montserrat-Bold"),
+		url("/fonts/montserrat/Montserrat-Bold.woff2") format("woff2"),
+		url("/fonts/montserrat/Montserrat-Bold.woff") format("woff");
+	font-weight: bold;
+	font-style: normal;
+	font-display: swap;
 }
 
 p,
@@ -27,240 +27,239 @@ h5,
 h6,
 li,
 span {
-  color: #121212;
+	color: #121212;
 }
 h1 {
-  font-size: 1.25rem;
+	font-size: 1.25rem;
 }
 p {
-  font-size: 1rem;
+	font-size: 1rem;
 }
 
 @screen md {
-  h1 {
-    font-size: 2rem;
-  }
-  h2 {
-    font-size: 1.5rem;
-  }
-  h3 {
-    font-size: 1.25rem;
-  }
-  p {
-    font-size: 1.25rem;
-  }
+	h1 {
+		font-size: 2rem;
+	}
+	h2 {
+		font-size: 1.5rem;
+	}
+	h3 {
+		font-size: 1.25rem;
+	}
+	p {
+		font-size: 1.25rem;
+	}
 }
 
 /* =============== VIDEO JS STUFF  ============= */
 .video-js {
-  width: 100% !important;
-  height: 100% !important;
-  padding-top: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+	padding-top: 0 !important;
 }
 .video-js video,
 .video-js img {
-  object-fit: cover;
+	object-fit: cover;
 }
 .vjs-big-play-button {
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  border-radius: 9999px !important;
-  height: 4.5rem !important;
-  width: 4.5rem !important;
-  display: inline-grid !important;
-  place-content: center !important;
-  padding: 0 !important;
-  line-height: 2 !important;
-  border: none !important;
-  background: #f3f3f3 !important;
-  color: #9c9c9c !important;
+	top: 50% !important;
+	left: 50% !important;
+	transform: translate(-50%, -50%) !important;
+	border-radius: 9999px !important;
+	height: 4.5rem !important;
+	width: 4.5rem !important;
+	display: inline-grid !important;
+	place-content: center !important;
+	padding: 0 !important;
+	line-height: 2 !important;
+	border: none !important;
+	background: #f3f3f3 !important;
+	color: #9c9c9c !important;
 }
 .vjs-big-play-button:hover {
-  background: hsl(20, 100%, 56%) !important;
+	background: hsl(20, 100%, 56%) !important;
 }
 .vjs-has-started .vjs-big-play-button {
-  display: none !important;
+	display: none !important;
 }
 .vjs-progress-control.vjs-control {
-  width: 100%;
-  position: absolute;
-  top: -100%;
+	width: 100%;
+	position: absolute;
+	top: -100%;
 }
 .vjs-playback-rate {
-  display: inline-block !important;
+	display: inline-block !important;
 }
 .vjs-big-play-button:hover .vjs-icon-placeholder:before {
-  color: white !important;
+	color: white !important;
 }
 .video-js .vjs-big-play-button .vjs-icon-placeholder:before {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 4rem;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 4rem;
 }
 .vjs-progress-control .vjs-mouse-display {
-  /* left: 85px !important; */
-  top: -3.25rem !important;
-  align-items: center !important;
-  justify-content: center !important;
-  flex-direction: column-reverse !important;
-  font-size: 0.8em !important;
-  background-color: rgba(0, 0, 0, 0.8) !important;
-  height: max-content !important;
-  width: max-content !important;
-  transform: translateX(-50%);
-  padding: 0.25rem;
+	/* left: 85px !important; */
+	top: -3.25rem !important;
+	align-items: center !important;
+	justify-content: center !important;
+	flex-direction: column-reverse !important;
+	font-size: 0.8em !important;
+	background-color: rgba(0, 0, 0, 0.8) !important;
+	height: max-content !important;
+	width: max-content !important;
+	transform: translateX(-50%);
+	padding: 0.25rem;
 }
 .vjs-progress-control .vjs-mouse-display * {
-  background: none;
+	background: none;
 }
 .vjs-mouse-display .vjs-time-tooltip {
-  float: none !important;
-  position: static !important;
-  font-size: 1em !important;
-  padding: 0;
+	float: none !important;
+	position: static !important;
+	font-size: 1em !important;
+	padding: 0;
 }
 .video-js .vjs-progress-control:hover .vjs-mouse-display {
-  display: flex !important;
+	display: flex !important;
 }
 .vjs-progress-control:hover .chapLabelTextHolder,
 .vjs-progress-control:focus .chapLabelTextHolder {
-  display: inline-block;
+	display: inline-block;
 }
 .vjs-chapters-button {
-  display: none !important;
+	display: none !important;
 }
 .vjs-text-track-cue b {
-  font-size: 0.65em;
-  display: inline-block;
-  transform: translateY(-8px);
+	font-size: 0.65em;
+	display: inline-block;
+	transform: translateY(-8px);
 }
 /* =============== MISC  ============= */
 /* gradients some things just are simpler outside of utility css, but it's nice to still have easy media queries that line up with uno breakpoitns */
 .y-scroll-gradient {
-  background-image: linear-gradient(
-    0deg,
-    hsl(20, 100%, 56%) 0%,
-    hsla(20, 100%, 56%, 0) 15%,
-    hsla(20, 100%, 56%, 0) 85%,
-    hsla(20, 100%, 56%, 0.6) 100%
-  );
+	background-image: linear-gradient(
+		0deg,
+		hsl(20, 100%, 56%) 0%,
+		hsla(20, 100%, 56%, 0) 15%,
+		hsla(20, 100%, 56%, 0) 85%,
+		hsla(20, 100%, 56%, 0.6) 100%
+	);
 }
 
 @screen sm {
-  .x-scroll-gradient {
-    background: rgb(0, 0, 0);
-    background: linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0.1) 1%,
-      rgba(0, 0, 0, 0) 2%,
-      rgba(0, 0, 0, 0) 97%,
-      rgba(0, 0, 0, 0.1) 100%
-    );
-  }
+	.x-scroll-gradient {
+		background: rgb(0, 0, 0);
+		background: linear-gradient(
+			90deg,
+			rgba(0, 0, 0, 0.1) 1%,
+			rgba(0, 0, 0, 0) 2%,
+			rgba(0, 0, 0, 0) 97%,
+			rgba(0, 0, 0, 0.1) 100%
+		);
+	}
 }
 .seekRipple {
-  overflow: hidden;
-  background: hsl(0deg 0% 49.15% / 10%);
+	overflow: hidden;
+	background: hsl(0deg 0% 49.15% / 10%);
 }
 
 .seekRipple:after {
-  content: "";
-  background: hsla(0, 100%, 100%, 0.3);
-  /* background: hsla(0, 0%, 0%, .1); */
-  position: absolute;
-  top: 50%;
-  height: 1rem;
-  width: 1rem;
-  transform: translateY(-50%);
-  border-radius: 9999px;
-  animation: ripple-animation 0.2s infinite alternate;
+	content: "";
+	background: hsla(0, 100%, 100%, 0.3);
+	/* background: hsla(0, 0%, 0%, .1); */
+	position: absolute;
+	top: 50%;
+	height: 1rem;
+	width: 1rem;
+	transform: translateY(-50%);
+	border-radius: 9999px;
+	animation: ripple-animation 0.2s infinite alternate;
 }
 #seekRippleForward:after {
-  left: 50%;
-  /* border-radius: 100% 0% 0% 100% / 50% 50% 50% 50% ; */
+	left: 50%;
+	/* border-radius: 100% 0% 0% 100% / 50% 50% 50% 50% ; */
 }
 #seekRippleBackward:after {
-  right: 50%;
-  /* border-radius: 0% 100% 100% 0% / 50% 50% 50% 50% ; */
+	right: 50%;
+	/* border-radius: 0% 100% 100% 0% / 50% 50% 50% 50% ; */
 }
 @keyframes ripple-animation {
-  0% {
-    transform: translateY(-50%) scale(0.1);
-  }
-  100% {
-    transform: translateY(-50%) scale(50);
-  }
+	0% {
+		transform: translateY(-50%) scale(0.1);
+	}
+	100% {
+		transform: translateY(-50%) scale(50);
+	}
 }
 
 /********** Range Input Styles **********/
 /*Range Reset*/
 input[type="range"] {
-  -webkit-appearance: none;
-  @apply appearance-none bg-transparent cursor-pointer w-40;
+	-webkit-appearance: none;
+	@apply appearance-none bg-transparent cursor-pointer w-40;
 }
 
 /* Removes default focus */
 input[type="range"]:focus {
-  @apply outline-none;
+	@apply outline-none;
 }
 
 /***** Chrome, Safari, Opera and Edge Chromium styles *****/
 /* slider track */
 input[type="range"]::-webkit-slider-runnable-track {
-  -webkit-appearance: none; /* Override default look */
-  @apply bg-primary/20 rounded-md h-2;
+	-webkit-appearance: none; /* Override default look */
+	@apply bg-primary/20 rounded-md h-2;
 }
 
 /* slider thumb */
 input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none; /* Override default look */
-  @apply mt--2 h-6 w-6 rounded-full bg-primary/80
-  /* margin-top: -12px; Centers thumb on the track */;
+	-webkit-appearance: none; /* Override default look */
+	@/* margin-top: -12px; Centers thumb on the track */ apply mt--2 h-6 w-6 rounded-full bg-primary/80;
 }
 
 input[type="range"]:focus::-webkit-slider-thumb {
-  @apply border border-gray-500 outline outline-3 outline-gray-500 outline-offset-2;
+	@apply border border-gray-500 outline outline-3 outline-gray-500 outline-offset-2;
 }
 
 /******** Firefox styles ********/
 /* slider track */
 input[type="range"]::-moz-range-track {
-  @apply bg-primary/20 rounded-md h-2;
+	@apply bg-primary/20 rounded-md h-2;
 }
 
 /* slider thumb */
 input[type="range"]::-moz-range-thumb {
-  @apply mt--2 h-6 w-6 rounded-full bg-primary/80;
+	@apply mt--2 h-6 w-6 rounded-full bg-primary/80;
 }
 
 input[type="range"]:focus::-moz-range-thumb {
-  @apply border border-gray-500 outline outline-3 outline-gray-500 outline-offset-2;
+	@apply border border-gray-500 outline outline-3 outline-gray-500 outline-offset-2;
 }
 
-@media (prefers-color-scheme: dark) {
-}
+/* @media (prefers-color-scheme: dark) {
+} */
 
 ion-modal {
-  --width: 100vw;
-  --height: auto;
+	--width: 100vw;
+	--height: auto;
 }
 
 .customProgressBar[value] {
-  -webkit-appearance: none;
+	-webkit-appearance: none;
 
-  accent-color: var(--ion-color-success-tint);
-  /* Get rid of the default appearance */
-  border-radius: 20px;
-  background: red;
+	accent-color: var(--ion-color-success-tint);
+	/* Get rid of the default appearance */
+	border-radius: 20px;
+	background: red;
 }
 
 ::-webkit-progress-value {
-  background-color: var(--ion-color-success-tint);
-  /* accent-color: var(--ion-color-success-tint) */
+	background-color: var(--ion-color-success-tint);
+	/* accent-color: var(--ion-color-success-tint) */
 }
 
 ion-checkbox::part(container) {
-  margin-right: -0.5rem;
+	margin-right: -0.5rem;
 }

@@ -27,7 +27,7 @@ export function PlaylistInfo({
 					</span>
 				)}
 				{currentVid.id && isSavingSingle.includes(currentVid.id) && (
-					<div role="status">
+					<div>
 						<svg
 							aria-hidden="true"
 							className="w-6 h-6 text-gray-200 animate-spin  fill-primary"

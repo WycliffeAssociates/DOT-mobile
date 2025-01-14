@@ -113,7 +113,9 @@ export function upperFirstLowerRest(bookName: string) {
 export function formatPlayListName(playlist: validPlaylistSlugs | undefined) {
 	if (!playlist) return "";
 	const parts = playlist.split("-");
-	const cased = parts.map((part) => upperFirstLowerRest(part));
+	const cased = parts
+		.map((part) => upperFirstLowerRest(part))
+		.map((part) => (part.toLowerCase() === "nt" ? part.toUpperCase() : part));
 	return cased.join(" ");
 }
 export function convertTimeToSeconds(timeStr: string): number {

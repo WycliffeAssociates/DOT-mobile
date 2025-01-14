@@ -38,7 +38,7 @@ const Home: React.FC = () => {
 									className="flex items-center  w-full gap-3 py-4 border-b-[#E9E9E9] border-b"
 								>
 									<img
-										className="block max-w-8"
+										className="block w-8"
 										src={`assets/flags/${value.flag}`}
 										alt=""
 									/>

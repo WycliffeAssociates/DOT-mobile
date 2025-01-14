@@ -12,7 +12,7 @@
 		"ignore": []
 	},
 	"files": {
-		"ignore": [".DS_Store", "bcApi.ts"]
+		"ignore": [".DS_Store", "bcApi.ts", "vidJs.css"]
 	},
 	"linter": {
 		"enabled": true,

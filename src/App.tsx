@@ -20,7 +20,8 @@ import Playlist from "./pages/Playlist";
 
 setupIonicReact();
 
-const App: React.FC = () => (
+const App = () => (
+	// @ts-ignore
 	<IonApp>
 		<IonReactRouter>
 			<IonRouterOutlet>

@@ -9,6 +9,8 @@ declare global {
 		dotAppStopAllDownloads: boolean;
 	}
 }
+type KeyUnion<T, K extends keyof T[keyof T]> = T[keyof T][K];
+
 export type formattedPlaylist = Record<string, IVidWithCustom[]>;
 
 export type IPlaylistResponse = PlaylistResponse & {
@@ -92,8 +94,16 @@ export type IappState = {
 	preferredSpeed?: number;
 };
 
-export type validPlaylistSlugs =
-	(typeof brightCovePlaylistConfig)[keyof typeof brightCovePlaylistConfig]["playlist"];
+export type validPlaylistSlugs = KeyUnion<
+	typeof brightCovePlaylistConfig,
+	"playlist"
+>;
+export type validPlaylistNames = KeyUnion<
+	typeof brightCovePlaylistConfig,
+	"playlistDisplayName"
+>;
+
+//
 
 export type downloadProgressInfo = {
 	started: boolean;

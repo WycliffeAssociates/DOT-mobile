@@ -1,9 +1,13 @@
-import type { IVidWithCustom, validPlaylistSlugs } from "../customTypes/types";
-import { formatPlayListName, normalizeBookName } from "../lib/utils";
+import type {
+	IVidWithCustom,
+	validPlaylistNames,
+	validPlaylistSlugs,
+} from "../customTypes/types";
+import { normalizeBookName } from "../lib/utils";
 import { IconMaterialSymbolsCheckCircle } from "./Icons";
 type IPlaylistInfo = {
 	currentVid: IVidWithCustom;
-	playlist: validPlaylistSlugs;
+	playlist: validPlaylistNames;
 	isSavingSingle: string[];
 };
 export function PlaylistInfo({
@@ -47,7 +51,7 @@ export function PlaylistInfo({
 					</div>
 				)}
 			</div>
-			<p>{formatPlayListName(playlist)}</p>
+			<p>{playlist}</p>
 		</div>
 	);
 }

@@ -498,7 +498,7 @@ function Playlist() {
 									<div className="mt-4 flex justify-between px-5 gap-2">
 										<PlaylistInfo
 											currentVid={currentVid}
-											playlist={playlistInfo.playlist}
+											playlist={playlistInfo.playlistDisplayName}
 											isSavingSingle={isSavingSingle}
 										/>
 										<div data-name="downloadSingleBtn">

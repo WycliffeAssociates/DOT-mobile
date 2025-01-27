@@ -29,26 +29,25 @@ const Home: React.FC = () => {
 					<h1 className="w-full text-center  mt-10 mb-5 font-bold  capitalize">
 						{t("pickSignBible")}
 					</h1>
-					<ul data-testid="playlistsAvailable" className="flex flex-col  gap-3">
+					<ul
+						data-testid="playlistsAvailable"
+						className="flex flex-col  gap-3 pb-12"
+					>
 						{alphabetizedKeys.map((key) => {
 							const value = brightCovePlaylistConfig[key];
 							return (
-								<li
-									key={value.path}
-									className="flex items-center  w-full gap-3 py-4 border-b-[#E9E9E9] border-b"
-								>
-									<img
-										className="block w-8"
-										src={`assets/flags/${value.flag}`}
-										alt=""
-									/>
-									<div>
-										<Link
-											to={{ pathname: value.path, state: { routeInfo: value } }}
-										>
-											<h2 className="">{value.display}</h2>
-										</Link>
-									</div>
+								<li key={value.path} className=" border-b-[#E9E9E9] border-b">
+									<Link
+										to={{ pathname: value.path, state: { routeInfo: value } }}
+										className=" py-4 block  flex items-center  w-full gap-3"
+									>
+										<img
+											className="block w-8"
+											src={`assets/flags/${value.flag}`}
+											alt=""
+										/>
+										{value.display}
+									</Link>
 								</li>
 							);
 						})}

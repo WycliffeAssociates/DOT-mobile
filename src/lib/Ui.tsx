@@ -10,7 +10,7 @@ import type {
 	formattedPlaylist,
 	validPlaylistSlugs,
 } from "../customTypes/types";
-import { makeVidSaver } from "./storage";
+import { getSavedMp4Src, makeVidSaver } from "./storage";
 import {
 	convertTimeToSeconds,
 	formatDuration,
@@ -352,7 +352,7 @@ export function mutateTimeStampBcResponse(data: Partial<IPlaylistResponse>) {
 
 type IupdatePrefsInBackground = {
 	existingPlaylistData?: formattedPlaylist;
-	playlist: string;
+	playlist: validPlaylistSlugs;
 };
 export async function mergeInPreviouslySavedVids({
 	existingPlaylistData,
@@ -361,7 +361,6 @@ export async function mergeInPreviouslySavedVids({
 	if (!existingPlaylistData) return;
 	const data = await fetchBcApiEndpoint(playlist);
 	if (!data || !data.videos) return;
-
 	const castedVids = data.videos as IVidWithCustom[];
 	const { sortedVids, filteredByMatchingReferenceId } =
 		massageVidsArray(castedVids);
@@ -385,6 +384,30 @@ export async function mergeInPreviouslySavedVids({
 					});
 					if (matchingNewBook) {
 						matchingNewBook.savedSources = book.savedSources;
+
+						//  make sure the urls are fixed btw deploys since version changes create different paths to documents data;
+						await Promise.all(
+							Object.entries(matchingNewBook.savedSources).map(
+								async ([key, value]) => {
+									if (
+										!!value &&
+										typeof value === "string" &&
+										key !== "dateSavedIso"
+									) {
+										// Thsi may be a little redundant when not between deploys, but it's just the IO async and is a tiny amt of extra work compared to atcually fetching the playlist and stuff
+										const converted = await getSavedMp4Src(
+											playlist,
+											matchingNewBook,
+										);
+										// satisfy ts checking.
+										if (matchingNewBook.savedSources) {
+											// @ts-ignore
+											matchingNewBook.savedSources[key] = converted;
+										}
+									}
+								},
+							),
+						);
 					}
 				}
 			}

@@ -154,8 +154,6 @@ export function Settings(props: ISettings) {
 		await vidSaver.deleteWipChunkedVidBlobs();
 		await vidSaver.deleteWipPrefsData();
 		await vidSaver.updateCachedPlaylist(playlistClone);
-
-		await vidSaver.updateCachedPlaylist(playlistClone);
 		// update in memory
 		await updateStateFromFs({
 			playlistSlug: props.playlistSlug,

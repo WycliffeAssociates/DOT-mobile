@@ -23,7 +23,7 @@ export function makeVidSaver(
 ) {
 	// NOTE: We could change this, but 10 seems like a reasonsable amount for avoiding timeouts.
 	// const increment = 1024 * 1000 * 10; //1 kilobyte * 1000 (= 1mb) * 10 = (10mb)
-	const increment = 1024 * 300; //1kb * 250 = 300kb
+	const increment = 1024 * 1000 * 3; //1kb * 1000 * 5 = 3mb chunks
 	const mp4FileName = `${vid.id}_mp4`;
 
 	function getAggregatedBlobPath() {
@@ -329,7 +329,6 @@ export function makeVidSaver(
 				path: `${getAggregatedBlobPath()}`,
 				directory: fsDirToUse,
 			});
-
 			const mp4DeviceSrc = Capacitor.convertFileSrc(finalMp4Blob.uri);
 			return mp4DeviceSrc;
 		},
@@ -445,6 +444,20 @@ export async function updateSavedAppPreferences(payload: IappState) {
 	});
 }
 
+export async function getSavedMp4Src(
+	playlist: validPlaylistSlugs,
+	vid: IVidWithCustom,
+) {
+	const path = `${playlist}/${vid.id}/vid.mp4`;
+
+	const savedMp4 = await Filesystem.getUri({
+		path: path,
+		directory: fsDirToUse,
+	});
+	const src = Capacitor.convertFileSrc(savedMp4.uri);
+	return src;
+}
+
 // Things stored in preferences
 /* 
 1. ${playlist} = playlist json (bc/cached master)
@@ -458,3 +471,6 @@ base dir = ${playlist}/${vidId}
 2. ${playlist}/${vidId}/blobs_in_progress/$start_$end.mp4
 3. ${playlist}/${vidId}/vid.mp4
 */
+
+// sim verison:
+// D3A27B30-A49C-461D-BCF0-38C3D0C00C3B

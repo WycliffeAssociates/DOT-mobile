@@ -57,12 +57,18 @@ Luc2:17-28
 		.filter((segment) => segment.includes("-->"))
 		.map((chapter) => {
 			const parts = chapter.split("\n");
-			const timeStamp = parts[0].split("-->");
+			// biome-ignore lint/style/noNonNullAssertion: <covered by .filter above>
+			const timeStamp = parts
+				.find((line) => line.includes("-->"))!
+				.split("-->");
 
 			const startTime = convertTimeToSeconds(timeStamp[0].trim());
 			const endTime = convertTimeToSeconds(timeStamp[1].trim());
 			const totalDur = vidDur;
-			const labelMatches = parts[1].match(labelRegex);
+			// biome-ignore lint/style/noNonNullAssertion:
+			const labelMatches = parts
+				.find((p) => labelRegex.test(p))!
+				.match(labelRegex);
 			const xPos = String((startTime / totalDur) * 100);
 			return {
 				chapterStart: startTime,

@@ -5,7 +5,7 @@ interface IconProps {
 }
 
 export function DotLogo() {
-	return <img src="/assets/dot-logo-full.png" alt="" />;
+	return <img src="/assets/logos/no-background-plain.webp" alt="" />;
 }
 
 export function IconMaterialSymbolsChevronLeft(props: IconProps) {

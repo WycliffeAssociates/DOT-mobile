@@ -2,18 +2,19 @@ import { type CheckboxCustomEvent, IonButton } from "@ionic/react";
 import { type Dispatch, type SetStateAction, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type {
+	downloadProgressInfo,
 	IPlaylistData,
 	IVidWithCustom,
 	validPlaylistSlugs,
 } from "../../customTypes/types";
-import type { downloadProgressInfo } from "../../customTypes/types";
+import { makeVidSaver } from "../../lib/storage";
 import {
 	getCurrentPlaylistDataFs,
 	getDownloadSize,
 	updateStateFromFs,
 } from "../../lib/Ui";
-import { makeVidSaver } from "../../lib/storage";
 import { BookToDownload } from "./DownloadBookItem";
+
 type IDownloadListing = {
 	currentBook: IVidWithCustom[];
 	currentVid: IVidWithCustom;
@@ -141,7 +142,7 @@ export function BulkListing({
 		for await (const vidChapter of flattenedBooks) {
 			if (skipVidDownload(vidChapter)) continue;
 			setIsSavingSingle((prev) => {
-				// biome-ignore lint/style/noNonNullAssertion:
+				// biome-ignore lint/style/noNonNullAssertion: <known exception>
 				return [...prev, ...flattenedBooks.map((vid) => vid.id!)];
 			});
 			if (!vidChapter.savedSources?.poster || !vidChapter.savedSources?.video) {

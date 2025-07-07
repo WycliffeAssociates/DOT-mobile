@@ -1,8 +1,9 @@
 import { type Dispatch, type SetStateAction, useEffect, useRef } from "react";
 import type { VideoJsPlayer } from "video.js";
-import type { IVidWithCustom, chapterMarkers } from "../customTypes/types";
-import { handleVideoJsTaps, playerCustomHotKeys } from "../lib/Ui";
+import type { chapterMarkers, IVidWithCustom } from "../customTypes/types";
 import { getSavedAppPreferences } from "../lib/storage";
+import { handleVideoJsTaps, playerCustomHotKeys } from "../lib/Ui";
+
 type Iplayer = {
 	setPlayer: Dispatch<SetStateAction<VideoJsPlayer | undefined>>;
 	existingPlayer: VideoJsPlayer | undefined;

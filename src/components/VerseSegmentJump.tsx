@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 
 import type {
-	IVidWithCustom,
 	IadjacentChap,
+	IVidWithCustom,
 	IvidJsPlayer,
 } from "../customTypes/types";
 import { trackAdjacentChap } from "../lib/Ui";
 import { IconChapBack, IconChapNext } from "./Icons";
+
 type IVerseSegmentJump = {
 	player: IvidJsPlayer | undefined;
 	currentVideo: IVidWithCustom;

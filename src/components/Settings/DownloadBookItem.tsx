@@ -3,8 +3,8 @@ import { IonButton, IonCheckbox, IonProgressBar } from "@ionic/react";
 import type { Dispatch, SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
 import type {
-	IVidWithCustom,
 	downloadProgressInfo,
+	IVidWithCustom,
 } from "../../customTypes/types";
 import { IconCancelX, IconMaterialSymbolsCheckCircle } from "../Icons";
 

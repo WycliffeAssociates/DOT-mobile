@@ -1,6 +1,7 @@
 import { Preferences } from "@capacitor/preferences";
 import {
 	IonAlert,
+	IonButton,
 	IonContent,
 	IonHeader,
 	IonLoading,
@@ -8,7 +9,6 @@ import {
 	IonToolbar,
 	useIonViewWillEnter,
 } from "@ionic/react";
-import { IonButton } from "@ionic/react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
@@ -22,15 +22,19 @@ import { PlaylistInfo } from "../components/PlaylistInfo";
 import { Settings } from "../components/Settings";
 import { VerseSegmentJump } from "../components/VerseSegmentJump";
 import type {
-	IPlaylistData,
-	IPlaylistResponse,
-	IVidWithCustom,
-	IappState,
-	IvidJsPlayer,
 	changePlayerSrcParams,
 	changeVidParams,
 	formattedPlaylist,
+	IappState,
+	IPlaylistData,
+	IPlaylistResponse,
+	IVidWithCustom,
+	IvidJsPlayer,
 } from "../customTypes/types";
+import {
+	getSavedAppPreferences,
+	updateSavedAppPreferences,
+} from "../lib/storage";
 import {
 	cacheBcPlaylistJson,
 	distributeChapterMarkers,
@@ -38,10 +42,6 @@ import {
 	getChaptersArrFromVtt,
 	getCurrentPlaylistDataFs,
 } from "../lib/Ui";
-import {
-	getSavedAppPreferences,
-	updateSavedAppPreferences,
-} from "../lib/storage";
 import { groupObjectsByKey, massageVidsArray } from "../lib/utils";
 
 function Playlist() {
@@ -50,7 +50,7 @@ function Playlist() {
 	const playInfo = Object.values(brightCovePlaylistConfig).find(
 		(value) => value.path === urlSlug,
 	);
-	if (!playInfo) return null;
+
 	const playlistInfo = playInfo; //@ extra assignemnt for typescripts narrowing
 	const { t } = useTranslation();
 	const [isFetching, setIsFetching] = useState(true);
@@ -69,6 +69,45 @@ function Playlist() {
 	const [jumpingBackAmount, setJumpingBackAmount] = useState<jumpParam>(null);
 	const [isSavingSingle, setIsSavingSingle] = useState<string[]>([]);
 	const alertRef: any = useRef(null);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <I'm purposely running this effect only on playlist cause the src we'll only shift from blob to https if the shapedPlaylist that is saved to fs is edited.  The fs version of the shapedPlaylist is the real source of truth for what the UI should show more than the state is>
+	useEffect(() => {
+		async function refreshPlayer() {
+			if (vidJsPlayer) {
+				// make sure the srces haven't been deleted out from under us. Given the props given
+				changePlayerSrc({ vid: currentVid, bookToUse: currentBook });
+			}
+		}
+		refreshPlayer();
+	}, [shapedPlaylist]);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <autoplay has a dep on the currentVid, and if we only hook this up using "on" it creates a stale closure on the state variables>
+	useEffect(() => {
+		if (vidJsPlayer) {
+			// Using one each time a vid ends to try to avoid a stale closures issue that has cropped up some with react and videos js
+			vidJsPlayer.off("ended", autoPlayToNextBook);
+			vidJsPlayer.one("ended", autoPlayToNextBook);
+			// MAYBE: I HAD ERROR HANDLING FOR  EXPIRED SRC errors on media not supported, but now fetchAndSetup no already fetches the latest sources, but leaving here in case need to troubleshoot more later
+			vidJsPlayer.on("error", handleVidJsError);
+		}
+	}, [currentVid, vidJsPlayer]);
+
+	useIonViewWillEnter(() => {
+		fetchAndSetup();
+	}, []);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <biome not aware enough of code deps here to say>
+	useEffect(() => {
+		updateCachedStateDuringProgress();
+	}, [currentVid, currentBook]);
+
+	useEffect(() => {
+		if (currentVid.savedSources?.video) {
+			setIsSavingSingle((prev) => prev.filter((id) => id !== currentVid.id));
+		}
+	}, [currentVid.savedSources?.video, currentVid.id]);
+
+	if (!playInfo) return null;
 
 	/*// #===============  PAGE FUNCTIONS   =============   */
 
@@ -150,6 +189,7 @@ function Playlist() {
 	}
 
 	async function setNewBook(vids: IVidWithCustom[]) {
+		if (!playlistInfo?.playlist) return;
 		const bookName = vids[0].book;
 		// treat the fs as source of truth since it's getting saved to in various places
 		const mostRecentData = await getCurrentPlaylistDataFs(
@@ -166,6 +206,7 @@ function Playlist() {
 	}
 
 	async function fetchAndSetup() {
+		if (!playlistInfo?.playlist) return;
 		try {
 			const data = await fetchBcData(playlistInfo.playlist);
 			// Put into state setter here;
@@ -223,17 +264,6 @@ function Playlist() {
 		}
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <autoplay has a dep on the currentVid, and if we only hook this up using "on" it creates a stale closure on the state variables>
-	useEffect(() => {
-		if (vidJsPlayer) {
-			// Using one each time a vid ends to try to avoid a stale closures issue that has cropped up some with react and videos js
-			vidJsPlayer.off("ended", autoPlayToNextBook);
-			vidJsPlayer.one("ended", autoPlayToNextBook);
-			// MAYBE: I HAD ERROR HANDLING FOR  EXPIRED SRC errors on media not supported, but now fetchAndSetup no already fetches the latest sources, but leaving here in case need to troubleshoot more later
-			vidJsPlayer.on("error", handleVidJsError);
-		}
-	}, [currentVid, vidJsPlayer]);
-
 	async function handleVidJsError() {
 		if (!vidJsPlayer) return;
 		const err = vidJsPlayer.error();
@@ -246,22 +276,12 @@ function Playlist() {
 		// console.error(event);
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <I'm purposely running this effect only on playlist cause the src we'll only shift from blob to https if the shapedPlaylist that is saved to fs is edited.  The fs version of the shapedPlaylist is the real source of truth for what the UI should show more than the state is>
-	useEffect(() => {
-		async function refreshPlayer() {
-			if (vidJsPlayer) {
-				// make sure the srces haven't been deleted out from under us. Given the props given
-				changePlayerSrc({ vid: currentVid, bookToUse: currentBook });
-			}
-		}
-		refreshPlayer();
-	}, [shapedPlaylist]);
-
 	async function doInitialSetup(
 		vids: IVidWithCustom[],
 		alreadyBucketizedData: formattedPlaylist | undefined,
 		restPlaylistData: Omit<IPlaylistResponse, "videos" | "formattedVideos">,
 	) {
+		if (!playlistInfo) return;
 		const alreadySavedState = await Preferences.get({
 			key: "appState",
 		});
@@ -386,22 +406,8 @@ function Playlist() {
 
 	/*// #=============== END PAGE FUNCTIONS   =============   */
 
-	useIonViewWillEnter(() => {
-		fetchAndSetup();
-	}, []);
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <biome not aware enough of code deps here to say>
-	useEffect(() => {
-		updateCachedStateDuringProgress();
-	}, [currentVid, currentBook]);
-
-	useEffect(() => {
-		if (currentVid.savedSources?.video) {
-			setIsSavingSingle((prev) => prev.filter((id) => id !== currentVid.id));
-		}
-	}, [currentVid.savedSources?.video, currentVid.id]);
-
 	/*//# ===============  MARKUP   =============   */
+	if (!playlistInfo) return null;
 	return (
 		<IonPage id="">
 			<IonHeader className=" bg-base">

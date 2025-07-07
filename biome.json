@@ -1,18 +1,15 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.4.1/schema.json",
-	"organizeImports": {
-		"enabled": true
-	},
+	"$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
+	"assist": { "actions": { "source": { "organizeImports": "on" } } },
 	"formatter": {
 		"enabled": true,
 		"formatWithErrors": false,
 		"indentStyle": "tab",
 		"indentWidth": 2,
-		"lineWidth": 80,
-		"ignore": []
+		"lineWidth": 80
 	},
 	"files": {
-		"ignore": [".DS_Store", "bcApi.ts", "vidJs.css"]
+		"includes": ["src/**/*", "!**/.DS_Store", "!**/bcApi.ts", "!**/vidJs.css"]
 	},
 	"linter": {
 		"enabled": true,
@@ -20,7 +17,7 @@
 			"recommended": true,
 			"suspicious": {
 				"noExplicitAny": "off",
-				"noConsoleLog": "warn"
+				"noDuplicateProperties": "off"
 			},
 			"correctness": {
 				"noUnusedVariables": "error",

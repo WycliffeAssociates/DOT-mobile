@@ -3,9 +3,9 @@ import { Directory, Filesystem } from "@capacitor/filesystem";
 import { Preferences } from "@capacitor/preferences";
 import write_blob from "capacitor-blob-writer";
 import type {
+	fetchSession,
 	IPlaylistData,
 	IVidWithCustom,
-	fetchSession,
 	writeAnInProgressBlobParams,
 } from "src/customTypes/types";
 import type {

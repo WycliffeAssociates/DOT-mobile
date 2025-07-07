@@ -2,12 +2,12 @@ import { Directory, Encoding, Filesystem } from "@capacitor/filesystem";
 
 import type { Dispatch, SetStateAction } from "react";
 import type {
+	chapterMarkers,
+	formattedPlaylist,
 	IPlaylistData,
 	IPlaylistResponse,
 	IVidWithCustom,
 	IvidJsPlayer,
-	chapterMarkers,
-	formattedPlaylist,
 	validPlaylistSlugs,
 } from "../customTypes/types";
 import { getSavedMp4Src, makeVidSaver } from "./storage";
@@ -65,10 +65,9 @@ Luc2:17-28
 			const startTime = convertTimeToSeconds(timeStamp[0].trim());
 			const endTime = convertTimeToSeconds(timeStamp[1].trim());
 			const totalDur = vidDur;
-			// biome-ignore lint/style/noNonNullAssertion:
 			const labelMatches = parts
-				.find((p) => labelRegex.test(p))!
-				.match(labelRegex);
+				.find((p) => labelRegex.test(p))
+				?.match(labelRegex);
 			const xPos = String((startTime / totalDur) * 100);
 			return {
 				chapterStart: startTime,
@@ -420,7 +419,11 @@ export async function mergeInPreviouslySavedVids({
 		}
 	}
 
-	const { videos, formattedVideos, ...restPlaylistData } = data;
+	const {
+		videos: _videos,
+		formattedVideos: _formatted,
+		...restPlaylistData
+	} = data;
 	mutateTimeStampBcResponse(restPlaylistData);
 
 	// no need to await this write to fs here

@@ -1,4 +1,4 @@
-import type { IVidWithCustom, validPlaylistSlugs } from "../customTypes/types";
+import type { IVidWithCustom } from "../customTypes/types";
 
 interface sortOrderI {
 	[key: string]: number;
@@ -92,7 +92,7 @@ export function getBibleBookSort(bookSlug: string) {
 }
 
 export function convertToValidFilename(string: string) {
-	return string.replace(/[\/|\\:*?"<>]/g, " ").replace(" ", "_");
+	return string.replace(/[/|\\:*?"<>]/g, " ").replace(" ", "_");
 }
 
 export function normalizeBookName(bookname: string | undefined) {

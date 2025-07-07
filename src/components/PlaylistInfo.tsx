@@ -1,10 +1,7 @@
-import type {
-	IVidWithCustom,
-	validPlaylistNames,
-	validPlaylistSlugs,
-} from "../customTypes/types";
+import type { IVidWithCustom, validPlaylistNames } from "../customTypes/types";
 import { normalizeBookName } from "../lib/utils";
 import { IconMaterialSymbolsCheckCircle } from "./Icons";
+
 type IPlaylistInfo = {
 	currentVid: IVidWithCustom;
 	playlist: validPlaylistNames;

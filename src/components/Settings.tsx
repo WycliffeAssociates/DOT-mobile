@@ -1,6 +1,5 @@
 import { IonButton, IonIcon, IonModal } from "@ionic/react";
-import { close } from "ionicons/icons";
-import { settingsOutline } from "ionicons/icons";
+import { close, settingsOutline } from "ionicons/icons";
 import {
 	type Dispatch,
 	type SetStateAction,
@@ -11,17 +10,17 @@ import {
 import { useTranslation } from "react-i18next";
 import type { VideoJsPlayer } from "video.js";
 import type {
+	downloadProgressInfo,
 	IPlaylistData,
 	IVidWithCustom,
-	downloadProgressInfo,
 	validPlaylistSlugs,
 } from "../customTypes/types";
+import { makeVidSaver } from "../lib/storage";
 import {
 	getChaptersArrFromVtt,
 	getCurrentPlaylistDataFs,
 	updateStateFromFs,
 } from "../lib/Ui";
-import { makeVidSaver } from "../lib/storage";
 import { BulkListing } from "./Settings/BulkListing";
 import { SpeedControl } from "./Settings/SpeedControl";
 
@@ -210,7 +209,7 @@ export function Settings(props: ISettings) {
 			setCurrentVid: props.setCurrentVid,
 		});
 	}
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <biome was not correct on this>
 	useEffect(() => {
 		if (settingsRef?.current) {
 			if (!settingsRef.current.dataset.listening) {

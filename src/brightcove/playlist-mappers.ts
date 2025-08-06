@@ -65,6 +65,13 @@ const config = createConfig({
 		display: "Democratic Republic of Congo (French)",
 		flag: "cg.svg",
 	},
+	bukavu: {
+		playlist: "ase-x-bukavusl",
+		playlistDisplayName: "Democratic Republic of Congo (Bukavu)",
+		path: "bukavu",
+		display: "Democratic Republic of Congo (Bukavu)",
+		flag: "cg.svg",
+	},
 	marathi: {
 		playlist: "marathi-nt",
 		playlistDisplayName: "Marathi New Testament",

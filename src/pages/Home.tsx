@@ -7,9 +7,11 @@ import "./Home.css";
 
 const Home: React.FC = () => {
 	const { t } = useTranslation();
-	const alphabetizedKeys = Object.keys(
+	const alphabetizedByPlaylistDisplayName = Object.entries(
 		brightCovePlaylistConfig,
-	).sort() as unknown as Array<keyof typeof brightCovePlaylistConfig>;
+	).sort((a, b) =>
+		a[1].playlistDisplayName.localeCompare(b[1].playlistDisplayName),
+	);
 
 	return (
 		<IonPage id="home-page">
@@ -33,8 +35,7 @@ const Home: React.FC = () => {
 						data-testid="playlistsAvailable"
 						className="flex flex-col  gap-3 pb-12"
 					>
-						{alphabetizedKeys.map((key) => {
-							const value = brightCovePlaylistConfig[key];
+						{alphabetizedByPlaylistDisplayName.map(([_key, value]) => {
 							return (
 								<li key={value.path} className=" border-b-[#E9E9E9] border-b">
 									<Link

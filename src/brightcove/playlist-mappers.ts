@@ -63,14 +63,14 @@ const config = createConfig({
 		playlistDisplayName: "DRC French New Testament",
 		path: "congodrc",
 		display: "Democratic Republic of Congo (French)",
-		flag: "cg.svg",
+		flag: "drc.png",
 	},
 	drcswahili: {
 		playlist: "ase-x-bukavusl",
 		playlistDisplayName: "Democratic Republic of Congo (Swahili)",
 		path: "drcswahili",
 		display: "Democratic Republic of Congo (Swahili)",
-		flag: "cg.svg",
+		flag: "drc.png",
 	},
 	marathi: {
 		playlist: "marathi-nt",
@@ -78,6 +78,13 @@ const config = createConfig({
 		path: "marathi",
 		display: "Marathi",
 		flag: "in.svg",
+	},
+	brazil: {
+		playlist: "brazil-nt",
+		playlistDisplayName: "Brazilian New Testament",
+		path: "brazil",
+		display: "Brazil",
+		flag: "br.svg",
 	},
 } as const);
 

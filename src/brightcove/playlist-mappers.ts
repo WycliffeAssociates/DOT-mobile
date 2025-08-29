@@ -86,6 +86,13 @@ const config = createConfig({
 		display: "Brazil",
 		flag: "br.svg",
 	},
+	paraguay: {
+		playlist: "pys-nt",
+		playlistDisplayName: "Paraguay New Testament",
+		path: "paraguay",
+		display: "Paraguay",
+		flag: "paraguay.svg",
+	},
 } as const);
 
 export default config;

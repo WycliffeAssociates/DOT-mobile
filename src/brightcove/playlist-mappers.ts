@@ -93,6 +93,13 @@ const config = createConfig({
 		display: "Paraguay",
 		flag: "paraguay.svg",
 	},
+	malayalam: {
+		playlist: "ins-x-keralasl",
+		playlistDisplayName: "Malayalam New Testament",
+		path: "malayalam",
+		display: "Malayalam",
+		flag: "in.svg",
+	},
 } as const);
 
 export default config;

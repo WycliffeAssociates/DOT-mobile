@@ -100,6 +100,13 @@ const config = createConfig({
 		display: "Malayalam",
 		flag: "in.svg",
 	},
+	mozambique: {
+		playlist: "mozambique-new-testament",
+		playlistDisplayName: "Mozambican New Testament",
+		path: "mozambique",
+		display: "Mozambique",
+		flag: "mz.svg",
+	},
 } as const);
 
 export default config;

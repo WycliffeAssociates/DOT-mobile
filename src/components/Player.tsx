@@ -2,15 +2,13 @@ import { type Dispatch, type SetStateAction, useEffect, useRef } from "react";
 import type { VideoJsPlayer } from "video.js";
 import type { chapterMarkers, IVidWithCustom } from "../customTypes/types";
 import { getSavedAppPreferences } from "../lib/storage";
-import { handleVideoJsTaps, playerCustomHotKeys } from "../lib/Ui";
+import { playerCustomHotKeys } from "../lib/Ui";
 
 type Iplayer = {
 	setPlayer: Dispatch<SetStateAction<VideoJsPlayer | undefined>>;
 	existingPlayer: VideoJsPlayer | undefined;
 	playlistData: Record<string, IVidWithCustom[]>;
 	currentVid: IVidWithCustom;
-	setJumpingForwardAmount: Dispatch<SetStateAction<string | number | null>>;
-	setJumpingBackAmount: Dispatch<SetStateAction<string | number | null>>;
 	handleChapters(
 		vid: IVidWithCustom,
 		vidJsPlayer: VideoJsPlayer | undefined,
@@ -22,8 +20,6 @@ export function VidJsPlayer({
 	existingPlayer,
 	playlistData,
 	currentVid,
-	setJumpingBackAmount,
-	setJumpingForwardAmount,
 	handleChapters,
 }: Iplayer) {
 	const vidPlayerRef = useRef(null);
@@ -55,7 +51,7 @@ export function VidJsPlayer({
 			const player = window.bc(vidPlayerRef.current, {
 				responsive: true,
 				fluid: true,
-				controls: true,
+				controls: false,
 				playbackRates: [0.5, 1, 1.5, 2, 2.5],
 				preload: "auto",
 				autoplay: false,
@@ -65,58 +61,20 @@ export function VidJsPlayer({
 				enableDocumentPictureInPicture: true,
 				sources: firstVidSrces,
 				poster: firstPoster,
-				nativeControlsForTouch: true,
+				nativeControlsForTouch: false,
 			});
 
 			player.playbackRate(preferredSpeed);
 			player.on("loadstart", () => maintainPlayerSpeed(player));
 			player.language(navigator.languages[0]);
 			player.playsinline(true); //ios
+			(
+				player as VideoJsPlayer & { qualityLevels?: () => unknown }
+			).qualityLevels?.();
 
 			// Get initial chapters if present
 			player.one("loadedmetadata", () => {
 				handleChapters(currentVid, player);
-			});
-
-			const videoJsDomEl = player.el();
-			// Handle mobile taps
-			handleVideoJsTaps({
-				el: videoJsDomEl,
-				rightDoubleFxn(number) {
-					const curTime = player?.currentTime();
-					if (!curTime) return;
-					// the extra minus jumpAmount on end of next line is to account for fact that min tap amount is 2 to diff btw double and single taps, so we still want to allow the smallest measure of jump back;
-					const newTime = number * jumpAmount + curTime - jumpAmount;
-					player?.currentTime(newTime);
-					setJumpingForwardAmount(null);
-					videoJsDomEl.classList.remove("vjs-user-active");
-				},
-				leftDoubleFxn(number) {
-					const curTime = player?.currentTime();
-					if (!curTime) return;
-
-					const newTime = curTime - number * jumpAmount - jumpAmount;
-					player?.currentTime(newTime);
-					setJumpingBackAmount(null);
-					videoJsDomEl.classList.remove("vjs-user-active");
-				},
-				singleTapFxn() {
-					if (!player) return;
-					if (player.paused()) {
-						player.play();
-					} else {
-						player.pause();
-					}
-				},
-				doubleTapUiClue(dir, tapsCount) {
-					if (dir === "LEFT") {
-						setJumpingBackAmount(tapsCount * jumpAmount - 5);
-						setJumpingForwardAmount(null);
-					} else if (dir === "RIGHT") {
-						setJumpingBackAmount(null);
-						setJumpingForwardAmount(tapsCount * jumpAmount - 5);
-					}
-				},
 			});
 
 			// @MANAGE KEYS TO SKIP
@@ -125,8 +83,6 @@ export function VidJsPlayer({
 					e,
 					vjsPlayer: player,
 					increment: jumpAmount,
-					setJumpingBackAmount,
-					setJumpingForwardAmount,
 				}),
 			);
 
@@ -182,7 +138,6 @@ export function VidJsPlayer({
 				<video
 					ref={vidPlayerRef}
 					className="video-js object-cover absolute inset-0"
-					controls
 					src=""
 				/>
 			)}

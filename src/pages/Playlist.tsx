@@ -15,12 +15,11 @@ import { useParams } from "react-router";
 import brightCovePlaylistConfig from "../brightcove/playlist-mappers";
 import { ChapterSelector } from "../components/ChapterSelector";
 import { ArrowBack, DotLogo } from "../components/Icons";
-import { JumpDisplay } from "../components/JumpDisplay";
 import { VidJsPlayer } from "../components/Player";
+import { PlayerControls } from "../components/PlayerControls";
 import { PlaylistBookPicker } from "../components/PlaylistBookPicker";
 import { PlaylistInfo } from "../components/PlaylistInfo";
 import { Settings } from "../components/Settings";
-import { VerseSegmentJump } from "../components/VerseSegmentJump";
 import type {
 	changePlayerSrcParams,
 	changeVidParams,
@@ -37,7 +36,6 @@ import {
 } from "../lib/storage";
 import {
 	cacheBcPlaylistJson,
-	distributeChapterMarkers,
 	fetchBcData,
 	getChaptersArrFromVtt,
 	getCurrentPlaylistDataFs,
@@ -63,10 +61,6 @@ function Playlist() {
 		{} as IVidWithCustom,
 	);
 	const [showChapSliderButtons, setShowChapSliderButtons] = useState(true);
-	type jumpParam = null | number | string;
-	const [jumpingForwardAmount, setJumpingForwardAmount] =
-		useState<jumpParam>(null);
-	const [jumpingBackAmount, setJumpingBackAmount] = useState<jumpParam>(null);
 	const [isSavingSingle, setIsSavingSingle] = useState<string[]>([]);
 	const alertRef: any = useRef(null);
 
@@ -180,10 +174,6 @@ function Playlist() {
 				vid.chapterMarkers = undefined;
 				return vid;
 			});
-		}
-		// Protect against some data corruption:
-		if (chapters && allMarkersHaveValidXPos) {
-			distributeChapterMarkers(chapters, vidJsPlayer);
 		}
 		return chapters;
 	}
@@ -459,40 +449,20 @@ function Playlist() {
 								className="lg:grid lg:grid-cols-[70%_30%] h-90vh"
 							>
 								{/* player parts */}
-								<div className="aspect-video lg:aspect-ratio-initial">
-									<div className="w-full mx-auto   relative  sm:overflow-hidden h-full">
-										<VerseSegmentJump
-											currentVideo={currentVid}
-											player={vidJsPlayer}
-											dir="back"
-										/>
-										{jumpingBackAmount && (
-											<JumpDisplay
-												dir="back"
-												id="seekRippleBackward"
-												text={String(jumpingBackAmount)}
+								<div className="lg:aspect-ratio-initial">
+									<div className="w-full mx-auto overflow-visible">
+										<div className="relative aspect-video">
+											<VidJsPlayer
+												handleChapters={handleChapters}
+												setPlayer={setVidJsPlayer}
+												existingPlayer={vidJsPlayer}
+												playlistData={shapedPlaylist.formattedVideos}
+												currentVid={currentVid}
 											/>
-										)}
-										<VidJsPlayer
-											handleChapters={handleChapters}
-											setJumpingBackAmount={setJumpingBackAmount}
-											setJumpingForwardAmount={setJumpingForwardAmount}
-											setPlayer={setVidJsPlayer}
-											existingPlayer={vidJsPlayer}
-											playlistData={shapedPlaylist.formattedVideos}
+										</div>
+										<PlayerControls
+											player={vidJsPlayer}
 											currentVid={currentVid}
-										/>
-										{jumpingForwardAmount && (
-											<JumpDisplay
-												dir="forward"
-												id="seekRippleForward"
-												text={String(jumpingForwardAmount)}
-											/>
-										)}
-										<VerseSegmentJump
-											currentVideo={currentVid}
-											player={vidJsPlayer}
-											dir="forward"
 										/>
 									</div>
 									{/* end player parts */}

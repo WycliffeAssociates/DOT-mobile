@@ -6,6 +6,9 @@ import { defineConfig } from "vite";
 // https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [UnoCSS(), react(), legacy()],
+	server: {
+		port: 3003,
+	},
 	// build: {
 	//   rollupOptions: {
 	//     external: ["virtual:uno.css", "video.js", "@brightcove/loscore"],

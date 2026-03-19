@@ -13,7 +13,6 @@ import type {
 import { getSavedMp4Src, makeVidSaver } from "./storage";
 import {
 	convertTimeToSeconds,
-	formatDuration,
 	groupObjectsByKey,
 	massageVidsArray,
 	reduceToLowestSize,
@@ -137,7 +136,6 @@ interface IhandleVideoJsTaps {
 	el: Element;
 	leftDoubleFxn: (number: number) => void;
 	rightDoubleFxn: (number: number) => void;
-	singleTapFxn: () => void;
 	doubleTapUiClue: (dir: "LEFT" | "RIGHT" | null, tapCount: number) => void;
 }
 
@@ -145,7 +143,6 @@ export function handleVideoJsTaps({
 	el,
 	leftDoubleFxn,
 	rightDoubleFxn,
-	singleTapFxn,
 	doubleTapUiClue,
 }: IhandleVideoJsTaps) {
 	let tapCount = 0;
@@ -162,7 +159,6 @@ export function handleVideoJsTaps({
 		const target = event.target as HTMLElement;
 		const wasOnVideo = target && target.nodeName === "VIDEO";
 		if (event.touches.length === 1 && wasOnVideo) {
-			el.classList.add("vjs-user-active");
 			lastTapTimestamp = event.timeStamp;
 			const tapEvent = event.touches[0];
 			const boundingRect = target.getBoundingClientRect();
@@ -187,10 +183,7 @@ export function handleVideoJsTaps({
 			// single tap too brief -- clear"
 			clearTapData();
 		} else if (tapCount === 1) {
-			// exec single tap
 			tapTimer = window.setTimeout(() => {
-				// exec single tap then clear
-				singleTapFxn();
 				clearTapData();
 			}, thresholdMilliseconds);
 		} else if (tapCount > 1) {
@@ -236,38 +229,19 @@ interface playerCustomHotKeysParams {
 	e: KeyboardEvent;
 	vjsPlayer: IvidJsPlayer;
 	increment: number;
-	setJumpingBackAmount: Dispatch<SetStateAction<number | null | string>>;
-	setJumpingForwardAmount: Dispatch<SetStateAction<number | null | string>>;
 }
 export function playerCustomHotKeys({
 	e,
 	vjsPlayer,
 	increment,
-	setJumpingBackAmount,
-	setJumpingForwardAmount,
 }: playerCustomHotKeysParams) {
 	const currentTime = vjsPlayer.currentTime();
-	let uiJumpingTimeout: number | null = null;
 	switch (e.key) {
 		case "ArrowLeft":
 			vjsPlayer.currentTime(currentTime - increment);
-			setJumpingBackAmount(formatDuration((currentTime - increment) * 1000));
-			if (uiJumpingTimeout) {
-				window.clearTimeout(uiJumpingTimeout);
-			}
-			uiJumpingTimeout = window.setTimeout(() => {
-				setJumpingBackAmount(null);
-			}, 250);
 			break;
 		case "ArrowRight":
 			vjsPlayer.currentTime(currentTime + increment);
-			setJumpingForwardAmount(formatDuration((currentTime + increment) * 1000));
-			if (uiJumpingTimeout) {
-				window.clearTimeout(uiJumpingTimeout);
-			}
-			uiJumpingTimeout = window.setTimeout(() => {
-				setJumpingForwardAmount(null);
-			}, 250);
 			break;
 		default:
 			break;

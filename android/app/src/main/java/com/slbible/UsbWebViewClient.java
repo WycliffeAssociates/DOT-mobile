@@ -45,8 +45,12 @@ public class UsbWebViewClient extends BridgeWebViewClient {
     }
 
     private WebResourceResponse streamUsbFile(WebResourceRequest request) {
-        String encodedUri = request.getUrl().getPath().substring(USB_PATH_PREFIX.length());
-        Uri contentUri = Uri.parse(Uri.decode(encodedUri));
+        String token = request.getUrl().getPath().substring(USB_PATH_PREFIX.length());
+        Uri contentUri = UsbVideoRegistry.get(token);
+        if (contentUri == null) {
+            Log.e("UsbWebViewClient", "no URI registered for token: " + token);
+            return errorResponse();
+        }
         Log.d("UsbWebViewClient", "streaming: " + contentUri);
 
         ContentResolver cr = bridge.getContext().getContentResolver();

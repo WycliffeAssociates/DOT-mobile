@@ -140,11 +140,11 @@ public class UsbStoragePlugin extends Plugin {
 
             Log.d("UsbStorage", "found: " + videoFile.getUri());
 
-            // Build a localhost URL the WebView can load, streamed via UsbWebViewClient
-            // using our SAF permission (content:// URIs are not directly playable by <video>).
-            String playableUrl = "https://localhost"
-                    + UsbWebViewClient.USB_PATH_PREFIX
-                    + Uri.encode(videoFile.getUri().toString());
+            // Store the Uri in the registry and expose only a token in the URL —
+            // passing a content:// URI through a URL causes the WebView to mangle
+            // percent-encoding, breaking the SAF permission check.
+            String token = UsbVideoRegistry.register(videoFile.getUri());
+            String playableUrl = "https://localhost" + UsbWebViewClient.USB_PATH_PREFIX + token;
             Log.d("UsbStorage", "playable URL: " + playableUrl);
 
             JSObject ret = new JSObject();

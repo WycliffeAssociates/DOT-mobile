@@ -451,7 +451,6 @@ async function fetchBcApiEndpoint(playlist: string) {
 export async function fetchBcData(playlist: validPlaylistSlugs) {
 	try {
 		let savedData: IPlaylistResponse | null = null;
-		// if (!options?.bypassCache) {
 		try {
 			const savedVersionFs = await Filesystem.readFile({
 				path: `playlists/${playlist}`,
@@ -467,31 +466,45 @@ export async function fetchBcData(playlist: validPlaylistSlugs) {
 			console.error(error);
 		}
 
-		// Always refresh savedData with freshest from api right now, but do merge in anythign previously saved. We can look at doing the caching stuff again later, but for now, prioritize freshness
 		if (savedData) {
-			// NOTE: THERE WAS SOME BANDWIDTH SAVING HERE BY ONLY REFRESHING AFTER SO LONG, BUT WE'RE JUST GONNA EAT THE BANDWIDTH FOR A PLAYLIST FETCH HERE AND NOT HAVE ANYTHING STALE
-			// if (savedData.refreshBy > Date.now()) {
-			//   return savedData;
-			// }
-			// if (
-			//   savedData.refreshBy < Date.now() &&
-			//   savedData.expiresBy > Date.now()
-			// ) {
-			// This is a background update. If it fails while offline or whatever, it
+			// Return cached data immediately; refresh from API in the background.
+			// If the refresh fails (e.g. offline) it fails silently — that's fine.
 			mergeInPreviouslySavedVids({
 				existingPlaylistData: savedData.formattedVideos,
 				playlist,
 			});
 			return savedData;
-			// }
-			// }
-			// }
 		}
-		// if we are fetching fresh, we have nothing cached and don't need to worry about mergeing in previously saved vids
+
+		// No filesystem cache — try the network.
 		const data = await fetchBcApiEndpoint(playlist);
-		if (!data) throw new Error("fetch failed");
-		mutateTimeStampBcResponse(data);
-		return data;
+		if (data) {
+			mutateTimeStampBcResponse(data);
+			return data;
+		}
+
+		// Network also failed (offline, first launch). Fall back to the bundled
+		// seed JSON that ships inside the app bundle (public/bundled-playlists/).
+		// These files contain the full navigation structure but without expiring
+		// CDN source URLs, so they work indefinitely offline.
+		console.warn(
+			`[fetchBcData] offline and no cache — trying bundled seed for ${playlist}`,
+		);
+		try {
+			const seedRes = await fetch(`/bundled-playlists/${playlist}.json`);
+			if (seedRes.ok) {
+				const seedData = (await seedRes.json()) as IPlaylistResponse;
+				// Don't write seed data to the filesystem cache — let the next
+				// online launch populate the real cache with fresh source URLs.
+				return seedData;
+			}
+		} catch (seedErr) {
+			console.warn("[fetchBcData] bundled seed fetch failed:", seedErr);
+		}
+
+		throw new Error(
+			"No data available: offline with no cache and no bundled seed",
+		);
 	} catch (error) {
 		console.error(error);
 		return;

@@ -11,6 +11,9 @@ export interface UsbStoragePlugin {
 
 	requestDirectoryAccess(): Promise<{ uri: string }>;
 
+	/** Returns true if any USB device is currently connected. */
+	checkUsbConnected(): Promise<{ connected: boolean }>;
+
 	/** Returns the content:// URI for a specific chapter video on the USB drive,
 	 *  plus a localhost URL that can be set directly as a video src. */
 	getPlayableUri(options: {

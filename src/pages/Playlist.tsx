@@ -208,14 +208,16 @@ function Playlist() {
 	async function fetchAndSetup() {
 		if (!playlistInfo?.playlist) return;
 		try {
-			const data = await fetchBcData(playlistInfo.playlist);
+			// biome-ignore lint/style/noNonNullAssertion: <explanation>
+			const data = await fetchBcData(playlistInfo.playlist)!;
 			// Put into state setter here;
-			if (!data) {
-				throw new Error("fetching failed");
-			}
-
-			const vids = data.videos as IVidWithCustom[];
-			const { formattedVideos, ...restPlaylistData } = data;
+			// if (!data) {
+			// 	throw new Error("fetching failed");
+			// }
+			// biome-ignore lint/style/noNonNullAssertion: <explanation>
+			const vids = data!.videos as IVidWithCustom[];
+			const { formattedVideos, ...restPlaylistData } =
+				data as IPlaylistResponse;
 			doInitialSetup(vids, formattedVideos, restPlaylistData);
 		} catch (error) {
 			console.error(error);

@@ -2,6 +2,8 @@ package com.slbible;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbManager;
 import android.util.Log;
 import android.content.Context;
 import android.content.Intent;
@@ -33,26 +35,55 @@ public class UsbStoragePlugin extends Plugin {
                 if (Intent.ACTION_MEDIA_MOUNTED.equals(action)) {
                     data.put("status", "mounted");
                     data.put("path", intent.getData() != null ? intent.getData().getPath() : "");
-                } else {
+                } else if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
+                    UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+                    if (device != null) {
+                        data.put("status", "mounted");
+                        data.put("path", device.getDeviceName());
+                    }
+                } else if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
+                    UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+                    if (device != null) {
+                        data.put("status", "removed");
+                        data.put("path", device.getDeviceName());
+                    }
+                } else if (Intent.ACTION_MEDIA_EJECT.equals(action)) {
                     data.put("status", "removed");
                 }
                 notifyListeners("usbStateChange", data);
             }
         };
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_MEDIA_MOUNTED);
-        filter.addAction(Intent.ACTION_MEDIA_REMOVED);
-        filter.addAction(Intent.ACTION_MEDIA_EJECT);
-        // Required: media broadcasts use file:// URIs
-        filter.addDataScheme("file");
+        // Media broadcasts (ACTION_MEDIA_*) require a file:// data scheme filter.
+        IntentFilter mediaFilter = new IntentFilter();
+        mediaFilter.addAction(Intent.ACTION_MEDIA_MOUNTED);
+        mediaFilter.addAction(Intent.ACTION_MEDIA_REMOVED);
+        mediaFilter.addAction(Intent.ACTION_MEDIA_EJECT);
+        mediaFilter.addDataScheme("file"); // Required for media broadcasts
+
+        // USB device broadcasts must NOT have a data scheme filter — they carry no URI.
+        IntentFilter usbFilter = new IntentFilter();
+        usbFilter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+        usbFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
 
         // Android 13+ requires an explicit exported flag for runtime receivers
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            getContext().registerReceiver(mediaReceiver, filter, Context.RECEIVER_EXPORTED);
+            getContext().registerReceiver(mediaReceiver, mediaFilter, Context.RECEIVER_EXPORTED);
+            getContext().registerReceiver(mediaReceiver, usbFilter, Context.RECEIVER_EXPORTED);
         } else {
-            getContext().registerReceiver(mediaReceiver, filter);
+            getContext().registerReceiver(mediaReceiver, mediaFilter);
+            getContext().registerReceiver(mediaReceiver, usbFilter);
         }
+    }
+
+    @PluginMethod
+    public void checkUsbConnected(PluginCall call) {
+        android.hardware.usb.UsbManager usbManager =
+            (android.hardware.usb.UsbManager) getContext().getSystemService(Context.USB_SERVICE);
+        boolean connected = usbManager != null && !usbManager.getDeviceList().isEmpty();
+        JSObject ret = new JSObject();
+        ret.put("connected", connected);
+        call.resolve(ret);
     }
 
     @PluginMethod

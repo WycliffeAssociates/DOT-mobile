@@ -32,6 +32,7 @@ import type {
 } from "../customTypes/types";
 import {
 	getSavedAppPreferences,
+	getUsbVideoSource,
 	updateSavedAppPreferences,
 } from "../lib/storage";
 import {
@@ -105,7 +106,8 @@ function Playlist() {
 
 	/*// #===============  PAGE FUNCTIONS   =============   */
 
-	function changePlayerSrc({ vid, bookToUse }: changePlayerSrcParams) {
+	async function changePlayerSrc({ vid, bookToUse }: changePlayerSrcParams) {
+		console.log("HERE!");
 		const plyr = vidJsPlayer;
 		plyr?.pause();
 		changeVid({ chapNum: vid.chapter, bookToUse });
@@ -118,7 +120,15 @@ function Playlist() {
 		};
 		const savedPoster = vid.savedSources?.poster;
 
-		savedSrc ? plyr?.src(savedSrc) : plyr?.src(httpsOnly);
+		// Prefer USB drive over downloaded local file, which both beat the network
+		const usbSrc =
+			vid.book && vid.chapter && playlistInfo?.playlist
+				? await getUsbVideoSource(playlistInfo.playlist, vid.book, vid.chapter)
+				: null;
+
+		const bestOfflineSrc = usbSrc ?? savedSrc ?? null;
+		bestOfflineSrc ? plyr?.src(bestOfflineSrc) : plyr?.src(httpsOnly);
+
 		savedPoster
 			? plyr?.poster(savedPoster)
 			: vid.poster
@@ -398,6 +408,7 @@ function Playlist() {
 
 	/*//# ===============  MARKUP   =============   */
 	if (!playlistInfo) return null;
+
 	return (
 		<IonPage id="">
 			<IonHeader className=" bg-base">

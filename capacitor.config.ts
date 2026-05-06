@@ -8,6 +8,7 @@ const config: CapacitorConfig = {
 		androidScheme: "https",
 	},
 	android: {
+        adjustMarginsForEdgeToEdge: 'force',
 		buildOptions: {},
 	},
 };

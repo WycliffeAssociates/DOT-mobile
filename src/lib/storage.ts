@@ -13,6 +13,7 @@ import type {
 	validPlaylistSlugs,
 	vidSavingWipData,
 } from "../customTypes/types";
+import { UsbStorage } from "../plugins/UsbStorage";
 import { cacheBcPlaylistJson } from "./Ui";
 
 const fsDirToUse = Directory.Documents;
@@ -474,3 +475,39 @@ base dir = ${playlist}/${vidId}
 
 // sim verison:
 // D3A27B30-A49C-461D-BCF0-38C3D0C00C3B
+
+const USB_URI_KEY = "usbTreeUri";
+
+/**
+ * Returns a video source object pointing to the USB file for the given
+ * playlist / book / chapter, or null if USB access hasn't been granted or
+ * the file doesn't exist on the drive.
+ */
+export async function getUsbVideoSource(
+	playlist: string,
+	book: string,
+	chapter: string,
+): Promise<{ src: string; type: "video/mp4" } | null> {
+	const { value: treeUri } = await Preferences.get({ key: USB_URI_KEY });
+	console.log("[USB] treeUri:", treeUri);
+	console.log("[USB] looking for:", { playlist, book, chapter });
+	if (!treeUri) {
+		console.log(
+			"[USB] no tree URI saved — open the USB bar and grant access first",
+		);
+		return null;
+	}
+	try {
+		const { playableUrl } = await UsbStorage.getPlayableUri({
+			treeUri,
+			playlist,
+			book,
+			chapter,
+		});
+		console.log("[USB] playableUrl:", playableUrl);
+		return { src: playableUrl, type: "video/mp4" };
+	} catch (e) {
+		console.log("[USB] getPlayableUri rejected:", e);
+		return null;
+	}
+}

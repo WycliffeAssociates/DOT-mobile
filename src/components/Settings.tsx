@@ -5,6 +5,7 @@ import {
 	IonIcon,
 	IonModal,
 	IonTitle,
+	IonToggle,
 	IonToolbar,
 } from "@ionic/react";
 import { close, settingsOutline } from "ionicons/icons";
@@ -51,7 +52,7 @@ export function Settings(props: ISettings) {
 		useState<downloadProgressInfo>();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { t } = useTranslation();
-	const { isOffline } = useOfflineMode();
+	const { isOffline, setIsOffline } = useOfflineMode();
 
 	async function saveVidOffline(
 		vidToSave: IVidWithCustom = props.currentVid,
@@ -297,42 +298,70 @@ export function Settings(props: ISettings) {
 						</IonButton>
 					</IonToolbar>
 				</IonHeader>
-				<IonContent className="ion-padding">
-					<SpeedControl player={props.player} />
-					<div
-						data-name="downloadSection"
-						className="sticky top-0 bg-white pt-2"
-					>
-						<h2 className="font-bold mb-4">{t("downloadOptions")}</h2>
-						{isOffline && (
-							<div
-								style={{
-									background: "#fef3c7",
-									border: "1px solid #f59e0b",
-									borderRadius: 6,
-									padding: "8px 12px",
-									marginBottom: 12,
-									fontSize: "0.85rem",
-									color: "#92400e",
-								}}
-							>
-								Downloads are disabled in Offline Mode.
+				<IonContent>
+					<div style={{ padding: "16px 16px 0" }}>
+						<SpeedControl player={props.player} />
+
+						{/* Offline mode toggle */}
+						<div
+							style={{
+								display: "flex",
+								alignItems: "center",
+								justifyContent: "space-between",
+								padding: "12px 0",
+								marginBottom: 16,
+								borderBottom: "1px solid var(--ion-border-color, #e0e0e0)",
+							}}
+						>
+							<div>
+								<div style={{ fontWeight: 600 }}>Offline Mode</div>
+								<div
+									style={{ fontSize: "0.8rem", color: "#666", marginTop: 2 }}
+								>
+									Disable network calls; use local &amp; USB videos only
+								</div>
 							</div>
-						)}
+							<IonToggle
+								checked={isOffline}
+								onIonChange={(e) => setIsOffline(e.detail.checked)}
+							/>
+						</div>
+
+						<div
+							data-name="downloadSection"
+							className="sticky top-0 bg-white pt-2"
+						>
+							<h2 className="font-bold mb-4">{t("downloadOptions")}</h2>
+							{isOffline && (
+								<div
+									style={{
+										background: "#fef3c7",
+										border: "1px solid #f59e0b",
+										borderRadius: 6,
+										padding: "8px 12px",
+										marginBottom: 12,
+										fontSize: "0.85rem",
+										color: "#92400e",
+									}}
+								>
+									Downloads are disabled in Offline Mode.
+								</div>
+							)}
+						</div>
+						<BulkListing
+							downloadProgress={downloadProgress}
+							setCurrentBook={props.setCurrentBook}
+							setCurrentVid={props.setCurrentVid}
+							playlistSlug={props.playlistSlug}
+							playlistData={props.playlistData}
+							setDownloadProgress={setDownloadProgress}
+							saveVidOffline={saveVidOffline}
+							currentBook={props.currentBook}
+							currentVid={props.currentVid}
+							setShapedPlaylist={props.setShapedPlaylist}
+							setIsSavingSingle={props.setIsSavingSingle}
+						/>
 					</div>
-					<BulkListing
-						downloadProgress={downloadProgress}
-						setCurrentBook={props.setCurrentBook}
-						setCurrentVid={props.setCurrentVid}
-						playlistSlug={props.playlistSlug}
-						playlistData={props.playlistData}
-						setDownloadProgress={setDownloadProgress}
-						saveVidOffline={saveVidOffline}
-						currentBook={props.currentBook}
-						currentVid={props.currentVid}
-						setShapedPlaylist={props.setShapedPlaylist}
-						setIsSavingSingle={props.setIsSavingSingle}
-					/>
 				</IonContent>
 			</IonModal>
 		</>

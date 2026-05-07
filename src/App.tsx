@@ -8,6 +8,7 @@ import {
 import { IonReactRouter } from "@ionic/react-router";
 import { useEffect, useRef } from "react";
 import { Route } from "react-router-dom";
+import brightCovePlaylistConfig from "./brightcove/playlist-mappers";
 import Home from "./pages/Home";
 
 /* Core CSS required for Ionic components to work properly */
@@ -53,13 +54,88 @@ function App() {
 					{ text: "No", role: "cancel" },
 					{
 						text: "Yes",
-						handler: async () => {
-							try {
-								const { uri } = await UsbStorage.requestDirectoryAccess();
-								await Preferences.set({ key: USB_URI_KEY, value: uri });
-							} catch {
-								// user cancelled the SAF picker — no-op
-							}
+						handler: () => {
+							// Run async work outside the handler so Ionic doesn't
+							// wait on the promise before dismissing the dialog.
+							(async () => {
+								try {
+									const { uri, folders } =
+										await UsbStorage.requestDirectoryAccess();
+
+									// Cross-reference the root folders on the drive
+									// against every known playlist slug.
+									const matchedEntries = Object.values(
+										brightCovePlaylistConfig,
+									).filter((e) => folders.includes(e.playlist));
+
+									if (matchedEntries.length > 0) {
+										// Valid drive — save the URI and tell the user what was found.
+										await Preferences.set({
+											key: USB_URI_KEY,
+											value: uri,
+										});
+										const languageList = matchedEntries
+											.map((e) => e.display)
+											.join(", ");
+										presentAlert({
+											header: "USB Drive Ready",
+											message: `Found ${matchedEntries.length} language(s): ${languageList}`,
+											buttons: ["OK"],
+										});
+									} else {
+										// No recognised playlist folders — ask to retry.
+										presentAlert({
+											header: "No DOT Videos Found",
+											message:
+												"The selected folder doesn't contain any recognised DOT language folders. Would you like to choose a different folder?",
+											buttons: [
+												{ text: "Cancel", role: "cancel" },
+												{
+													text: "Try Again",
+													handler: () => {
+														(async () => {
+															try {
+																const { uri: retryUri, folders: retryFolders } =
+																	await UsbStorage.requestDirectoryAccess();
+																const retryMatches = Object.values(
+																	brightCovePlaylistConfig,
+																).filter((e) =>
+																	retryFolders.includes(e.playlist),
+																);
+																if (retryMatches.length > 0) {
+																	await Preferences.set({
+																		key: USB_URI_KEY,
+																		value: retryUri,
+																	});
+																	const list = retryMatches
+																		.map((e) => e.display)
+																		.join(", ");
+																	presentAlert({
+																		header: "USB Drive Ready",
+																		message: `Found ${retryMatches.length} language(s): ${list}`,
+																		buttons: ["OK"],
+																	});
+																} else {
+																	presentAlert({
+																		header: "No DOT Videos Found",
+																		message:
+																			"Still no recognised DOT language folders in the selected location.",
+																		buttons: ["OK"],
+																	});
+																}
+															} catch {
+																// user cancelled retry SAF picker
+															}
+														})();
+													},
+												},
+											],
+										});
+									}
+								} catch {
+									// user cancelled the SAF picker — no-op
+								}
+							})();
 						},
 					},
 				],

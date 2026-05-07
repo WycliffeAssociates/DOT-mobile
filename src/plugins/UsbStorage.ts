@@ -9,7 +9,7 @@ export interface UsbStoragePlugin {
 		}) => void,
 	): Promise<{ remove: () => void }>;
 
-	requestDirectoryAccess(): Promise<{ uri: string }>;
+	requestDirectoryAccess(): Promise<{ uri: string; folders: string[] }>;
 
 	/** Returns true if any USB device is currently connected. */
 	checkUsbConnected(): Promise<{ connected: boolean }>;

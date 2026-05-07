@@ -101,8 +101,27 @@ public class UsbStoragePlugin extends Plugin {
                     treeUri,
                     Intent.FLAG_GRANT_READ_URI_PERMISSION
                 );
+
+                // Scan root-level folders so the JS side can validate without
+                // a second round-trip plugin call.
+                JSArray folders = new JSArray();
+                try {
+                    DocumentFile root = DocumentFile.fromTreeUri(getContext(), treeUri);
+                    if (root != null && root.exists()) {
+                        for (DocumentFile child : root.listFiles()) {
+                            if (child.isDirectory()) {
+                                String name = child.getName();
+                                if (name != null) folders.put(name);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.w("UsbStorage", "Could not list root folders: " + e.getMessage());
+                }
+
                 JSObject ret = new JSObject();
                 ret.put("uri", treeUri.toString());
+                ret.put("folders", folders);
                 call.resolve(ret);
             } else {
                 call.reject("No URI returned");

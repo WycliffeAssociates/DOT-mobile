@@ -1,4 +1,12 @@
-import { IonButton, IonIcon, IonModal } from "@ionic/react";
+import {
+	IonButton,
+	IonContent,
+	IonHeader,
+	IonIcon,
+	IonModal,
+	IonTitle,
+	IonToolbar,
+} from "@ionic/react";
 import { close, settingsOutline } from "ionicons/icons";
 import {
 	type Dispatch,
@@ -15,6 +23,7 @@ import type {
 	IVidWithCustom,
 	validPlaylistSlugs,
 } from "../customTypes/types";
+import { useOfflineMode } from "../lib/offlineMode";
 import { makeVidSaver } from "../lib/storage";
 import {
 	getChaptersArrFromVtt,
@@ -40,13 +49,16 @@ export function Settings(props: ISettings) {
 	const settingsRef = useRef<HTMLDivElement>(null);
 	const [downloadProgress, setDownloadProgress] =
 		useState<downloadProgressInfo>();
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { t } = useTranslation();
+	const { isOffline } = useOfflineMode();
 
 	async function saveVidOffline(
 		vidToSave: IVidWithCustom = props.currentVid,
 		playlistData: IPlaylistData = props.playlistData,
 		vidForState: IVidWithCustom = props.currentVid,
 	) {
+		if (isOffline) return;
 		const vidName =
 			vidToSave.name || vidToSave.reference_id || vidToSave.id || "Unnamed Vid";
 		setDownloadProgress({
@@ -170,7 +182,7 @@ export function Settings(props: ISettings) {
 	}
 
 	function dismiss() {
-		modal.current?.dismiss();
+		setIsModalOpen(false);
 		props.player?.play();
 	}
 
@@ -238,7 +250,6 @@ export function Settings(props: ISettings) {
 		<>
 			<div className="flex" id="settingsRef" ref={settingsRef}>
 				<IonButton
-					id="open-modal"
 					shape="round"
 					fill="clear"
 					className="text-surface focus:(ring ring-solid ring-primary ring-offset-2) rounded-999px h-6 w-10"
@@ -248,37 +259,66 @@ export function Settings(props: ISettings) {
 						"--background-activated": "transparent",
 						"--background-focused": "transparent",
 					}}
+					onClick={() => {
+						setIsModalOpen(true);
+						props.player?.pause();
+					}}
 				>
 					<IonIcon color="dark" slot="icon-only" icon={settingsOutline} />
 				</IonButton>
 			</div>
 			<IonModal
 				ref={modal}
-				onIonModalDidPresent={() => props.player?.pause()}
-				onDidDismiss={() => props.player?.play()}
-				trigger="open-modal"
-				className="grid place-content-end"
+				isOpen={isModalOpen}
+				onDidDismiss={() => {
+					setIsModalOpen(false);
+					props.player?.play();
+				}}
+				style={{ "--height": "90vh" }}
 			>
-				<div className="block h-[90vh]  p-2 overflow-auto pt-5 px-5 relative">
-					<div className="w-full flex justify-end relative ">
+				<IonHeader>
+					<IonToolbar>
+						<IonTitle>{t("settings") ?? "Settings"}</IonTitle>
 						<IonButton
+							slot="end"
 							fill="outline"
 							size="small"
 							shape="round"
 							style={{
 								"--padding-start": "0",
-								"--padding-end": 0,
+								"--padding-end": "0",
 								"--color": "#9c2921",
 								"--border-color": "#9c2921",
+								marginRight: 8,
 							}}
 							onClick={() => dismiss()}
 						>
-							<IonIcon className="" slot="icon-only" icon={close} />
+							<IonIcon slot="icon-only" icon={close} />
 						</IonButton>
-					</div>
+					</IonToolbar>
+				</IonHeader>
+				<IonContent className="ion-padding">
 					<SpeedControl player={props.player} />
-					<div data-name="downloadSection" className="sticky top-0 bg-white">
+					<div
+						data-name="downloadSection"
+						className="sticky top-0 bg-white pt-2"
+					>
 						<h2 className="font-bold mb-4">{t("downloadOptions")}</h2>
+						{isOffline && (
+							<div
+								style={{
+									background: "#fef3c7",
+									border: "1px solid #f59e0b",
+									borderRadius: 6,
+									padding: "8px 12px",
+									marginBottom: 12,
+									fontSize: "0.85rem",
+									color: "#92400e",
+								}}
+							>
+								Downloads are disabled in Offline Mode.
+							</div>
+						)}
 					</div>
 					<BulkListing
 						downloadProgress={downloadProgress}
@@ -293,7 +333,7 @@ export function Settings(props: ISettings) {
 						setShapedPlaylist={props.setShapedPlaylist}
 						setIsSavingSingle={props.setIsSavingSingle}
 					/>
-				</div>
+				</IonContent>
 			</IonModal>
 		</>
 	);

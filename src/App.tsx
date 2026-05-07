@@ -25,6 +25,7 @@ import "./theme/global.css";
 import "./theme/variables.css";
 
 import { UsbCopyModal } from "./components/UsbCopyModal";
+import { OfflineModeProvider } from "./lib/offlineMode";
 import Playlist from "./pages/Playlist";
 import { UsbStorage } from "./plugins/UsbStorage";
 
@@ -207,31 +208,33 @@ function App() {
 	return (
 		// @ts-ignore
 		<IonApp>
-			<IonReactRouter>
-				<IonRouterOutlet>
-					<Route path="/" exact={true}>
-						<Home />
-					</Route>
-					<Route path="/:playlist">
-						<Playlist />
-					</Route>
-				</IonRouterOutlet>
-			</IonReactRouter>
+			<OfflineModeProvider>
+				<IonReactRouter>
+					<IonRouterOutlet>
+						<Route path="/" exact={true}>
+							<Home />
+						</Route>
+						<Route path="/:playlist">
+							<Playlist />
+						</Route>
+					</IonRouterOutlet>
+				</IonReactRouter>
 
-			<UsbCopyModal
-				isOpen={copyModal.isOpen}
-				treeUri={copyModal.treeUri}
-				matchedEntries={copyModal.matchedEntries}
-				onClose={() => setCopyModal((s) => ({ ...s, isOpen: false }))}
-				onCopyDone={(count) => {
-					setCopyModal((s) => ({ ...s, isOpen: false }));
-					presentAlert({
-						header: "Copy Complete",
-						message: `${count} video${count !== 1 ? "s" : ""} copied to device storage.`,
-						buttons: ["OK"],
-					});
-				}}
-			/>
+				<UsbCopyModal
+					isOpen={copyModal.isOpen}
+					treeUri={copyModal.treeUri}
+					matchedEntries={copyModal.matchedEntries}
+					onClose={() => setCopyModal((s) => ({ ...s, isOpen: false }))}
+					onCopyDone={(count) => {
+						setCopyModal((s) => ({ ...s, isOpen: false }));
+						presentAlert({
+							header: "Copy Complete",
+							message: `${count} video${count !== 1 ? "s" : ""} copied to device storage.`,
+							buttons: ["OK"],
+						});
+					}}
+				/>
+			</OfflineModeProvider>
 		</IonApp>
 	);
 }

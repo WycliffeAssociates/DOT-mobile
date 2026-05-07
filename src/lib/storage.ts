@@ -48,7 +48,7 @@ export function makeVidSaver(
 			}
 		},
 		getSmallestMp4: () => {
-			const mp4Srces = vid.sources
+			const mp4Srces = (vid.sources ?? [])
 				.filter(
 					(source) =>
 						source.container === "MP4" &&

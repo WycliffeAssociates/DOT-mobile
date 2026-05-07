@@ -30,6 +30,7 @@ import type {
 	IVidWithCustom,
 	IvidJsPlayer,
 } from "../customTypes/types";
+import { useOfflineMode } from "../lib/offlineMode";
 import {
 	getLocalUsbCopySrc,
 	getSavedAppPreferences,
@@ -45,6 +46,7 @@ import {
 import { groupObjectsByKey, massageVidsArray } from "../lib/utils";
 
 function Playlist() {
+	const { isOffline } = useOfflineMode();
 	const { playlist: urlSlug } = useParams<{ playlist: string }>();
 
 	const playInfo = Object.values(brightCovePlaylistConfig).find(
@@ -132,13 +134,17 @@ function Playlist() {
 				: null;
 
 		const bestOfflineSrc = localCopySrc ?? usbSrc ?? savedSrc ?? null;
-		bestOfflineSrc ? plyr?.src(bestOfflineSrc) : plyr?.src(httpsOnly);
+		if (bestOfflineSrc) {
+			plyr?.src(bestOfflineSrc);
+		} else if (!isOffline) {
+			plyr?.src(httpsOnly);
+		}
 
-		savedPoster
-			? plyr?.poster(savedPoster)
-			: vid.poster
-				? plyr?.poster(vid.poster)
-				: null;
+		if (savedPoster) {
+			plyr?.poster(savedPoster);
+		} else if (vid.poster && !isOffline) {
+			plyr?.poster(vid.poster);
+		}
 		plyr?.one("loadedmetadata", () => {
 			handleChapters(vid, plyr);
 		});
@@ -217,7 +223,9 @@ function Playlist() {
 	async function fetchAndSetup() {
 		if (!playlistInfo?.playlist) return;
 		try {
-			const data = await fetchBcData(playlistInfo.playlist);
+			const data = await fetchBcData(playlistInfo.playlist, {
+				offline: isOffline,
+			});
 			// Put into state setter here;
 			// if (!data) {
 			// 	throw new Error("fetching failed");

@@ -497,7 +497,11 @@ async function fetchBcApiEndpoint(playlist: string) {
 	}
 }
 
-export async function fetchBcData(playlist: validPlaylistSlugs) {
+export async function fetchBcData(
+	playlist: validPlaylistSlugs,
+	options?: { offline?: boolean },
+) {
+	const offline = options?.offline ?? false;
 	try {
 		let savedData: IPlaylistResponse | null = null;
 		try {
@@ -516,20 +520,23 @@ export async function fetchBcData(playlist: validPlaylistSlugs) {
 		}
 
 		if (savedData) {
-			// Return cached data immediately; refresh from API in the background.
-			// If the refresh fails (e.g. offline) it fails silently — that's fine.
-			mergeInPreviouslySavedVids({
-				existingPlaylistData: savedData.formattedVideos,
-				playlist,
-			});
+			// In offline mode skip the background API refresh entirely.
+			if (!offline) {
+				mergeInPreviouslySavedVids({
+					existingPlaylistData: savedData.formattedVideos,
+					playlist,
+				});
+			}
 			return savedData;
 		}
 
-		// No filesystem cache — try the network.
-		const data = await fetchBcApiEndpoint(playlist);
-		if (data) {
-			mutateTimeStampBcResponse(data);
-			return data;
+		// No filesystem cache — try the network (only when not in offline mode).
+		if (!offline) {
+			const data = await fetchBcApiEndpoint(playlist);
+			if (data) {
+				mutateTimeStampBcResponse(data);
+				return data;
+			}
 		}
 
 		// Network also failed (offline, first launch). Fall back to the bundled

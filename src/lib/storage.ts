@@ -483,6 +483,30 @@ const USB_URI_KEY = "usbTreeUri";
  * playlist / book / chapter, or null if USB access hasn't been granted or
  * the file doesn't exist on the drive.
  */
+/**
+ * Returns a video source pointing to a copy of a USB video that was previously
+ * copied to device storage via copyUsbPlaylist.
+ * Uses the native getLocalCopyUrl plugin method so the path is guaranteed to
+ * match exactly what copyUsbPlaylist wrote — no Capacitor Filesystem mapping needed.
+ * Returns null if no local copy exists.
+ */
+export async function getLocalUsbCopySrc(
+	playlist: string,
+	book: string,
+	chapter: string,
+): Promise<{ src: string; type: "video/mp4" } | null> {
+	try {
+		const { playableUrl } = await UsbStorage.getLocalCopyUrl({
+			playlist,
+			book,
+			chapter,
+		});
+		return { src: playableUrl, type: "video/mp4" };
+	} catch {
+		return null;
+	}
+}
+
 export async function getUsbVideoSource(
 	playlist: string,
 	book: string,

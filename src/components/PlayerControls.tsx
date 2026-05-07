@@ -228,7 +228,7 @@ export function PlayerControls({ player, currentVid }: PlayerControlsProps) {
 			document.removeEventListener("enterpictureinpicture", handlePipChange);
 			document.removeEventListener("leavepictureinpicture", handlePipChange);
 		};
-	}, [player, currentVid.id]);
+	}, [player]);
 
 	useEffect(() => {
 		if (!menuOpen) return;

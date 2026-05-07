@@ -61,14 +61,6 @@ p {
 	height: 100% !important;
 	padding-top: 0 !important;
 }
-.video-js .vjs-control-bar,
-.video-js .vjs-big-play-button {
-	display: none !important;
-}
-.video-js video,
-.video-js img {
-	object-fit: cover;
-}
 .vjs-big-play-button {
 	top: 50% !important;
 	left: 50% !important;
@@ -83,6 +75,14 @@ p {
 	border: none !important;
 	background: #f3f3f3 !important;
 	color: #9c9c9c !important;
+}
+.video-js .vjs-control-bar,
+.video-js .vjs-big-play-button {
+	display: none !important;
+}
+.video-js video,
+.video-js img {
+	object-fit: cover;
 }
 .vjs-big-play-button:hover {
 	background: hsl(20, 100%, 56%) !important;

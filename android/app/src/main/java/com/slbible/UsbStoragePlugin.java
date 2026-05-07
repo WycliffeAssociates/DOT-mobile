@@ -19,6 +19,11 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import org.json.JSONObject;
 
 @CapacitorPlugin(name = "UsbStorage")
 public class UsbStoragePlugin extends Plugin {
@@ -260,6 +265,220 @@ public class UsbStoragePlugin extends Plugin {
         } catch (Exception e) {
             call.reject("Error scanning videos: " + e.getMessage());
         }
+    }
+
+    /**
+     * Copies specific {book, chapter} pairs from a playlist on the USB drive into
+     * app-private external storage, mirroring the same path as copyUsbPlaylist.
+     * Expects: treeUri, playlist, items: [{book, chapter}]
+     * Returns: { filesCopied: N }
+     */
+    @PluginMethod
+    public void copyUsbChapters(PluginCall call) {
+        String treeUriStr = call.getString("treeUri");
+        String playlist = call.getString("playlist");
+        JSArray items = call.getArray("items");
+
+        if (treeUriStr == null || playlist == null || items == null) {
+            call.reject("Missing required parameters");
+            return;
+        }
+
+        new Thread(() -> {
+            try {
+                Uri treeUri = Uri.parse(treeUriStr);
+                DocumentFile root = DocumentFile.fromTreeUri(getContext(), treeUri);
+                if (root == null || !root.exists()) {
+                    call.reject("USB directory is not accessible");
+                    return;
+                }
+                DocumentFile playlistDir = root.findFile(playlist);
+                if (playlistDir == null || !playlistDir.isDirectory()) {
+                    call.reject("Playlist folder not found: " + playlist);
+                    return;
+                }
+
+                File destPlaylist = new File(getContext().getExternalFilesDir(null), playlist);
+                int filesCopied = 0;
+
+                for (int i = 0; i < items.length(); i++) {
+                    try {
+                        JSONObject item = items.getJSONObject(i);
+                        if (item == null) continue;
+                        String book = item.getString("book");
+                        String chapter = item.getString("chapter");
+                        if (book == null || chapter == null) continue;
+
+                        DocumentFile bookDir = playlistDir.findFile(book);
+                        if (bookDir == null || !bookDir.isDirectory()) continue;
+
+                        DocumentFile videoFile = bookDir.findFile(chapter + ".mp4");
+                        if (videoFile == null || !videoFile.exists()) continue;
+
+                        File destBook = new File(destPlaylist, book);
+                        if (!destBook.exists()) destBook.mkdirs();
+                        File destFile = new File(destBook, chapter + ".mp4");
+
+                        InputStream in = null;
+                        OutputStream out = null;
+                        try {
+                            in = getContext().getContentResolver().openInputStream(videoFile.getUri());
+                            if (in == null) continue;
+                            out = new FileOutputStream(destFile);
+                            byte[] buf = new byte[65536];
+                            int len;
+                            while ((len = in.read(buf)) != -1) out.write(buf, 0, len);
+                            filesCopied++;
+                        } catch (Exception e) {
+                            Log.w("UsbStorage", "Failed chapter " + book + "/" + chapter + ": " + e.getMessage());
+                            if (destFile.exists()) destFile.delete();
+                        } finally {
+                            if (in != null) try { in.close(); } catch (Exception ignored) {}
+                            if (out != null) try { out.close(); } catch (Exception ignored) {}
+                        }
+                    } catch (Exception e) {
+                        Log.w("UsbStorage", "Error at item " + i + ": " + e.getMessage());
+                    }
+                }
+
+                JSObject ret = new JSObject();
+                ret.put("filesCopied", filesCopied);
+                call.resolve(ret);
+            } catch (Exception e) {
+                Log.e("UsbStorage", "copyUsbChapters error: " + e.getMessage());
+                call.reject("Error copying chapters: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    /**
+     * Checks whether a file was previously copied from USB via copyUsbPlaylist and,
+     * if so, registers it in UsbVideoRegistry and returns a _capacitor_usb_ URL so
+     * UsbWebViewClient can stream it with Range/206 support.
+     * Expects: playlist, book, chapter (without .mp4)
+     * Returns: { playableUrl: string }
+     */
+    @PluginMethod
+    public void getLocalCopyUrl(PluginCall call) {
+        String playlist = call.getString("playlist");
+        String book = call.getString("book");
+        String chapter = call.getString("chapter");
+
+        if (playlist == null || book == null || chapter == null) {
+            call.reject("Missing required parameters");
+            return;
+        }
+
+        // Must match the base used in copyUsbPlaylist: getExternalFilesDir(null).
+        File videoFile = new File(new File(new File(getContext().getExternalFilesDir(null), playlist), book), chapter + ".mp4");
+
+        Log.d("UsbStorage", "getLocalCopyUrl: path=" + videoFile.getAbsolutePath() + " exists=" + videoFile.exists());
+
+        if (!videoFile.exists()) {
+            call.reject("Local copy not found: " + videoFile.getAbsolutePath());
+            return;
+        }
+
+        // Register a file:// URI in the same registry used for USB content so
+        // UsbWebViewClient handles streaming with full Range / 206 support.
+        Uri fileUri = Uri.fromFile(videoFile);
+        String token = UsbVideoRegistry.register(fileUri);
+        String playableUrl = "https://localhost" + UsbWebViewClient.USB_PATH_PREFIX + token;
+        Log.d("UsbStorage", "getLocalCopyUrl: " + playableUrl);
+
+        JSObject ret = new JSObject();
+        ret.put("playableUrl", playableUrl);
+        call.resolve(ret);
+    }
+
+    /**
+     * Copies all .mp4 files for a playlist from the USB drive into the app's
+     * private internal storage (getFilesDir), mirroring the USB folder structure:
+     *   getFilesDir()/{playlist}/{book}/{chapter}.mp4
+     *
+     * Private internal storage needs no external-storage permission and is
+     * unaffected by Android scoped-storage rules.
+     * Runs on a background thread so it won't block the UI.
+     * Expects: treeUri, playlist
+     * Returns: { ok: true, filesCopied: N }
+     */
+    @PluginMethod
+    public void copyUsbPlaylist(PluginCall call) {
+        String treeUriStr = call.getString("treeUri");
+        String playlist = call.getString("playlist");
+
+        if (treeUriStr == null || playlist == null) {
+            call.reject("Missing required parameters");
+            return;
+        }
+
+        new Thread(() -> {
+            try {
+                Uri treeUri = Uri.parse(treeUriStr);
+                DocumentFile root = DocumentFile.fromTreeUri(getContext(), treeUri);
+                if (root == null || !root.exists()) {
+                    call.reject("USB directory is not accessible");
+                    return;
+                }
+
+                DocumentFile playlistDir = root.findFile(playlist);
+                if (playlistDir == null || !playlistDir.isDirectory()) {
+                    call.reject("Playlist folder not found: " + playlist);
+                    return;
+                }
+
+                // App-private external storage — no permission needed on any Android version.
+                // getLocalCopyUrl uses the same base, so paths are guaranteed to match.
+                File destBase = new File(getContext().getExternalFilesDir(null), playlist);
+                int filesCopied = 0;
+
+                for (DocumentFile bookDir : playlistDir.listFiles()) {
+                    if (!bookDir.isDirectory()) continue;
+                    String bookName = bookDir.getName();
+                    if (bookName == null) continue;
+
+                    File destBook = new File(destBase, bookName);
+                    if (!destBook.exists()) destBook.mkdirs();
+
+                    for (DocumentFile videoFile : bookDir.listFiles()) {
+                        String name = videoFile.getName();
+                        if (name == null || !name.endsWith(".mp4")) continue;
+
+                        File destFile = new File(destBook, name);
+                        InputStream in = null;
+                        OutputStream out = null;
+                        try {
+                            in = getContext().getContentResolver()
+                                    .openInputStream(videoFile.getUri());
+                            if (in == null) continue;
+                            out = new FileOutputStream(destFile);
+                            byte[] buffer = new byte[65536]; // 64 KB chunks
+                            int len;
+                            while ((len = in.read(buffer)) != -1) {
+                                out.write(buffer, 0, len);
+                            }
+                            filesCopied++;
+                            Log.d("UsbStorage", "Copied: " + playlist + "/" + bookName + "/" + name);
+                        } catch (Exception e) {
+                            Log.w("UsbStorage", "Failed to copy " + name + ": " + e.getMessage());
+                            // Partial file — clean up so it won't be treated as complete.
+                            if (destFile.exists()) destFile.delete();
+                        } finally {
+                            if (in != null) try { in.close(); } catch (Exception ignored) {}
+                            if (out != null) try { out.close(); } catch (Exception ignored) {}
+                        }
+                    }
+                }
+
+                JSObject ret = new JSObject();
+                ret.put("ok", true);
+                ret.put("filesCopied", filesCopied);
+                call.resolve(ret);
+            } catch (Exception e) {
+                Log.e("UsbStorage", "copyUsbPlaylist error: " + e.getMessage());
+                call.reject("Error copying playlist: " + e.getMessage());
+            }
+        }).start();
     }
 
     @Override

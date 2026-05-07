@@ -11,6 +11,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import com.getcapacitor.Bridge;
 import com.getcapacitor.BridgeWebViewClient;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,17 +54,22 @@ public class UsbWebViewClient extends BridgeWebViewClient {
         }
         Log.d("UsbWebViewClient", "streaming: " + contentUri);
 
+        boolean isFileUri = "file".equals(contentUri.getScheme());
         ContentResolver cr = bridge.getContext().getContentResolver();
 
-        // Resolve file size for range support
+        // Resolve file size — local files use File.length(), SAF files use ContentResolver query
         long fileSize = -1;
-        try (Cursor cursor = cr.query(contentUri, new String[]{OpenableColumns.SIZE}, null, null, null)) {
-            if (cursor != null && cursor.moveToFirst()) {
-                int col = cursor.getColumnIndex(OpenableColumns.SIZE);
-                if (col >= 0) fileSize = cursor.getLong(col);
+        if (isFileUri) {
+            fileSize = new File(contentUri.getPath()).length();
+        } else {
+            try (Cursor cursor = cr.query(contentUri, new String[]{OpenableColumns.SIZE}, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int col = cursor.getColumnIndex(OpenableColumns.SIZE);
+                    if (col >= 0) fileSize = cursor.getLong(col);
+                }
+            } catch (Exception e) {
+                Log.w("UsbWebViewClient", "could not query file size: " + e.getMessage());
             }
-        } catch (Exception e) {
-            Log.w("UsbWebViewClient", "could not query file size: " + e.getMessage());
         }
 
         Map<String, String> headers = new HashMap<>();
@@ -74,6 +80,16 @@ public class UsbWebViewClient extends BridgeWebViewClient {
         String rangeHeader = request.getRequestHeaders().get("Range");
 
         try {
+            // Open a seekable FileInputStream — works for both local files and SAF descriptors
+            FileInputStream fis;
+            if (isFileUri) {
+                fis = new FileInputStream(new File(contentUri.getPath()));
+            } else {
+                ParcelFileDescriptor pfd = cr.openFileDescriptor(contentUri, "r");
+                if (pfd == null) return errorResponse();
+                fis = new FileInputStream(pfd.getFileDescriptor());
+            }
+
             if (rangeHeader != null && fileSize > 0) {
                 // Parse "bytes=start-end"
                 String[] parts = rangeHeader.replace("bytes=", "").split("-");
@@ -85,22 +101,14 @@ public class UsbWebViewClient extends BridgeWebViewClient {
 
                 headers.put("Content-Range", "bytes " + start + "-" + end + "/" + fileSize);
                 headers.put("Content-Length", String.valueOf(length));
-
-                // Use ParcelFileDescriptor for efficient seeking
-                ParcelFileDescriptor pfd = cr.openFileDescriptor(contentUri, "r");
-                if (pfd == null) return errorResponse();
-                FileInputStream fis = new FileInputStream(pfd.getFileDescriptor());
                 fis.getChannel().position(start);
 
                 Log.d("UsbWebViewClient", "206 range " + start + "-" + end + "/" + fileSize);
                 return new WebResourceResponse("video/mp4", null, 206, "Partial Content", headers, fis);
             } else {
-                InputStream is = cr.openInputStream(contentUri);
-                if (is == null) return errorResponse();
                 if (fileSize > 0) headers.put("Content-Length", String.valueOf(fileSize));
-
                 Log.d("UsbWebViewClient", "200 full file, size=" + fileSize);
-                return new WebResourceResponse("video/mp4", null, 200, "OK", headers, is);
+                return new WebResourceResponse("video/mp4", null, 200, "OK", headers, fis);
             }
         } catch (IOException e) {
             Log.e("UsbWebViewClient", "stream error: " + e.getMessage());

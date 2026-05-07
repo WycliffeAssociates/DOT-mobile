@@ -6,7 +6,7 @@ import {
 	useIonAlert,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Route } from "react-router-dom";
 import brightCovePlaylistConfig from "./brightcove/playlist-mappers";
 import Home from "./pages/Home";
@@ -24,6 +24,7 @@ import "@unocss/reset/tailwind.css";
 import "./theme/global.css";
 import "./theme/variables.css";
 
+import { UsbCopyModal } from "./components/UsbCopyModal";
 import Playlist from "./pages/Playlist";
 import { UsbStorage } from "./plugins/UsbStorage";
 
@@ -33,9 +34,12 @@ const USB_URI_KEY = "usbTreeUri";
 
 function App() {
 	const [presentAlert, dismissAlert] = useIonAlert();
-	// Tracks whether we've already shown the dialog for the current USB connection.
-	// Using a ref so it doesn't trigger re-renders and is accessible inside the effect.
 	const hasPromptedRef = useRef(false);
+	const [copyModal, setCopyModal] = useState<{
+		isOpen: boolean;
+		treeUri: string;
+		matchedEntries: { playlist: string; display: string }[];
+	}>({ isOpen: false, treeUri: "", matchedEntries: [] });
 
 	useEffect(() => {
 		// Clear any stale SAF permission from a previous session so we never
@@ -55,35 +59,44 @@ function App() {
 					{
 						text: "Yes",
 						handler: () => {
-							// Run async work outside the handler so Ionic doesn't
-							// wait on the promise before dismissing the dialog.
 							(async () => {
 								try {
 									const { uri, folders } =
 										await UsbStorage.requestDirectoryAccess();
 
-									// Cross-reference the root folders on the drive
-									// against every known playlist slug.
-									const matchedEntries = Object.values(
+									const matched = Object.values(
 										brightCovePlaylistConfig,
 									).filter((e) => folders.includes(e.playlist));
 
-									if (matchedEntries.length > 0) {
-										// Valid drive — save the URI and tell the user what was found.
-										await Preferences.set({
-											key: USB_URI_KEY,
-											value: uri,
-										});
-										const languageList = matchedEntries
-											.map((e) => e.display)
-											.join(", ");
+									if (matched.length > 0) {
+										await Preferences.set({ key: USB_URI_KEY, value: uri });
 										presentAlert({
 											header: "USB Drive Ready",
-											message: `Found ${matchedEntries.length} language(s): ${languageList}`,
-											buttons: ["OK"],
+											message: `Found ${matched.length} language(s): ${matched.map((e) => e.display).join(", ")}`,
+											inputs: [
+												{
+													type: "checkbox" as const,
+													label: "Copy videos to device for offline use",
+													value: "copy",
+													checked: false,
+												},
+											],
+											buttons: [
+												{
+													text: "OK",
+													handler: (selected: string[]) => {
+														if (selected.includes("copy")) {
+															setCopyModal({
+																isOpen: true,
+																treeUri: uri,
+																matchedEntries: matched,
+															});
+														}
+													},
+												},
+											],
 										});
 									} else {
-										// No recognised playlist folders — ask to retry.
 										presentAlert({
 											header: "No DOT Videos Found",
 											message:
@@ -97,23 +110,42 @@ function App() {
 															try {
 																const { uri: retryUri, folders: retryFolders } =
 																	await UsbStorage.requestDirectoryAccess();
-																const retryMatches = Object.values(
+																const retryMatched = Object.values(
 																	brightCovePlaylistConfig,
 																).filter((e) =>
 																	retryFolders.includes(e.playlist),
 																);
-																if (retryMatches.length > 0) {
+																if (retryMatched.length > 0) {
 																	await Preferences.set({
 																		key: USB_URI_KEY,
 																		value: retryUri,
 																	});
-																	const list = retryMatches
-																		.map((e) => e.display)
-																		.join(", ");
 																	presentAlert({
 																		header: "USB Drive Ready",
-																		message: `Found ${retryMatches.length} language(s): ${list}`,
-																		buttons: ["OK"],
+																		message: `Found ${retryMatched.length} language(s): ${retryMatched.map((e) => e.display).join(", ")}`,
+																		inputs: [
+																			{
+																				type: "checkbox" as const,
+																				label:
+																					"Copy videos to device for offline use",
+																				value: "copy",
+																				checked: false,
+																			},
+																		],
+																		buttons: [
+																			{
+																				text: "OK",
+																				handler: (selected: string[]) => {
+																					if (selected.includes("copy")) {
+																						setCopyModal({
+																							isOpen: true,
+																							treeUri: retryUri,
+																							matchedEntries: retryMatched,
+																						});
+																					}
+																				},
+																			},
+																		],
 																	});
 																} else {
 																	presentAlert({
@@ -124,7 +156,7 @@ function App() {
 																	});
 																}
 															} catch {
-																// user cancelled retry SAF picker
+																// user cancelled retry
 															}
 														})();
 													},
@@ -133,7 +165,7 @@ function App() {
 										});
 									}
 								} catch {
-									// user cancelled the SAF picker — no-op
+									// user cancelled SAF picker
 								}
 							})();
 						},
@@ -185,6 +217,21 @@ function App() {
 					</Route>
 				</IonRouterOutlet>
 			</IonReactRouter>
+
+			<UsbCopyModal
+				isOpen={copyModal.isOpen}
+				treeUri={copyModal.treeUri}
+				matchedEntries={copyModal.matchedEntries}
+				onClose={() => setCopyModal((s) => ({ ...s, isOpen: false }))}
+				onCopyDone={(count) => {
+					setCopyModal((s) => ({ ...s, isOpen: false }));
+					presentAlert({
+						header: "Copy Complete",
+						message: `${count} video${count !== 1 ? "s" : ""} copied to device storage.`,
+						buttons: ["OK"],
+					});
+				}}
+			/>
 		</IonApp>
 	);
 }

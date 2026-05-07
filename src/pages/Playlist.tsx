@@ -31,6 +31,7 @@ import type {
 	IvidJsPlayer,
 } from "../customTypes/types";
 import {
+	getLocalUsbCopySrc,
 	getSavedAppPreferences,
 	getUsbVideoSource,
 	updateSavedAppPreferences,
@@ -107,11 +108,10 @@ function Playlist() {
 	/*// #===============  PAGE FUNCTIONS   =============   */
 
 	async function changePlayerSrc({ vid, bookToUse }: changePlayerSrcParams) {
-		console.log("HERE!");
 		const plyr = vidJsPlayer;
 		plyr?.pause();
 		changeVid({ chapNum: vid.chapter, bookToUse });
-		const httpsOnly = vid.sources.filter((srcObj) =>
+		const httpsOnly = (vid.sources ?? []).filter((srcObj) =>
 			srcObj.src.startsWith("https"),
 		);
 		const savedSrc = vid.savedSources?.video && {
@@ -120,13 +120,18 @@ function Playlist() {
 		};
 		const savedPoster = vid.savedSources?.poster;
 
-		// Prefer USB drive over downloaded local file, which both beat the network
-		const usbSrc =
+		// Priority: internal copy of USB content > live USB drive > downloaded file > network
+		const localCopySrc =
 			vid.book && vid.chapter && playlistInfo?.playlist
+				? await getLocalUsbCopySrc(playlistInfo.playlist, vid.book, vid.chapter)
+				: null;
+
+		const usbSrc =
+			!localCopySrc && vid.book && vid.chapter && playlistInfo?.playlist
 				? await getUsbVideoSource(playlistInfo.playlist, vid.book, vid.chapter)
 				: null;
 
-		const bestOfflineSrc = usbSrc ?? savedSrc ?? null;
+		const bestOfflineSrc = localCopySrc ?? usbSrc ?? savedSrc ?? null;
 		bestOfflineSrc ? plyr?.src(bestOfflineSrc) : plyr?.src(httpsOnly);
 
 		savedPoster
@@ -212,14 +217,12 @@ function Playlist() {
 	async function fetchAndSetup() {
 		if (!playlistInfo?.playlist) return;
 		try {
-			// biome-ignore lint/style/noNonNullAssertion: <explanation>
-			const data = await fetchBcData(playlistInfo.playlist)!;
+			const data = await fetchBcData(playlistInfo.playlist);
 			// Put into state setter here;
 			// if (!data) {
 			// 	throw new Error("fetching failed");
 			// }
-			// biome-ignore lint/style/noNonNullAssertion: <explanation>
-			const vids = data!.videos as IVidWithCustom[];
+			const vids = (data?.videos ?? []) as IVidWithCustom[];
 			const { formattedVideos, ...restPlaylistData } =
 				data as IPlaylistResponse;
 			doInitialSetup(vids, formattedVideos, restPlaylistData);

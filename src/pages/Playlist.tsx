@@ -160,7 +160,11 @@ function Playlist() {
 		cleanUpUiMarkers = true,
 	) {
 		if (!vidJsPlayer) return;
-		const chapters = await getChaptersArrFromVtt(vid, cleanUpUiMarkers);
+		const chapters = await getChaptersArrFromVtt(
+			vid,
+			cleanUpUiMarkers,
+			playlistInfo?.playlist,
+		);
 		if (chapters) {
 			setCurrentVid((vid) => {
 				vid.chapterMarkers = chapters;

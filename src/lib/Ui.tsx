@@ -18,28 +18,77 @@ import {
 	reduceToLowestSize,
 } from "./utils";
 
+// Module-level cache so each playlist's seed file is only fetched once per session.
+const _seedVttCache = new Map<string, Map<string, string>>(); // playlist → (videoId → vttContent)
+
+async function getBundledVttContent(
+	playlist: string,
+	videoId: string,
+): Promise<string | undefined> {
+	if (!_seedVttCache.has(playlist)) {
+		try {
+			const res = await fetch(`/bundled-playlists/${playlist}.json`);
+			if (!res.ok) {
+				_seedVttCache.set(playlist, new Map()); // cache the miss
+			} else {
+				const seed = await res.json();
+				const map = new Map<string, string>();
+				for (const seedVid of (seed.videos ?? []) as any[]) {
+					const chapTrack = seedVid.text_tracks?.find(
+						(tt: any) => tt.kind === "chapters" && tt.bundledContent,
+					);
+					if (chapTrack && seedVid.id) {
+						map.set(seedVid.id, chapTrack.bundledContent);
+					}
+				}
+				_seedVttCache.set(playlist, map);
+			}
+		} catch {
+			_seedVttCache.set(playlist, new Map()); // cache the miss
+		}
+	}
+	return _seedVttCache.get(playlist)?.get(videoId);
+}
+
 export async function getChaptersArrFromVtt(
 	vid: IVidWithCustom,
 	cleanUpUiMarkers = true,
+	playlist?: string,
 ) {
 	if (cleanUpUiMarkers) {
 		cleanUpOldChapters();
 	}
 	const chapterObj = vid.text_tracks?.find((tt) => tt.kind === "chapters");
-	if (!chapterObj || !chapterObj.src || !chapterObj.sources) {
-		return [];
-	}
-	const srcToFetch = chapterObj.sources.find((srcO) =>
-		srcO.src?.startsWith("https"),
-	);
+	if (!chapterObj) return [];
 	if (!vid.duration) return;
-	if (!srcToFetch || !srcToFetch.src) return;
 	const vidDur = vid.duration / 1000;
 
-	// NOTE: consider a force bypass to refresh?
+	// Return cached markers if already parsed
 	if (vid.chapterMarkers) return vid.chapterMarkers;
 
-	const chapterVtt = await fetchRemoteChaptersFile(srcToFetch.src);
+	let chapterVtt: string | undefined;
+
+	// 1. Use bundledContent if the track already carries it (seed data path)
+	const bundledContent = (chapterObj as any).bundledContent as
+		| string
+		| undefined;
+	if (bundledContent) {
+		chapterVtt = bundledContent;
+	} else {
+		// 2. Try fetching from the live URL (online path — cached data / fresh API data)
+		const srcToFetch = chapterObj.sources?.find((srcO) =>
+			srcO.src?.startsWith("https"),
+		);
+		if (srcToFetch?.src) {
+			chapterVtt = await fetchRemoteChaptersFile(srcToFetch.src);
+		}
+	}
+
+	// 3. Fallback: load VTT from the bundled seed file (offline + cached data path)
+	if (!chapterVtt && playlist && vid.id) {
+		chapterVtt = await getBundledVttContent(playlist, vid.id);
+	}
+
 	if (!chapterVtt) {
 		return [];
 	}

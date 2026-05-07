@@ -36,3 +36,5 @@ dist
 /blob-report/
 /playwright/.cache/
 notes.md
+
+public/bundled-playlists/

@@ -21,7 +21,6 @@ import Playlist from "./pages/Playlist";
 setupIonicReact({ swipeBackEnabled: false });
 
 const App = () => (
-	// @ts-expect-error
 	<IonApp>
 		<IonReactRouter>
 			<IonRouterOutlet>

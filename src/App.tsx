@@ -18,10 +18,10 @@ import "./theme/variables.css";
 
 import Playlist from "./pages/Playlist";
 
-setupIonicReact();
+setupIonicReact({ swipeBackEnabled: false });
 
 const App = () => (
-	// @ts-ignore
+	// @ts-expect-error
 	<IonApp>
 		<IonReactRouter>
 			<IonRouterOutlet>

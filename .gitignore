@@ -36,3 +36,4 @@ dist
 /blob-report/
 /playwright/.cache/
 notes.md
+/ignored-notes

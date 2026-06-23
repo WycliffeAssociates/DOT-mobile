@@ -128,6 +128,7 @@ export function VidJsPlayer({
 	}, []);
 
 	return (
+		// biome-ignore lint/correctness/useUniqueElementIds: id queried via #vidJsPlayerContainer in SpeedControl
 		<div
 			className="mx-auto absolute inset-0 aspect-video"
 			ref={vidJsPlayerContainerRef}

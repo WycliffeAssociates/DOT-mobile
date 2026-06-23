@@ -103,7 +103,6 @@ export function BookToDownload(props: BookToDownloadProps) {
 
 			{book.isAlreadySaved ? (
 				<IonButton
-					id=""
 					size="small"
 					fill="outline"
 					color="primary"

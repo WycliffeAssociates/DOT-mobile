@@ -236,7 +236,9 @@ export function Settings(props: ISettings) {
 
 	return (
 		<>
+			{/* biome-ignore lint/correctness/useUniqueElementIds: id queried via #settingsRef in Playlist */}
 			<div className="flex" id="settingsRef" ref={settingsRef}>
+				{/* biome-ignore lint/correctness/useUniqueElementIds: id is the IonModal trigger target */}
 				<IonButton
 					id="open-modal"
 					shape="round"

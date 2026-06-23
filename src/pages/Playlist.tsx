@@ -399,7 +399,7 @@ function Playlist() {
 	/*//# ===============  MARKUP   =============   */
 	if (!playlistInfo) return null;
 	return (
-		<IonPage id="">
+		<IonPage>
 			<IonHeader className=" bg-base">
 				<IonToolbar>
 					<div className="flex content-center items-center justify-between w-full px-2.5">
@@ -479,7 +479,6 @@ function Playlist() {
 										/>
 										<div data-name="downloadSingleBtn">
 											<IonButton
-												id=""
 												size="small"
 												fill="outline"
 												color="primary"

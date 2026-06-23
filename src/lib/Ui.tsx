@@ -102,7 +102,7 @@ export function distributeChapterMarkers(
 	plyr: IvidJsPlayer,
 ) {
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore  - controlBar does exist.  Typings are wrong
+	// @ts-expect-error  - controlBar does exist.  Typings are wrong
 	const sb = plyr.controlBar?.progressControl?.seekBar?.el();
 	for (const marker of markers) {
 		// Escaping the React ecosystem here and manually injecting the markers since videojs controls that part of the dom.
@@ -380,7 +380,7 @@ export async function mergeInPreviouslySavedVids({
 										);
 										// satisfy ts checking.
 										if (matchingNewBook.savedSources) {
-											// @ts-ignore
+											// @ts-expect-error
 											matchingNewBook.savedSources[key] = converted;
 										}
 									}

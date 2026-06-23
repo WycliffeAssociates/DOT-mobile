@@ -484,10 +484,10 @@ export function PlayerControls({ player, currentVid }: PlayerControlsProps) {
 				</div>
 			</div>
 
-			<div className="px-2 pb-2.5 pt-0.5 md:px-3 md:pb-3 md:pt-1">
+			<div className="px-5 pb-2.5 pt-1 md:px-5 md:pb-3 md:pt-1.5">
 				<div
 					ref={seekRailRef}
-					className="relative h-8 cursor-pointer touch-none md:h-9"
+					className="relative h-12 cursor-pointer touch-none md:h-12"
 					onPointerDown={handleSeekRailPointerDown}
 					onPointerMove={handleSeekRailPointerMove}
 					onPointerUp={handleSeekRailPointerUp}
@@ -522,9 +522,6 @@ export function PlayerControls({ player, currentVid }: PlayerControlsProps) {
 								type="button"
 								className="absolute top-1/2 z-20 grid h-5 min-w-5 -translate-x-1/2 -translate-y-1/2 place-content-center rounded-full border border-white/95 bg-white! px-1 text-[9px] leading-none font-bold text-primary shadow md:h-6 md:min-w-6 md:text-[10px]"
 								style={{ left: `${marker.xPos}%` }}
-								onPointerDown={(event) => {
-									event.stopPropagation();
-								}}
 								onClick={() => handleSeek(marker.chapterStart)}
 								title={markerLabel}
 								aria-label={markerLabel}

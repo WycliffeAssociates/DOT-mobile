@@ -14,6 +14,7 @@ const Home: React.FC = () => {
 	);
 
 	return (
+		// biome-ignore lint/correctness/useUniqueElementIds: single top-level page, static id is intentional
 		<IonPage id="home-page">
 			<IonHeader className="ion-no-border ">
 				<IonToolbar style={{ "--min-height": "auto" }}>

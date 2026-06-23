@@ -217,7 +217,6 @@ export function BulkListing({
 		<div className="mt-4 max-h-70vh overflow-y-auto scrollbar-hide relative bg-white ">
 			<div className="sticky top-0 z-10 bg-white">
 				<IonButton
-					id=""
 					size="small"
 					fill="outline"
 					color="primary"

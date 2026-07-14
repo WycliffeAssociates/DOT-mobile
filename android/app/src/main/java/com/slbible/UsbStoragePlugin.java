@@ -175,7 +175,7 @@ public class UsbStoragePlugin extends Plugin {
                 return;
             }
 
-            DocumentFile bookDir = playlistDir.findFile(book);
+            DocumentFile bookDir = findFileIgnoreCase(playlistDir, book);
             if (bookDir == null || !bookDir.isDirectory()) {
                 StringBuilder children = new StringBuilder();
                 for (DocumentFile f : playlistDir.listFiles()) children.append(f.getName()).append(", ");
@@ -245,8 +245,10 @@ public class UsbStoragePlugin extends Plugin {
             DocumentFile[] bookDirs = playlistDir.listFiles();
             for (DocumentFile bookDir : bookDirs) {
                 if (!bookDir.isDirectory()) continue;
-                String bookName = bookDir.getName();
-                if (bookName == null) continue;
+                String rawBookName = bookDir.getName();
+                if (rawBookName == null) continue;
+                // Normalise to uppercase so book names match vid.book in the app.
+                String bookName = rawBookName.toUpperCase();
 
                 for (DocumentFile file : bookDir.listFiles()) {
                     String name = file.getName();
@@ -309,7 +311,7 @@ public class UsbStoragePlugin extends Plugin {
                         String chapter = item.getString("chapter");
                         if (book == null || chapter == null) continue;
 
-                        DocumentFile bookDir = playlistDir.findFile(book);
+                        DocumentFile bookDir = findFileIgnoreCase(playlistDir, book);
                         if (bookDir == null || !bookDir.isDirectory()) continue;
 
                         DocumentFile videoFile = bookDir.findFile(chapter + ".mp4");
@@ -370,7 +372,14 @@ public class UsbStoragePlugin extends Plugin {
         }
 
         // Must match the base used in copyUsbPlaylist: getExternalFilesDir(null).
-        File videoFile = new File(new File(new File(getContext().getExternalFilesDir(null), playlist), book), chapter + ".mp4");
+        File destPlaylist = new File(getContext().getExternalFilesDir(null), playlist);
+        File bookDir = findDirIgnoreCase(destPlaylist, book);
+        if (bookDir == null) {
+            Log.d("UsbStorage", "getLocalCopyUrl: book dir not found for '" + book + "' in " + destPlaylist.getAbsolutePath());
+            call.reject("Local copy not found");
+            return;
+        }
+        File videoFile = new File(bookDir, chapter + ".mp4");
 
         Log.d("UsbStorage", "getLocalCopyUrl: path=" + videoFile.getAbsolutePath() + " exists=" + videoFile.exists());
 
@@ -479,6 +488,33 @@ public class UsbStoragePlugin extends Plugin {
                 call.reject("Error copying playlist: " + e.getMessage());
             }
         }).start();
+    }
+
+    /**
+     * Returns the first child of {@code dir} whose name matches {@code name}
+     * case-insensitively, or null if none is found.
+     */
+    private DocumentFile findFileIgnoreCase(DocumentFile dir, String name) {
+        if (dir == null) return null;
+        for (DocumentFile child : dir.listFiles()) {
+            String childName = child.getName();
+            if (childName != null && childName.equalsIgnoreCase(name)) return child;
+        }
+        return null;
+    }
+
+    /**
+     * Returns the first subdirectory of {@code parent} whose name matches
+     * {@code name} case-insensitively, or null if none is found.
+     */
+    private File findDirIgnoreCase(File parent, String name) {
+        if (parent == null || !parent.isDirectory()) return null;
+        File[] children = parent.listFiles();
+        if (children == null) return null;
+        for (File child : children) {
+            if (child.isDirectory() && child.getName().equalsIgnoreCase(name)) return child;
+        }
+        return null;
     }
 
     @Override

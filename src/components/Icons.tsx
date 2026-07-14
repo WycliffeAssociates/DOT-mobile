@@ -208,4 +208,25 @@ export function IconCancelX(props: SVGProps<SVGSVGElement>) {
 		</svg>
 	);
 }
+export function UsbIcon(props: SVGProps<SVGSVGElement>) {
+	return (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="1em"
+			height="1em"
+			viewBox="0 0 24 24"
+			fill="currentColor"
+			{...props}
+		>
+			<title>USB Storage</title>
+			{/* drive body */}
+			<rect x="3" y="8" width="14" height="8" rx="1.5" />
+			{/* connector */}
+			<rect x="17" y="10" width="4" height="4" rx="1" />
+			{/* detail slots */}
+			<rect x="6" y="11" width="2.5" height="2" rx="0.4" fill="white" />
+			<rect x="10.5" y="11" width="2.5" height="2" rx="0.4" fill="white" />
+		</svg>
+	);
+}
 // export function

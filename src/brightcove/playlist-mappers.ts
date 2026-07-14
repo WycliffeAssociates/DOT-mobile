@@ -1,5 +1,7 @@
 type Entry = {
 	playlist: string;
+	/** IETF language code from langnames.bibleineverylanguage.org */
+	ietfCode: string;
 	playlistDisplayName: string;
 	path: string;
 	display: string;
@@ -11,6 +13,7 @@ const createConfig = <T extends Record<string, Entry>>(config: T) => config;
 const config = createConfig({
 	benin: {
 		playlist: "benin-new-testament",
+		ietfCode: "ase-x-beninsl",
 		playlistDisplayName: "Benin New Testament",
 		path: "benin",
 		display: "Benin",
@@ -18,6 +21,7 @@ const config = createConfig({
 	},
 	ghana: {
 		playlist: "ghana-new-testament",
+		ietfCode: "gse",
 		playlistDisplayName: "Ghana New Testament",
 		path: "ghana",
 		display: "Ghana",
@@ -25,6 +29,7 @@ const config = createConfig({
 	},
 	cote: {
 		playlist: "cote-d'ivoire-new-testament",
+		ietfCode: "ase-x-cotedivosl",
 		playlistDisplayName: "Cote d'Ivoire New Testament",
 		path: "cotedivoire",
 		display: "Côte d'Ivoire",
@@ -32,6 +37,7 @@ const config = createConfig({
 	},
 	togo: {
 		playlist: "togo-new-testament",
+		ietfCode: "ase-x-togolesesl",
 		playlistDisplayName: "Togo New Testament",
 		path: "togo",
 		display: "Togo",
@@ -39,6 +45,7 @@ const config = createConfig({
 	},
 	malawi: {
 		playlist: "malawi-new-testament",
+		ietfCode: "lws",
 		playlistDisplayName: "Malawi New Testament",
 		path: "malawi",
 		display: "Malawi",
@@ -46,6 +53,7 @@ const config = createConfig({
 	},
 	tanzania: {
 		playlist: "tanzania-new-testament",
+		ietfCode: "tza",
 		playlistDisplayName: "Tanzania New Testament",
 		path: "tanzania",
 		display: "Tanzania",
@@ -53,6 +61,7 @@ const config = createConfig({
 	},
 	cameroon: {
 		playlist: "cameroon-new-testament",
+		ietfCode: "ase-x-camanglosl",
 		playlistDisplayName: "Cameroon New Testament",
 		path: "cameroon",
 		display: "Cameroon",
@@ -60,13 +69,16 @@ const config = createConfig({
 	},
 	congodrc: {
 		playlist: "congo-french-nt",
+		ietfCode: "ase-x-drcfrnch",
 		playlistDisplayName: "DRC French New Testament",
 		path: "congodrc",
 		display: "Democratic Republic of Congo (French)",
 		flag: "drc.png",
 	},
 	drcswahili: {
+		// slug is already the IETF code
 		playlist: "ase-x-bukavusl",
+		ietfCode: "ase-x-bukavusl",
 		playlistDisplayName: "Democratic Republic of Congo (Swahili)",
 		path: "drcswahili",
 		display: "Democratic Republic of Congo (Swahili)",
@@ -74,6 +86,7 @@ const config = createConfig({
 	},
 	marathi: {
 		playlist: "marathi-nt",
+		ietfCode: "ins-x-marathsl",
 		playlistDisplayName: "Marathi New Testament",
 		path: "marathi",
 		display: "Marathi",
@@ -81,6 +94,7 @@ const config = createConfig({
 	},
 	brazil: {
 		playlist: "brazil-nt",
+		ietfCode: "bzs",
 		playlistDisplayName: "Brazilian New Testament",
 		path: "brazil",
 		display: "Brazil",
@@ -88,13 +102,16 @@ const config = createConfig({
 	},
 	paraguay: {
 		playlist: "pys-nt",
+		ietfCode: "pys",
 		playlistDisplayName: "Paraguay New Testament",
 		path: "paraguay",
 		display: "Paraguay",
 		flag: "paraguay.svg",
 	},
 	malayalam: {
+		// slug is already the IETF code
 		playlist: "ins-x-keralasl",
+		ietfCode: "ins-x-keralasl",
 		playlistDisplayName: "Malayalam New Testament",
 		path: "malayalam",
 		display: "Malayalam",
@@ -102,6 +119,7 @@ const config = createConfig({
 	},
 	mozambique: {
 		playlist: "mozambique-new-testament",
+		ietfCode: "mzy",
 		playlistDisplayName: "Mozambican New Testament",
 		path: "mozambique",
 		display: "Mozambique",

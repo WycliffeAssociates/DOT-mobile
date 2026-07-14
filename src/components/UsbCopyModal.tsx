@@ -12,7 +12,12 @@ import {
 import { useEffect, useState } from "react";
 import { UsbStorage } from "../plugins/UsbStorage";
 
-type LanguageEntry = { playlist: string; display: string };
+type LanguageEntry = {
+	playlist: string;
+	ietfCode: string;
+	display: string;
+	usbFolderName: string;
+};
 
 type ChapterState = { chapter: string; selected: boolean };
 type BookState = {
@@ -125,7 +130,7 @@ export function UsbCopyModal({
 		try {
 			const { videos } = await UsbStorage.scanAvailableVideos({
 				treeUri,
-				playlist: lang.entry.playlist,
+				playlist: lang.entry.usbFolderName,
 			});
 			const bookMap = new Map<string, string[]>();
 			for (const { book, chapter } of videos) {
@@ -262,7 +267,7 @@ export function UsbCopyModal({
 				try {
 					const { filesCopied } = await UsbStorage.copyUsbPlaylist({
 						treeUri,
-						playlist: lang.entry.playlist,
+						playlist: lang.entry.usbFolderName,
 					});
 					totalCopied += filesCopied;
 				} catch (e) {
@@ -281,7 +286,7 @@ export function UsbCopyModal({
 			try {
 				const { filesCopied } = await UsbStorage.copyUsbChapters({
 					treeUri,
-					playlist: lang.entry.playlist,
+					playlist: lang.entry.usbFolderName,
 					items,
 				});
 				totalCopied += filesCopied;

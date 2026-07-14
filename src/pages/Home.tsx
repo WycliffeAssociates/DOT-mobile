@@ -14,13 +14,15 @@ import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import brightCovePlaylistConfig from "../brightcove/playlist-mappers";
-import { DotLogo } from "../components/Icons";
+import { DotLogo, UsbIcon } from "../components/Icons";
 import { useOfflineMode } from "../lib/offlineMode";
+import { useUsbAccess } from "../lib/usbAccess";
 import "./Home.css";
 
 const Home: React.FC = () => {
 	const { t } = useTranslation();
 	const { isOffline, setIsOffline } = useOfflineMode();
+	const { openUsbPicker } = useUsbAccess();
 	const settingsModal = useRef<HTMLIonModalElement>(null);
 
 	const alphabetizedByPlaylistDisplayName = Object.entries(
@@ -34,11 +36,34 @@ const Home: React.FC = () => {
 			<IonHeader className="ion-no-border">
 				<IonToolbar style={{ "--min-height": "auto" }}>
 					<div className="flex content-center py-2 border border-b border-b-[#e1e1e1] relative">
+						{/* USB button — top-left */}
+						<IonButton
+							shape="round"
+							fill="clear"
+							aria-label="Connect USB storage"
+							onClick={() => openUsbPicker()}
+							style={{
+								position: "absolute",
+								left: 4,
+								top: "50%",
+								transform: "translateY(-50%)",
+								"--padding-start": 0,
+								"--padding-end": 0,
+								"--background-activated": "transparent",
+							}}
+						>
+							<UsbIcon
+								style={{ fontSize: "1.35rem", color: "var(--ion-color-dark)" }}
+							/>
+						</IonButton>
+
 						<span className="w-44 block mx-auto">
 							<a href="/">
 								<DotLogo />
 							</a>
 						</span>
+
+						{/* Settings button — top-right */}
 						<IonButton
 							id="home-settings-trigger"
 							shape="round"

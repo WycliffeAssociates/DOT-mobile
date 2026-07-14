@@ -8,6 +8,7 @@ import type {
 	IVidWithCustom,
 	writeAnInProgressBlobParams,
 } from "src/customTypes/types";
+import brightCovePlaylistConfig from "../brightcove/playlist-mappers";
 import type {
 	IappState,
 	validPlaylistSlugs,
@@ -17,6 +18,19 @@ import { UsbStorage } from "../plugins/UsbStorage";
 import { cacheBcPlaylistJson } from "./Ui";
 
 const fsDirToUse = Directory.Documents;
+
+/** Returns all USB folder names to try for a given canonical playlist slug
+ *  (canonical slug first, then IETF code if different). */
+function usbFolderCandidates(playlist: string): string[] {
+	const entry = Object.values(brightCovePlaylistConfig).find(
+		(e) => e.playlist === playlist,
+	);
+	const candidates = [playlist];
+	if (entry?.ietfCode && entry.ietfCode !== playlist) {
+		candidates.push(entry.ietfCode);
+	}
+	return candidates;
+}
 
 export function makeVidSaver(
 	playlist: validPlaylistSlugs,
@@ -495,16 +509,19 @@ export async function getLocalUsbCopySrc(
 	book: string,
 	chapter: string,
 ): Promise<{ src: string; type: "video/mp4" } | null> {
-	try {
-		const { playableUrl } = await UsbStorage.getLocalCopyUrl({
-			playlist,
-			book,
-			chapter,
-		});
-		return { src: playableUrl, type: "video/mp4" };
-	} catch {
-		return null;
+	for (const folder of usbFolderCandidates(playlist)) {
+		try {
+			const { playableUrl } = await UsbStorage.getLocalCopyUrl({
+				playlist: folder,
+				book,
+				chapter,
+			});
+			return { src: playableUrl, type: "video/mp4" };
+		} catch {
+			// try next candidate
+		}
 	}
+	return null;
 }
 
 export async function getUsbVideoSource(
@@ -513,25 +530,19 @@ export async function getUsbVideoSource(
 	chapter: string,
 ): Promise<{ src: string; type: "video/mp4" } | null> {
 	const { value: treeUri } = await Preferences.get({ key: USB_URI_KEY });
-	console.log("[USB] treeUri:", treeUri);
-	console.log("[USB] looking for:", { playlist, book, chapter });
-	if (!treeUri) {
-		console.log(
-			"[USB] no tree URI saved — open the USB bar and grant access first",
-		);
-		return null;
+	if (!treeUri) return null;
+	for (const folder of usbFolderCandidates(playlist)) {
+		try {
+			const { playableUrl } = await UsbStorage.getPlayableUri({
+				treeUri,
+				playlist: folder,
+				book,
+				chapter,
+			});
+			return { src: playableUrl, type: "video/mp4" };
+		} catch {
+			// try next candidate
+		}
 	}
-	try {
-		const { playableUrl } = await UsbStorage.getPlayableUri({
-			treeUri,
-			playlist,
-			book,
-			chapter,
-		});
-		console.log("[USB] playableUrl:", playableUrl);
-		return { src: playableUrl, type: "video/mp4" };
-	} catch (e) {
-		console.log("[USB] getPlayableUri rejected:", e);
-		return null;
-	}
+	return null;
 }

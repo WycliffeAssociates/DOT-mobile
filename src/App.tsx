@@ -6,7 +6,7 @@ import {
 	useIonAlert,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Route } from "react-router-dom";
 import brightCovePlaylistConfig from "./brightcove/playlist-mappers";
 import Home from "./pages/Home";
@@ -26,6 +26,7 @@ import "./theme/variables.css";
 
 import { UsbCopyModal } from "./components/UsbCopyModal";
 import { OfflineModeProvider } from "./lib/offlineMode";
+import { UsbAccessContext } from "./lib/usbAccess";
 import Playlist from "./pages/Playlist";
 import { UsbStorage } from "./plugins/UsbStorage";
 
@@ -39,141 +40,168 @@ function App() {
 	const [copyModal, setCopyModal] = useState<{
 		isOpen: boolean;
 		treeUri: string;
-		matchedEntries: { playlist: string; display: string }[];
+		matchedEntries: {
+			playlist: string;
+			ietfCode: string;
+			display: string;
+			usbFolderName: string;
+		}[];
 	}>({ isOpen: false, treeUri: "", matchedEntries: [] });
+
+	const runUsbPickerFlow = useCallback(async () => {
+		try {
+			const { uri, folders } = await UsbStorage.requestDirectoryAccess();
+
+			const matched: {
+				playlist: string;
+				ietfCode: string;
+				display: string;
+				usbFolderName: string;
+			}[] = Object.values(brightCovePlaylistConfig).flatMap((e) => {
+				if (folders.includes(e.playlist))
+					return [{ ...e, usbFolderName: e.playlist as string }];
+				if (folders.includes(e.ietfCode))
+					return [{ ...e, usbFolderName: e.ietfCode as string }];
+				return [];
+			});
+
+			if (matched.length > 0) {
+				await Preferences.set({ key: USB_URI_KEY, value: uri });
+				presentAlert({
+					header: "USB Folder Ready",
+					message: `Found ${matched.length} language(s): ${matched.map((e) => e.display).join(", ")}`,
+					inputs: [
+						{
+							type: "checkbox" as const,
+							label: "Copy videos to device for offline use",
+							value: "copy",
+							checked: false,
+						},
+					],
+					buttons: [
+						{
+							text: "OK",
+							handler: (selected: string[]) => {
+								if (selected.includes("copy")) {
+									setCopyModal({
+										isOpen: true,
+										treeUri: uri,
+										matchedEntries: matched,
+									});
+								}
+							},
+						},
+					],
+				});
+			} else {
+				presentAlert({
+					header: "No DOT Videos Found",
+					message:
+						"The selected folder doesn't contain any recognised DOT language folders. Would you like to choose a different folder?",
+					buttons: [
+						{ text: "Cancel", role: "cancel" },
+						{
+							text: "Try Again",
+							handler: () => {
+								(async () => {
+									try {
+										const { uri: retryUri, folders: retryFolders } =
+											await UsbStorage.requestDirectoryAccess();
+										const retryMatched: {
+											playlist: string;
+											ietfCode: string;
+											display: string;
+											usbFolderName: string;
+										}[] = Object.values(brightCovePlaylistConfig).flatMap(
+											(e) => {
+												if (retryFolders.includes(e.playlist))
+													return [
+														{ ...e, usbFolderName: e.playlist as string },
+													];
+												if (retryFolders.includes(e.ietfCode))
+													return [
+														{ ...e, usbFolderName: e.ietfCode as string },
+													];
+												return [];
+											},
+										);
+										if (retryMatched.length > 0) {
+											await Preferences.set({
+												key: USB_URI_KEY,
+												value: retryUri,
+											});
+											presentAlert({
+												header: "USB Folder Ready",
+												message: `Found ${retryMatched.length} language(s): ${retryMatched.map((e) => e.display).join(", ")}`,
+												inputs: [
+													{
+														type: "checkbox" as const,
+														label: "Copy videos to device for offline use",
+														value: "copy",
+														checked: false,
+													},
+												],
+												buttons: [
+													{
+														text: "OK",
+														handler: (selected: string[]) => {
+															if (selected.includes("copy")) {
+																setCopyModal({
+																	isOpen: true,
+																	treeUri: retryUri,
+																	matchedEntries: retryMatched,
+																});
+															}
+														},
+													},
+												],
+											});
+										} else {
+											presentAlert({
+												header: "No DOT Videos Found",
+												message:
+													"Still no recognised DOT language folders in the selected location.",
+												buttons: ["OK"],
+											});
+										}
+									} catch {
+										// user cancelled retry
+									}
+								})();
+							},
+						},
+					],
+				});
+			}
+		} catch (e) {
+			// Silently ignore user-initiated cancellations; surface anything else.
+			const msg = e instanceof Error ? e.message : String(e);
+			if (!msg.toLowerCase().includes("cancel")) {
+				presentAlert({
+					header: "USB Error",
+					message: msg || "Could not open folder picker.",
+					buttons: ["OK"],
+				});
+			}
+		}
+	}, [presentAlert]);
+
+	/** Called by the USB button on the home page — always opens the picker. */
+	const openUsbPicker = useCallback(() => {
+		hasPromptedRef.current = false;
+		runUsbPickerFlow();
+	}, [runUsbPickerFlow]);
+
+	const showUsbDialog = useCallback(() => {
+		if (hasPromptedRef.current) return;
+		hasPromptedRef.current = true;
+		runUsbPickerFlow();
+	}, [runUsbPickerFlow]);
 
 	useEffect(() => {
 		// Clear any stale SAF permission from a previous session so we never
 		// hold a URI that may be invalid for the currently-attached drive.
 		Preferences.remove({ key: USB_URI_KEY });
-
-		const showUsbDialog = () => {
-			if (hasPromptedRef.current) return;
-			hasPromptedRef.current = true;
-
-			presentAlert({
-				header: "USB Drive Detected",
-				message:
-					"Would you like to open DOT videos from the connected USB drive?",
-				buttons: [
-					{ text: "No", role: "cancel" },
-					{
-						text: "Yes",
-						handler: () => {
-							(async () => {
-								try {
-									const { uri, folders } =
-										await UsbStorage.requestDirectoryAccess();
-
-									const matched = Object.values(
-										brightCovePlaylistConfig,
-									).filter((e) => folders.includes(e.playlist));
-
-									if (matched.length > 0) {
-										await Preferences.set({ key: USB_URI_KEY, value: uri });
-										presentAlert({
-											header: "USB Drive Ready",
-											message: `Found ${matched.length} language(s): ${matched.map((e) => e.display).join(", ")}`,
-											inputs: [
-												{
-													type: "checkbox" as const,
-													label: "Copy videos to device for offline use",
-													value: "copy",
-													checked: false,
-												},
-											],
-											buttons: [
-												{
-													text: "OK",
-													handler: (selected: string[]) => {
-														if (selected.includes("copy")) {
-															setCopyModal({
-																isOpen: true,
-																treeUri: uri,
-																matchedEntries: matched,
-															});
-														}
-													},
-												},
-											],
-										});
-									} else {
-										presentAlert({
-											header: "No DOT Videos Found",
-											message:
-												"The selected folder doesn't contain any recognised DOT language folders. Would you like to choose a different folder?",
-											buttons: [
-												{ text: "Cancel", role: "cancel" },
-												{
-													text: "Try Again",
-													handler: () => {
-														(async () => {
-															try {
-																const { uri: retryUri, folders: retryFolders } =
-																	await UsbStorage.requestDirectoryAccess();
-																const retryMatched = Object.values(
-																	brightCovePlaylistConfig,
-																).filter((e) =>
-																	retryFolders.includes(e.playlist),
-																);
-																if (retryMatched.length > 0) {
-																	await Preferences.set({
-																		key: USB_URI_KEY,
-																		value: retryUri,
-																	});
-																	presentAlert({
-																		header: "USB Drive Ready",
-																		message: `Found ${retryMatched.length} language(s): ${retryMatched.map((e) => e.display).join(", ")}`,
-																		inputs: [
-																			{
-																				type: "checkbox" as const,
-																				label:
-																					"Copy videos to device for offline use",
-																				value: "copy",
-																				checked: false,
-																			},
-																		],
-																		buttons: [
-																			{
-																				text: "OK",
-																				handler: (selected: string[]) => {
-																					if (selected.includes("copy")) {
-																						setCopyModal({
-																							isOpen: true,
-																							treeUri: retryUri,
-																							matchedEntries: retryMatched,
-																						});
-																					}
-																				},
-																			},
-																		],
-																	});
-																} else {
-																	presentAlert({
-																		header: "No DOT Videos Found",
-																		message:
-																			"Still no recognised DOT language folders in the selected location.",
-																		buttons: ["OK"],
-																	});
-																}
-															} catch {
-																// user cancelled retry
-															}
-														})();
-													},
-												},
-											],
-										});
-									}
-								} catch {
-									// user cancelled SAF picker
-								}
-							})();
-						},
-					},
-				],
-			});
-		};
 
 		// If a USB drive is already connected when the app opens, show the dialog.
 		UsbStorage.checkUsbConnected()
@@ -203,22 +231,24 @@ function App() {
 		return () => {
 			listenerHandle?.remove();
 		};
-	}, [presentAlert, dismissAlert]);
+	}, [showUsbDialog, dismissAlert]);
 
 	return (
 		// @ts-ignore
 		<IonApp>
 			<OfflineModeProvider>
-				<IonReactRouter>
-					<IonRouterOutlet>
-						<Route path="/" exact={true}>
-							<Home />
-						</Route>
-						<Route path="/:playlist">
-							<Playlist />
-						</Route>
-					</IonRouterOutlet>
-				</IonReactRouter>
+				<UsbAccessContext.Provider value={{ openUsbPicker }}>
+					<IonReactRouter>
+						<IonRouterOutlet>
+							<Route path="/" exact={true}>
+								<Home />
+							</Route>
+							<Route path="/:playlist">
+								<Playlist />
+							</Route>
+						</IonRouterOutlet>
+					</IonReactRouter>
+				</UsbAccessContext.Provider>
 
 				<UsbCopyModal
 					isOpen={copyModal.isOpen}
